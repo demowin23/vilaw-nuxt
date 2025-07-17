@@ -43,7 +43,8 @@
         </div>
         <!-- Search -->
         <div class="flex-1 flex justify-center max-w-lg">
-          <form class="w-full" @submit.prevent>
+          <!-- Desktop search input -->
+          <form class="w-full hidden md:block" @submit.prevent>
             <div
               class="flex items-center bg-[#efefef] rounded-lg px-3 py-2 w-full shadow-sm"
             >
@@ -110,13 +111,73 @@
             </div>
           </form>
         </div>
-        <!-- Login/User -->
-        <div class="flex items-center gap-2 relative">
-          <NuxtLink to="/chat-luat-su" class="menu-link"
-            >Chat với luật sư</NuxtLink
+        <!-- Login/User + Mobile search icon -->
+        <div class="flex items-center gap-2 relative menu-link-group">
+          <!-- Mobile search icon (right) -->
+          <button
+            class="block md:hidden p-2 rounded-full hover:bg-[#f58220]/10 focus:outline-none focus:ring-2 focus:ring-[#f58220]"
+            @click="showMobileSearch = true"
+            aria-label="Tìm kiếm"
           >
-          <NuxtLink to="/lien-he" class="menu-link">Liên hệ</NuxtLink>
-          <NuxtLink to="/mua-goi" class="menu-link">Mua gói</NuxtLink>
+            <svg
+              class="w-6 h-6 text-[#f58220]"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                cx="11"
+                cy="11"
+                r="8"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+              />
+              <line
+                x1="21"
+                y1="21"
+                x2="16.65"
+                y2="16.65"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+          <!-- Chat, Liên hệ, Mua gói: text to icon on <500px -->
+          <NuxtLink
+            to="/chat-luat-su"
+            class="menu-link menu-link-responsive"
+            title="Chat với luật sư"
+          >
+            <span class="icon-500:hidden"
+              ><font-awesome-icon :icon="['fas', 'comments']" class="text-lg"
+            /></span>
+            <span class="hidden icon-500:inline">Chat với luật sư</span>
+          </NuxtLink>
+          <NuxtLink
+            to="/lien-he"
+            class="menu-link menu-link-responsive"
+            title="Liên hệ"
+          >
+            <span class="icon-500:hidden"
+              ><font-awesome-icon :icon="['fas', 'phone']" class="text-lg"
+            /></span>
+            <span class="hidden icon-500:inline">Liên hệ</span>
+          </NuxtLink>
+          <NuxtLink
+            to="/mua-goi"
+            class="menu-link menu-link-responsive"
+            title="Mua gói"
+          >
+            <span class="icon-500:hidden"
+              ><font-awesome-icon
+                :icon="['fas', 'shopping-cart']"
+                class="text-lg"
+            /></span>
+            <span class="hidden icon-500:inline">Mua gói</span>
+          </NuxtLink>
           <button
             class="flex items-center gap-1 text-[#f58220] font-semibold hover:underline focus:outline-none"
             @mouseenter="showUserPopup = true"
@@ -162,44 +223,63 @@
               </button>
             </div>
           </transition>
+          <!-- Mobile search popup -->
+          <transition name="fade">
+            <div
+              v-if="showMobileSearch"
+              class="fixed inset-0 z-[100] flex items-start justify-center bg-black/40"
+              @click.self="showMobileSearch = false"
+            >
+              <div
+                class="bg-white rounded-lg shadow-lg mt-24 w-[90vw] max-w-md p-4 flex flex-col gap-3"
+              >
+                <div class="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="Nhập từ khoá tìm kiếm"
+                    class="flex-1 border border-[#f58220] rounded px-3 py-2 outline-none"
+                  />
+                  <button
+                    class="bg-[#f58220] hover:bg-[#e06d00] text-white rounded p-2 flex items-center justify-center"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="11"
+                        cy="11"
+                        r="8"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        fill="none"
+                      />
+                      <line
+                        x1="21"
+                        y1="21"
+                        x2="16.65"
+                        y2="16.65"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    class="ml-2 text-gray-400 hover:text-[#f58220] text-xl"
+                    @click="showMobileSearch = false"
+                    aria-label="Đóng"
+                  >
+                    &times;
+                  </button>
+                </div>
+              </div>
+            </div>
+          </transition>
         </div>
-        <!-- Hamburger for mobile -->
-        <button
-          @click="open = !open"
-          class="md:hidden ml-2 p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#f58220]"
-          aria-label="Mở menu"
-        >
-          <svg
-            v-if="!open"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="#f58220"
-            class="w-7 h-7"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"
-            />
-          </svg>
-          <svg
-            v-else
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="#f58220"
-            class="w-7 h-7"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
       </div>
     </header>
   </div>
@@ -214,13 +294,25 @@ import {
   faSignInAlt,
   faUserPlus,
   faHome,
+  faComments,
+  faPhone,
+  faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSidebarStore } from "~/stores/sidebar";
 
-library.add(faCircleUser, faSignInAlt, faUserPlus, faHome);
+library.add(
+  faCircleUser,
+  faSignInAlt,
+  faUserPlus,
+  faHome,
+  faComments,
+  faPhone,
+  faShoppingCart
+);
 const sidebarStore = useSidebarStore();
 const hoverMenu = ref("");
 const showUserPopup = ref(false);
+const showMobileSearch = ref(false);
 </script>
 
 <style scoped>
@@ -287,6 +379,39 @@ nav ul {
     box-shadow: none !important;
     min-width: 0 !important;
     padding-left: 1.5rem;
+  }
+}
+@media (max-width: 1028px) {
+  .md\:block {
+    display: none !important;
+  }
+  .md\:hidden {
+    display: block !important;
+  }
+}
+@media (max-width: 500px) {
+  .icon-500\:hidden {
+    display: inline !important;
+  }
+  .icon-500\:inline {
+    display: none !important;
+  }
+  .menu-link-group {
+    gap: 0.25rem !important;
+  }
+  .menu-link-responsive {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+}
+@media (min-width: 501px) {
+  .icon-500\:hidden {
+    display: none !important;
+  }
+  .icon-500\:inline {
+    display: inline !important;
   }
 }
 </style>

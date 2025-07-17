@@ -7,6 +7,7 @@
         :class="[
           isOpenSidebar ? 'w-64' : 'w-16',
           'bg-white shadow-lg z-40 min-h-screen flex flex-col transition-all duration-300',
+          'sidebar-absolute',
         ]"
       >
         <nav v-if="isOpenSidebar" class="flex-1 px-4 py-8">
@@ -145,7 +146,7 @@
         </nav>
       </aside>
       <!-- Main content -->
-      <div class="flex-1 flex flex-col">
+      <div class="flex-1 flex flex-col w-full">
         <main class="flex-1 container mx-auto px-4 py-8">
           <slot />
         </main>
@@ -209,5 +210,30 @@ const { isOpenSidebar } = storeToRefs(sidebarStore);
 }
 .sidebar-icon-only {
   @apply flex justify-center items-center w-full h-10 hover:bg-[#f58220]/10 rounded transition-colors duration-200;
+}
+@media (max-width: 1028px) {
+  .sidebar-absolute {
+    position: absolute !important;
+    top: 105px;
+    left: 0;
+    height: 100vh;
+    width: 260px !important;
+    min-width: unset !important;
+    max-width: 90vw;
+    z-index: 9999;
+    box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.18);
+    background: #fff;
+    transition: transform 0.3s;
+    /* Ẩn khi đóng */
+    display: none;
+  }
+  .sidebar-absolute.w-64 {
+    display: flex !important;
+    transform: translateX(0);
+  }
+  .sidebar-absolute.w-16 {
+    display: none !important;
+    transform: translateX(-100%);
+  }
 }
 </style>
