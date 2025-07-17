@@ -1,5 +1,16 @@
 <template>
   <div class="video-list">
+    <div
+      class="intro-text"
+      style="margin-bottom: 18px; color: #444; font-size: 1.1rem"
+    >
+      Pháp luật đời sống Hình Sự là lĩnh vực điều chỉnh các quan hệ xã hội liên
+      quan đến tội phạm, hình phạt và các biện pháp xử lý đối với người vi phạm
+      pháp luật hình sự. Việc hiểu biết về pháp luật hình sự giúp mỗi cá nhân
+      phòng tránh, bảo vệ quyền lợi hợp pháp và góp phần xây dựng xã hội an
+      toàn, công bằng.
+    </div>
+
     <div class="header-row">
       <h2 class="section-title">HÌNH SỰ</h2>
     </div>
@@ -15,12 +26,24 @@
         />
       </div>
     </div>
+    <div class="category-buttons mt-4">
+      <NuxtLink to="/phap-luat-doi-song?id=1" class="cat-btn">Hình sự</NuxtLink>
+      <NuxtLink to="/kien-thuc/tranh-chap" class="cat-btn"
+        >Giải quyết tranh chấp</NuxtLink
+      >
+      <NuxtLink to="/kien-thuc/kinh-doanh" class="cat-btn"
+        >Kinh doanh và thương mại</NuxtLink
+      >
+      <NuxtLink to="/kien-thuc/lao-dong" class="cat-btn">Lao động</NuxtLink>
+      <NuxtLink to="/kien-thuc/dat-dai" class="cat-btn">Đất đai</NuxtLink>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import VideoItem from "~/components/VideoItem.vue";
+import { NuxtLink } from "#components";
 
 const videos = [
   {
@@ -85,6 +108,18 @@ const videos = [
 <style scoped>
 .video-list {
   padding: 24px 0 0 0;
+}
+.intro-text {
+  background: #fff7ed;
+  border-left: 6px solid #f58220;
+  color: #d35400;
+  font-size: 1.13rem;
+  font-weight: 600;
+  padding: 18px 22px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 12px 0 rgba(245, 130, 32, 0.08);
+  line-height: 1.6;
 }
 .header-row {
   display: flex;
@@ -180,6 +215,30 @@ const videos = [
   width: 100%;
   max-width: unset;
   flex: unset;
+}
+.category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.cat-btn {
+  background: #f58220;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px 0 rgba(245, 130, 32, 0.08);
+  display: inline-block;
+}
+.cat-btn:hover {
+  background: #ffa000;
+  color: #fff;
 }
 @media (max-width: 1200px) {
   .video-grid {

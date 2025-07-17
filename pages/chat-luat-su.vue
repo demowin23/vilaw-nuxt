@@ -18,7 +18,7 @@
             v-for="cat in categories"
             :key="cat.value"
             @click="selectCategory(cat.value)"
-            class="flex flex-col items-center cursor-pointer group w-full"
+            class="flex flex-col items-center cursor-pointer mx-2 group w-full"
           >
             <div
               :class="[
@@ -80,7 +80,7 @@
               :class="msg.isUser ? 'items-end' : 'items-start'"
             >
               <div
-                class="inline-block px-4 py-2 rounded-lg mb-1"
+                class="inline-block px-4 py-2 rounded-lg mb-1 mx-2"
                 :class="
                   msg.isUser
                     ? 'bg-[#f58220] text-white'

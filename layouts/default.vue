@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col bg-[#e4e7ec] h-screen overflow-hidden">
     <Header />
-    <div class="flex flex-1">
+    <div class="flex flex-1 layout-main">
       <!-- Sidebar dưới header -->
       <aside
         :class="[
@@ -9,6 +9,7 @@
           'bg-white shadow-lg z-40 min-h-screen flex flex-col transition-all duration-300',
           'sidebar-absolute',
         ]"
+        style="flex-shrink: 0; min-width: 4rem; max-width: 16rem"
       >
         <nav v-if="isOpenSidebar" class="flex-1 px-4 py-8">
           <ul class="space-y-2">
@@ -170,9 +171,9 @@
         </nav>
       </aside>
       <!-- Main content -->
-      <div class="flex-1 flex flex-col w-full h-full min-h-0">
+      <div class="main-content flex-1 flex flex-col w-full h-full min-h-0">
         <main
-          class="flex-1 container mx-auto px-4 py-4 overflow-y-auto min-h-0"
+          class="flex-1 container mx-auto px-2 md:px-4 py-4 overflow-y-auto min-h-0 max-w-screen-2xl flex flex-col"
           style="height: 100%"
         >
           <slot />
@@ -274,14 +275,22 @@ const { isOpenSidebar } = storeToRefs(sidebarStore);
 .sidebar-icon--active {
   color: #f58220 !important;
 }
-.flex-1.flex.flex-col.w-full {
-  height: 100vh;
-  min-height: 0;
-}
-main {
-  min-height: 0;
+.layout-main {
+  display: flex;
+  width: 100%;
   height: 100%;
-  overflow-y: auto;
+}
+.sidebar-absolute {
+  flex-shrink: 0;
+  min-width: 4rem;
+  max-width: 16rem;
+}
+.main-content {
+  flex: 1 1 0%;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .sidebar-text--active {
   color: #f58220 !important;
