@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isChatPage">
     <button
       class="fixed bottom-6 right-6 z-50 bg-[#f58220] text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl hover:bg-[#e06d00] transition"
       @click="open = true"
@@ -34,12 +34,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faComments, faTimes } from "@fortawesome/free-solid-svg-icons";
 library.add(faComments, faTimes);
 const open = ref(false);
+const route = useRoute();
+const isChatPage = computed(() => route.path === "/chat-luat-su");
 </script>
 
 <style scoped>

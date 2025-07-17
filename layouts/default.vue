@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-[#e4e7ec]">
+  <div class="flex flex-col bg-[#e4e7ec] h-screen overflow-hidden">
     <Header />
     <div class="flex flex-1">
       <!-- Sidebar dưới header -->
@@ -48,14 +48,29 @@
                 Chat với Luật sư
               </NuxtLink>
             </li>
-            <li>
-              <SidebarDropdown label="">
+            <li
+              @mouseover="kienThucHover = true"
+              @mouseleave="kienThucHover = false"
+            >
+              <SidebarDropdown label="" :activePaths="['/kien-thuc']">
                 <template #label>
                   <font-awesome-icon
                     :icon="['fas', 'book']"
-                    class="sidebar-icon"
+                    :class="[
+                      'sidebar-icon',
+                      isKienThucActive || kienThucHover
+                        ? 'sidebar-icon--active'
+                        : '',
+                    ]"
                   />
-                  Kiến thức pháp luật
+                  <span
+                    :class="
+                      isKienThucActive || kienThucHover
+                        ? 'sidebar-text--active'
+                        : ''
+                    "
+                    >Kiến thức pháp luật</span
+                  >
                 </template>
                 <NuxtLink to="/kien-thuc/dan-su" class="sidebar-sublink"
                   >Dân sự – Thừa kế – Hôn nhân và gia đình</NuxtLink
@@ -128,6 +143,15 @@
               class="sidebar-icon"
             />
           </NuxtLink>
+          <NuxtLink
+            to="/kien-thuc/dan-su"
+            class="sidebar-icon-only"
+            :class="{
+              'router-link-active': route.path.startsWith('/kien-thuc'),
+            }"
+          >
+            <font-awesome-icon :icon="['fas', 'book']" class="sidebar-icon" />
+          </NuxtLink>
           <NuxtLink to="/van-ban" class="sidebar-icon-only">
             <font-awesome-icon
               :icon="['fas', 'file-lines']"
@@ -146,13 +170,16 @@
         </nav>
       </aside>
       <!-- Main content -->
-      <div class="flex-1 flex flex-col w-full">
-        <main class="flex-1 container mx-auto px-4 py-8">
+      <div class="flex-1 flex flex-col w-full h-full min-h-0">
+        <main
+          class="flex-1 container mx-auto px-4 py-4 overflow-y-auto min-h-0"
+          style="height: 100%"
+        >
           <slot />
+          <Footer v-if="!isChatPage" />
         </main>
       </div>
     </div>
-    <Footer />
     <ChatPopup />
   </div>
 </template>
@@ -190,26 +217,74 @@ library.add(
 import { useSidebarStore } from "~/stores/sidebar";
 import { storeToRefs } from "pinia";
 import ChatPopup from "~/components/ChatPopup.vue";
+import { useRoute } from "vue-router";
+import { ref, computed } from "vue";
+const route = useRoute();
+const isKienThucActive = computed(() => route.path.startsWith("/kien-thuc"));
+const kienThucHover = ref(false);
+const isChatPage = route.path === "/chat-luat-su";
 const sidebarStore = useSidebarStore();
 const { isOpenSidebar } = storeToRefs(sidebarStore);
 </script>
 
 <style scoped>
 .sidebar-link {
-  @apply flex items-center gap-2 px-1  py-2 rounded text-[#f58220] font-semibold hover:bg-[#f58220]/10 transition-colors duration-200;
+  @apply flex items-center gap-2 px-1 py-2 rounded font-semibold hover:bg-[#f58220]/10 transition-colors duration-200;
+  color: #181818;
+}
+.sidebar-link.router-link-active,
+.sidebar-link.router-link-exact-active,
+.sidebar-link:hover {
+  color: #f58220;
 }
 .sidebar-icon {
   font-size: 1.1em;
   margin-right: 8px;
-  color: #f58220;
+  color: #444;
   min-width: 20px;
   text-align: center;
+  transition: color 0.2s;
+}
+.sidebar-link.router-link-active .sidebar-icon,
+.sidebar-link.router-link-exact-active .sidebar-icon,
+.sidebar-link:hover .sidebar-icon {
+  color: #f58220;
 }
 .sidebar-sublink {
-  @apply block px-6 py-2 rounded text-[#f58220] hover:bg-[#f58220]/10 transition-colors duration-200 text-sm;
+  @apply block px-6 py-2 rounded hover:bg-[#f58220]/10 transition-colors duration-200 text-sm;
+  color: #181818;
+}
+.sidebar-sublink.router-link-active,
+.sidebar-sublink.router-link-exact-active,
+.sidebar-sublink:hover {
+  color: #f58220;
 }
 .sidebar-icon-only {
   @apply flex justify-center items-center w-full h-10 hover:bg-[#f58220]/10 rounded transition-colors duration-200;
+}
+.sidebar-icon-only .sidebar-icon {
+  color: #444;
+  transition: color 0.2s;
+}
+.sidebar-icon-only.router-link-active .sidebar-icon,
+.sidebar-icon-only.router-link-exact-active .sidebar-icon,
+.sidebar-icon-only:hover .sidebar-icon {
+  color: #f58220;
+}
+.sidebar-icon--active {
+  color: #f58220 !important;
+}
+.flex-1.flex.flex-col.w-full {
+  height: 100vh;
+  min-height: 0;
+}
+main {
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
+}
+.sidebar-text--active {
+  color: #f58220 !important;
 }
 @media (max-width: 1028px) {
   .sidebar-absolute {
