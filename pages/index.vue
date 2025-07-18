@@ -4,7 +4,11 @@
     <div class="flex gap-4">
       <div class="w-3/4">
         <NewVideo />
-        <SectionsVideo :topViews="topViews" />
+        <SectionsVideo :topViews="topViews" title="Hình sự" />
+        <SectionsVideo :topViews="topViews" title="Dân sự" />
+        <SectionsVideo :topViews="topViews" title="Kinh doanh" />
+        <SectionsVideo :topViews="topViews" title="Lao động" />
+        <SectionsVideo :topViews="topViews" title="Đất đai" />
       </div>
       <div
         class="w-1/4 min-w-[100px] max-w-xs h-fit bg-white rounded-2xl p-4 grid grid-cols-2 gap-4"

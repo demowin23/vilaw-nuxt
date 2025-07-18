@@ -73,25 +73,50 @@
                     >Kiến thức pháp luật</span
                   >
                 </template>
-                <NuxtLink to="/kien-thuc/dan-su" class="sidebar-sublink"
+                <NuxtLink
+                  to="/kien-thuc/dan-su"
+                  class="sidebar-sublink"
+                  @click="
+                    sidebarStore.setTitle(
+                      'Dân sự – Thừa kế – Hôn nhân và gia đình'
+                    )
+                  "
                   >Dân sự – Thừa kế – Hôn nhân và gia đình</NuxtLink
                 >
-                <NuxtLink to="/kien-thuc/hinh-su" class="sidebar-sublink"
+                <NuxtLink
+                  to="/kien-thuc/hinh-su"
+                  class="sidebar-sublink"
+                  @click="sidebarStore.setTitle('Hình sự')"
                   >Hình sự</NuxtLink
                 >
-                <NuxtLink to="/kien-thuc/tranh-chap" class="sidebar-sublink"
+                <NuxtLink
+                  to="/kien-thuc/tranh-chap"
+                  class="sidebar-sublink"
+                  @click="sidebarStore.setTitle('Giải quyết tranh chấp')"
                   >Giải quyết tranh chấp</NuxtLink
                 >
-                <NuxtLink to="/kien-thuc/kinh-doanh" class="sidebar-sublink"
+                <NuxtLink
+                  to="/kien-thuc/kinh-doanh"
+                  class="sidebar-sublink"
+                  @click="sidebarStore.setTitle('Kinh doanh thương mại')"
                   >Kinh doanh thương mại</NuxtLink
                 >
-                <NuxtLink to="/kien-thuc/lao-dong" class="sidebar-sublink"
+                <NuxtLink
+                  to="/kien-thuc/lao-dong"
+                  class="sidebar-sublink"
+                  @click="sidebarStore.setTitle('Lao động')"
                   >Lao động</NuxtLink
                 >
-                <NuxtLink to="/kien-thuc/dat-dai" class="sidebar-sublink"
+                <NuxtLink
+                  to="/kien-thuc/dat-dai"
+                  class="sidebar-sublink"
+                  @click="sidebarStore.setTitle('Đất đai')"
                   >Đất đai</NuxtLink
                 >
-                <NuxtLink to="/kien-thuc/khac" class="sidebar-sublink"
+                <NuxtLink
+                  to="/kien-thuc/khac"
+                  class="sidebar-sublink"
+                  @click="sidebarStore.setTitle('Thể loại khác')"
                   >Thể loại khác</NuxtLink
                 >
               </SidebarDropdown>
@@ -150,6 +175,7 @@
             :class="{
               'router-link-active': route.path.startsWith('/kien-thuc'),
             }"
+            @click="sidebarStore.setTitle('Kiến thức pháp luật')"
           >
             <font-awesome-icon :icon="['fas', 'book']" class="sidebar-icon" />
           </NuxtLink>

@@ -54,18 +54,34 @@
       <!-- Khu vực chat -->
       <div class="flex-1 flex flex-col min-h-0">
         <div
-          class="flex items-center justify-center border-b border-[#eee] min-h-[48px]"
+          class="flex items-center justify-center border-b border-[#eee] min-h-[48px] relative"
         >
           <h1
             class="text-lg md:text-2xl font-bold text-[#f58220] text-center m-0"
           >
             Chat với Luật sư
-            <span
-              v-if="selectedCategory"
-              class="ml-2 text-base md:text-xl text-[#333] font-normal"
-              >- {{ categoryLabel }}</span
-            >
           </h1>
+          <button
+            v-if="selectedCategory"
+            type="button"
+            @click="handleCall"
+            class="absolute right-4 bg-[#f58220] hover:bg-[#e06d00] text-white rounded-full p-2 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+              />
+            </svg>
+          </button>
         </div>
         <div class="flex flex-col flex-1 min-h-0 h-0" v-if="selectedCategory">
           <!-- Danh sách tin nhắn -->
@@ -409,6 +425,33 @@ function handleFileChange(e: Event) {
   }
   // Reset input để có thể upload lại cùng file
   (e.target as HTMLInputElement).value = "";
+}
+
+function handleCall() {
+  if (selectedCategory.value) {
+    // Thêm tin nhắn yêu cầu gọi điện
+    messages.value.push({
+      type: "text",
+      content: "Tôi muốn gọi điện thoại với luật sư",
+      isUser: true,
+    });
+
+    // Lưu lại lịch sử chat
+    chatHistories.value[selectedCategory.value] = [...messages.value];
+    scrollToBottom();
+
+    // Giả lập phản hồi từ luật sư
+    setTimeout(() => {
+      messages.value.push({
+        type: "text",
+        content:
+          "Luật sư sẽ gọi lại cho bạn trong vòng 5 phút. Vui lòng chuẩn bị sẵn sàng.",
+        isUser: false,
+      });
+      chatHistories.value[selectedCategory.value] = [...messages.value];
+      scrollToBottom();
+    }, 1000);
+  }
 }
 
 function scrollToBottom() {

@@ -30,34 +30,68 @@
 <script setup lang="ts">
 import { useSidebarStore } from "~/stores/sidebar";
 import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { computed, ref, onMounted, onUnmounted } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
+
 const sidebarStore = useSidebarStore();
 const { isOpenSidebar } = storeToRefs(sidebarStore);
+
 interface HotVideoItem {
   thumbnail: string;
   title: string;
 }
+
 const props = defineProps<{
   videos: HotVideoItem[];
 }>();
+
 const swiperRef = ref<any>(null);
 const activeIndex = ref(0);
+const windowWidth = ref(1024); // Default fallback value
+
 const totalSlides = computed(() => props.videos.length);
+
 const getSlidesPerView = computed(() => {
-  if (window.innerWidth <= 768) return isOpenSidebar.value ? 3 : 4;
-  if (window.innerWidth <= 1028) return isOpenSidebar.value ? 5 : 6;
-  if (window.innerWidth <= 1250) return isOpenSidebar.value ? 5 : 6;
-  return isOpenSidebar.value ? 6 : 7;
+  // Check if we're on client side
+  if (process.client) {
+    if (windowWidth.value <= 768) return isOpenSidebar.value ? 3 : 4;
+    if (windowWidth.value <= 1028) return isOpenSidebar.value ? 5 : 6;
+    if (windowWidth.value <= 1250) return isOpenSidebar.value ? 5 : 6;
+    return isOpenSidebar.value ? 6 : 7;
+  }
+  // Fallback for SSR
+  return 4;
 });
+
+const updateWindowWidth = () => {
+  if (process.client) {
+    windowWidth.value = window.innerWidth;
+  }
+};
+
+onMounted(() => {
+  if (process.client) {
+    windowWidth.value = window.innerWidth;
+    window.addEventListener("resize", updateWindowWidth);
+  }
+});
+
+onUnmounted(() => {
+  if (process.client) {
+    window.removeEventListener("resize", updateWindowWidth);
+  }
+});
+
 const onSwiper = (swiper: any) => {
   swiperRef.value = swiper;
 };
+
 const onSlideChange = (swiper: any) => {
   activeIndex.value = swiper.activeIndex;
 };
+
 const progressWidth = computed(() => {
   const visible = getSlidesPerView.value;
   const total = totalSlides.value;

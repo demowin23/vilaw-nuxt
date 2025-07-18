@@ -2,20 +2,7 @@
   <div class="bg-gray-100 rounded-2xl p-4 mb-6">
     <div class="flex items-center mb-2">
       <span class="text-orange-500 font-bold text-lg flex items-center">
-        <svg
-          class="w-5 h-5 mr-1"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M13 10V3L4 14h7v7l9-11h-7z"
-          />
-        </svg>
-        Có nhiều lượt xem
+        {{ title }}
       </span>
     </div>
     <hr class="border-dashed border-gray-300 mb-4" />
@@ -32,7 +19,7 @@
             'w-16 h-16 relative',
           ]"
         >
-          <img :src="item.icon" class="w-8 h-8 mx-auto mt-2" alt="icon" />
+          <img :src="item.icon" class="w-16 h-16 mx-auto" alt="icon" />
           <span
             class="absolute -top-2 -left-2 w-7 h-7 flex items-center justify-center rounded-full font-bold text-white text-base shadow-lg"
             :class="item.badgeBg"
@@ -58,5 +45,6 @@
 <script setup lang="ts">
 const props = defineProps<{
   topViews: any[];
+  title: string;
 }>();
 </script>

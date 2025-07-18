@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 
 export const useSidebarStore = defineStore('sidebar', {
   state: () => ({
-    isOpenSidebar: true
+    isOpenSidebar: true,
+    currentTitle: 'Dân sự – Thừa kế – Hôn nhân và gia đình'
   }),
   actions: {
     toggleSidebar() {
@@ -13,6 +14,9 @@ export const useSidebarStore = defineStore('sidebar', {
     },
     closeSidebar() {
       this.isOpenSidebar = false
+    },
+    setTitle(title: string) {
+      this.currentTitle = title
     }
   }
 }) 
