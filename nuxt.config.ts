@@ -10,6 +10,13 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'cloudflare-pages'
   },
+  vite: {
+    server: {
+      fs: {
+        strict: false
+      }
+    }
+  },
   tailwindcss: {
     config: {
       darkMode: 'class',
