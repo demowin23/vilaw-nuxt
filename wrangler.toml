@@ -1,0 +1,15 @@
+[build]
+command = "yarn build"
+output_directory = ".output/public"
+
+[build.environment]
+NODE_VERSION = "20"
+
+[site]
+bucket = ".output/public"
+
+[env.production]
+name = "vilaw-nuxt"
+
+[env.preview]
+name = "vilaw-nuxt-preview" 
