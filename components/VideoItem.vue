@@ -34,6 +34,12 @@ defineProps<{
   font-family: inherit;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease;
+}
+.dark .video-item {
+  background: #1f2937;
+  color: #f9fafb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 .thumbnail-wrapper {
   position: relative;
@@ -62,6 +68,10 @@ defineProps<{
   -webkit-box-orient: vertical;
   overflow: hidden;
   color: #181818;
+  transition: color 0.3s ease;
+}
+.dark .title {
+  color: #f9fafb;
 }
 .meta {
   font-size: 0.97em;
@@ -69,11 +79,19 @@ defineProps<{
   display: flex;
   flex-direction: column;
   gap: 2px;
+  transition: color 0.3s ease;
+}
+.dark .meta {
+  color: #9ca3af;
 }
 .duration-meta {
   font-size: 0.97em;
   color: #888;
   margin-bottom: 2px;
+  transition: color 0.3s ease;
+}
+.dark .duration-meta {
+  color: #9ca3af;
 }
 .views {
   white-space: nowrap;

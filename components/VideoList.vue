@@ -132,6 +132,10 @@ const handleClick = () => {
   display: flex;
   align-items: center;
   margin: 0;
+  transition: color 0.3s ease;
+}
+.dark .section-title {
+  color: #f9fafb;
 }
 .dot {
   width: 8px;

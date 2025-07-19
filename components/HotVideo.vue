@@ -116,6 +116,14 @@ const progressWidth = computed(() => {
   margin-top: 8px;
   overflow: hidden;
 }
+@media (prefers-color-scheme: dark) {
+  .hot-video-progress-bar {
+    background: #374151;
+  }
+}
+.dark .hot-video-progress-bar {
+  background: #374151;
+}
 .hot-video-progress {
   height: 100%;
   background: #f58220;

@@ -1,20 +1,25 @@
 <template>
-  <div class="bg-[#e4e7ec] w-full min-h-screen pb-8 animate-fade-in relative">
+  <div
+    class="w-full pb-8 animate-fade-in relative bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
+  >
     <section
       id="ve-chung-toi"
       class="container mx-auto pt-8 pb-8 px-2 sm:px-4 section-animate"
     >
-      <div class="bg-white rounded-3xl shadow p-6 sm:p-10 mx-auto text-center">
+      <div
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow p-6 sm:p-10 mx-auto text-center transition-colors duration-300"
+      >
         <div
-          class="text-[#095589] font-bold uppercase tracking-wide text-lg mb-2"
+          class="text-blue-800 dark:text-blue-300 font-bold uppercase tracking-wide text-lg mb-2 transition-colors duration-300"
         >
           Về chúng tôi
         </div>
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6">
-          Công ty Luật TNHH <span class="text-[#8a5a4a]">ViLaw</span>
+          Công ty Luật TNHH
+          <span class="text-orange-600 dark:text-orange-400">ViLaw</span>
         </h1>
         <div
-          class="text-justify text-gray-600 text-base sm:text-lg md:text-xl leading-7 sm:leading-8 md:leading-9 mb-6"
+          class="text-justify text-gray-600 dark:text-gray-300 text-base sm:text-lg md:text-xl leading-7 sm:leading-8 md:leading-9 mb-6 transition-colors duration-300"
         >
           Với phương châm hoạt động: “Thời Gian – Tận Tâm – Tận Lực”, chúng tôi
           luôn cam kết mang đến những dịch vụ pháp lý chất lượng, nhanh chóng,
@@ -27,7 +32,7 @@
           nhất cho sự thành công của chúng tôi.
         </div>
         <div
-          class="text-justify text-gray-600 text-base sm:text-lg md:text-xl leading-7 sm:leading-8 md:leading-9 mb-6"
+          class="text-justify text-gray-600 dark:text-gray-300 text-base sm:text-lg md:text-xl leading-7 sm:leading-8 md:leading-9 mb-6 transition-colors duration-300"
         >
           Với nhiều năm kinh nghiệm hợp tác và cung cấp dịch vụ tư vấn pháp lý
           cho các Doanh nghiệp lớn, uy tín trong và ngoài nước, đặc biệt là các
@@ -38,7 +43,7 @@
           Nam.
         </div>
         <div
-          class="text-justify text-gray-600 text-base sm:text-lg md:text-xl leading-7 sm:leading-8 md:leading-9"
+          class="text-justify text-gray-600 dark:text-gray-300 text-base sm:text-lg md:text-xl leading-7 sm:leading-8 md:leading-9 transition-colors duration-300"
         >
           Chúng tôi cam kết đồng hành cùng Quý khách trên hành trình phát triển
           bền vững, giải quyết hiệu quả mọi vấn đề pháp lý, giúp Quý khách đạt
@@ -48,26 +53,28 @@
     </section>
     <!-- Lịch sử thành lập (timeline dọc, icon giữa dòng kẻ, border mỏng) -->
     <section id="lich-su" class="container mx-auto py-12 px-4 section-animate">
-      <div class="bg-white rounded-3xl shadow-xl p-10">
+      <div
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10 transition-colors duration-300"
+      >
         <h2
-          class="text-3xl font-extrabold text-[#095589] mb-10 text-center tracking-tight uppercase"
+          class="text-3xl font-extrabold text-blue-800 dark:text-blue-300 mb-10 text-center tracking-tight uppercase transition-colors duration-300"
         >
           Lịch sử thành lập
         </h2>
         <div
-          class="relative border-l-2 border-[#095589]/30 pl-0 md:pl-0 space-y-10"
+          class="relative border-l-2 border-blue-800/30 dark:border-blue-300/30 pl-0 md:pl-0 space-y-10 transition-colors duration-300"
         >
           <!-- 2024 - nay -->
           <div class="relative flex flex-col gap-2 pl-12">
             <span
-              class="absolute left-0 top-0 flex items-center justify-center w-12 h-12 rounded-full border-2 border-[#095589] bg-white text-[#095589] z-10 -translate-x-1/2 shadow-md"
+              class="absolute left-0 top-0 flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-800 dark:border-blue-300 bg-white dark:bg-gray-900 text-blue-800 dark:text-blue-300 z-10 -translate-x-1/2 shadow-md transition-colors duration-300"
             >
               <!-- tabler:award -->
               <svg
                 class="h-8 w-8"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#095589"
+                stroke="currentColor"
                 stroke-width="2"
               >
                 <path
@@ -79,14 +86,24 @@
               </svg>
             </span>
             <div class="ml-2">
-              <div class="font-bold text-[#095589] text-lg">
+              <div
+                class="font-bold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
+              >
                 Kiện toàn tổ chức và phát triển dịch vụ
               </div>
-              <div class="font-semibold text-base text-[#222]">
+              <div
+                class="font-semibold text-base text-[#222] dark:text-gray-300 transition-colors duration-300"
+              >
                 Bổ sung nhân lực và phát triển mở rộng quy mô dịch vụ
               </div>
-              <div class="text-xs text-gray-500 mb-2">2024 - đến nay</div>
-              <div class="text-gray-700 text-base leading-relaxed">
+              <div
+                class="text-xs text-gray-500 dark:text-gray-400 mb-2 transition-colors duration-300"
+              >
+                2024 - đến nay
+              </div>
+              <div
+                class="text-gray-700 dark:text-gray-300 text-base leading-relaxed transition-colors duration-300"
+              >
                 Từ năm 2024 đến nay, Youth & Partners Law Firm đã tiến hành kiện
                 toàn bộ máy tổ chức, bổ sung nhân lực và mở rộng quy mô dịch vụ
                 để đáp ứng nhu cầu ngày càng cao của khách hàng. Công ty tập
@@ -94,7 +111,9 @@
                 vấn pháp lý chuyên sâu trong nhiều lĩnh vực, bao gồm nhưng không
                 giới hạn như:
               </div>
-              <ul class="list-disc pl-6 text-gray-700 text-base mt-2 space-y-1">
+              <ul
+                class="list-disc pl-6 text-gray-700 dark:text-gray-300 text-base mt-2 space-y-1 transition-colors duration-300"
+              >
                 <li>Doanh nghiệp</li>
                 <li>Tư vấn thường xuyên</li>
                 <li>Sở hữu trí tuệ</li>
@@ -114,14 +133,14 @@
           <!-- 2021-2023 -->
           <div class="relative flex flex-col gap-2 pl-12">
             <span
-              class="absolute left-0 top-0 flex items-center justify-center w-12 h-12 rounded-full border-2 border-[#095589] bg-white text-[#095589] z-10 -translate-x-1/2 shadow-md"
+              class="absolute left-0 top-0 flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-800 dark:border-blue-300 bg-white dark:bg-gray-900 text-blue-800 dark:text-blue-300 z-10 -translate-x-1/2 shadow-md transition-colors duration-300"
             >
               <!-- tabler:chart-arrows -->
               <svg
                 class="h-8 w-8"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#095589"
+                stroke="currentColor"
                 stroke-width="2"
               >
                 <path
@@ -132,12 +151,24 @@
               </svg>
             </span>
             <div class="ml-2">
-              <div class="font-bold text-[#095589] text-lg">Mở rộng</div>
-              <div class="font-semibold text-base text-[#222]">
+              <div
+                class="font-bold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
+              >
+                Mở rộng
+              </div>
+              <div
+                class="font-semibold text-base text-[#222] dark:text-gray-300 transition-colors duration-300"
+              >
                 Thêm 01 chi nhánh tại Hà Nội
               </div>
-              <div class="text-xs text-gray-500 mb-2">2021 - 2023</div>
-              <div class="text-gray-700 text-base leading-relaxed">
+              <div
+                class="text-xs text-gray-500 dark:text-gray-400 mb-2 transition-colors duration-300"
+              >
+                2021 - 2023
+              </div>
+              <div
+                class="text-gray-700 dark:text-gray-300 text-base leading-relaxed transition-colors duration-300"
+              >
                 Trong giai đoạn 2021 – 2023, Youth & Partners tiếp tục mở rộng
                 mạng lưới với chi nhánh mới tại thủ đô Hà Nội, được đặt tại
                 P316, Tháp Tây, Chung cư Học viện Quốc Phòng, phường Nghĩa Đô,
@@ -150,14 +181,14 @@
           <!-- 2020-2021 -->
           <div class="relative flex flex-col gap-2 pl-12">
             <span
-              class="absolute left-0 top-0 flex items-center justify-center w-12 h-12 rounded-full border-2 border-[#095589] bg-white text-[#095589] z-10 -translate-x-1/2 shadow-md"
+              class="absolute left-0 top-0 flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-800 dark:border-blue-300 bg-white dark:bg-gray-900 text-blue-800 dark:text-blue-300 z-10 -translate-x-1/2 shadow-md transition-colors duration-300"
             >
               <!-- tabler:chart-arrows -->
               <svg
                 class="h-8 w-8"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#095589"
+                stroke="currentColor"
                 stroke-width="2"
               >
                 <path
@@ -168,12 +199,24 @@
               </svg>
             </span>
             <div class="ml-2">
-              <div class="font-bold text-[#095589] text-lg">Mở rộng</div>
-              <div class="font-semibold text-base text-[#222]">
+              <div
+                class="font-bold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
+              >
+                Mở rộng
+              </div>
+              <div
+                class="font-semibold text-base text-[#222] dark:text-gray-300 transition-colors duration-300"
+              >
                 Thêm 01 chi nhánh tại Bắc Ninh
               </div>
-              <div class="text-xs text-gray-500 mb-2">2020 - 2021</div>
-              <div class="text-gray-700 text-base leading-relaxed">
+              <div
+                class="text-xs text-gray-500 dark:text-gray-400 mb-2 transition-colors duration-300"
+              >
+                2020 - 2021
+              </div>
+              <div
+                class="text-gray-700 dark:text-gray-300 text-base leading-relaxed transition-colors duration-300"
+              >
                 Trong giai đoạn 2020 – 2021, Công ty Luật TNHH Youth & Partners
                 đã thực hiện chiến lược mở rộng mạng lưới để nâng cao chất lượng
                 dịch vụ và đáp ứng tốt hơn nhu cầu của khách hàng tại các khu
@@ -187,14 +230,14 @@
           <!-- 2020 -->
           <div class="relative flex flex-col gap-2 pl-12">
             <span
-              class="absolute left-0 top-0 flex items-center justify-center w-12 h-12 rounded-full border-2 border-[#095589] bg-white text-[#095589] z-10 -translate-x-1/2 shadow-md"
+              class="absolute left-0 top-0 flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-800 dark:border-blue-300 bg-white dark:bg-gray-900 text-blue-800 dark:text-blue-300 z-10 -translate-x-1/2 shadow-md transition-colors duration-300"
             >
               <!-- tabler:step-out -->
               <svg
                 class="h-8 w-8"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#095589"
+                stroke="currentColor"
                 stroke-width="2"
               >
                 <path
@@ -205,12 +248,24 @@
               </svg>
             </span>
             <div class="ml-2">
-              <div class="font-bold text-[#095589] text-lg">Mở rộng</div>
-              <div class="font-semibold text-base text-[#222]">
+              <div
+                class="font-bold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
+              >
+                Mở rộng
+              </div>
+              <div
+                class="font-semibold text-base text-[#222] dark:text-gray-300 transition-colors duration-300"
+              >
                 Thay đổi địa chỉ công ty
               </div>
-              <div class="text-xs text-gray-500 mb-2">2020</div>
-              <div class="text-gray-700 text-base leading-relaxed">
+              <div
+                class="text-xs text-gray-500 dark:text-gray-400 mb-2 transition-colors duration-300"
+              >
+                2020
+              </div>
+              <div
+                class="text-gray-700 dark:text-gray-300 text-base leading-relaxed transition-colors duration-300"
+              >
                 Để đáp ứng nhu cầu phát triển, từ tháng 01 năm 2020, sau nửa năm
                 hoạt động, công ty đã chuyển địa chỉ văn phòng giao dịch sang
                 địa điểm mới, thuận tiện hơn cho khách hàng và đối tác.
@@ -227,13 +282,13 @@
       class="container mx-auto py-12 px-4 section-animate"
     >
       <div
-        class="bg-white rounded-3xl shadow-xl p-10 flex flex-col md:flex-row gap-10 items-center"
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10 flex flex-col md:flex-row gap-10 items-center transition-colors duration-300"
       >
         <!-- Left: Awards List -->
         <div class="flex-1 flex flex-col gap-8">
           <div class="flex items-start gap-5">
             <span
-              class="flex items-center justify-center w-14 h-14 aspect-square rounded-full bg-blue-100 text-[#095589] text-2xl shrink-0"
+              class="flex items-center justify-center w-14 h-14 aspect-square rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 text-2xl shrink-0 transition-colors duration-300"
             >
               <svg
                 class="w-6 h-6 icon-bold"
@@ -268,7 +323,7 @@
           </div>
           <div class="flex items-start gap-5">
             <span
-              class="flex items-center justify-center w-14 h-14 aspect-square rounded-full bg-blue-100 text-[#095589] text-2xl shrink-0"
+              class="flex items-center justify-center w-14 h-14 aspect-square rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 text-2xl shrink-0 transition-colors duration-300"
             >
               <svg
                 class="w-6 h-6 icon-bold"
@@ -305,7 +360,7 @@
           </div>
           <div class="flex items-start gap-5">
             <span
-              class="flex items-center justify-center w-14 h-14 aspect-square rounded-full bg-blue-100 text-[#095589] text-2xl shrink-0"
+              class="flex items-center justify-center w-14 h-14 aspect-square rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 text-2xl shrink-0 transition-colors duration-300"
             >
               <svg
                 class="w-6 h-6 icon-bold"
@@ -342,7 +397,9 @@
         <!-- Right: Title, Description, Button -->
         <div class="flex-1 flex flex-col items-start justify-center gap-6">
           <div>
-            <div class="text-4xl font-extrabold text-black mb-4">
+            <div
+              class="text-4xl font-extrabold text-black dark:text-white mb-4 transition-colors duration-300"
+            >
               Giải thưởng pháp lý
             </div>
             <div class="text-gray-500 text-xl mb-6">
@@ -351,7 +408,7 @@
             </div>
           </div>
           <button
-            class="px-10 py-4 bg-[#095589] text-white rounded-full font-semibold text-lg shadow hover:bg-[#073a5c] transition"
+            class="px-10 py-4 bg-blue-800 dark:bg-blue-600 text-white rounded-full font-semibold text-lg shadow hover:bg-blue-900 dark:hover:bg-blue-700 transition-colors duration-300"
           >
             Xem thêm
           </button>
@@ -361,29 +418,39 @@
 
     <!-- Cảm nhận của khách hàng -->
     <section id="cam-nhan" class="container mx-auto py-12 px-4 section-animate">
-      <h3 class="text-2xl font-bold text-[#095589] mb-8 text-center">
+      <h3
+        class="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-8 text-center transition-colors duration-300"
+      >
         Cảm nhận của khách hàng
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div
           v-for="(item, idx) in testimonials"
           :key="idx"
-          class="bg-white rounded-3xl shadow-xl p-8 flex flex-col gap-4 border-l-4 border-[#095589] hover:shadow-2xl transition-all duration-300"
+          class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 flex flex-col gap-4 border-l-4 border-blue-800 dark:border-blue-300 hover:shadow-2xl transition-all duration-300"
         >
           <div class="flex items-center gap-4 mb-2">
             <span
-              class="inline-block w-12 h-12 rounded-full bg-[#09558915] border-2 border-[#095589] flex items-center justify-center text-2xl text-[#095589] font-bold"
+              class="inline-block w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 border-2 border-blue-800 dark:border-blue-300 flex items-center justify-center text-2xl text-blue-800 dark:text-blue-300 font-bold transition-colors duration-300"
             >
               <font-awesome-icon :icon="['fas', 'user']" />
             </span>
             <div>
-              <div class="font-semibold text-[#095589] text-lg">
+              <div
+                class="font-semibold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
+              >
                 {{ item.name }}
               </div>
-              <div class="text-xs text-gray-500">{{ item.role }}</div>
+              <div
+                class="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
+              >
+                {{ item.role }}
+              </div>
             </div>
           </div>
-          <div class="text-gray-700 italic text-base">
+          <div
+            class="text-gray-700 dark:text-gray-300 italic text-base transition-colors duration-300"
+          >
             "{{ item.feedback }}"
           </div>
         </div>
@@ -393,7 +460,7 @@
     <!-- Tôn chỉ hoạt động -->
     <section id="ton-chi" class="container mx-auto py-12 px-4 section-animate">
       <div
-        class="flex flex-col md:flex-row items-center gap-10 bg-white rounded-3xl shadow-xl p-10 border-l-4 border-[#095589]"
+        class="flex flex-col md:flex-row items-center gap-10 bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10 border-l-4 border-blue-800 dark:border-blue-300 transition-colors duration-300"
       >
         <div
           class="w-full md:w-1/2 flex-shrink-0 flex items-center justify-center"
@@ -405,13 +472,15 @@
           />
         </div>
         <div class="flex-1 flex flex-col gap-8">
-          <h3 class="text-3xl font-extrabold mb-6 text-black">
+          <h3
+            class="text-3xl font-extrabold mb-6 text-black dark:text-white transition-colors duration-300"
+          >
             Tôn chỉ hoạt động của chúng tôi
           </h3>
           <div class="flex flex-col gap-8">
             <div class="flex items-start gap-4">
               <span
-                class="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 text-green-600 text-2xl mt-1"
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 text-2xl mt-1 transition-colors duration-300"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -437,8 +506,14 @@
                 </svg>
               </span>
               <div>
-                <div class="font-bold text-xl mb-1">Thời gian</div>
-                <div class="text-gray-700 text-base">
+                <div
+                  class="font-bold text-xl mb-1 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+                >
+                  Thời gian
+                </div>
+                <div
+                  class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+                >
                   Chúng tôi hiểu rằng mỗi vụ việc pháp lý đều có những yêu cầu
                   về thời gian và các yếu tố khắt khe. Vì vậy, đội ngũ luật sư
                   của chúng tôi luôn nỗ lực tối đa để đảm bảo tiến trình công
@@ -449,7 +524,7 @@
             </div>
             <div class="flex items-start gap-4">
               <span
-                class="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 text-green-600 text-2xl mt-1"
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 text-2xl mt-1 transition-colors duration-300"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -467,8 +542,14 @@
                 </svg>
               </span>
               <div>
-                <div class="font-bold text-xl mb-1">Tận tâm</div>
-                <div class="text-gray-700 text-base">
+                <div
+                  class="font-bold text-xl mb-1 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+                >
+                  Tận tâm
+                </div>
+                <div
+                  class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+                >
                   Mỗi luật sư tại Youth & Partners đều cam kết đặt trọn tâm
                   huyết vào từng hồ sơ, luôn lắng nghe và thấu hiểu nhu cầu của
                   khách hàng để đưa ra các giải pháp tối ưu và phù hợp nhất.
@@ -479,7 +560,7 @@
             </div>
             <div class="flex items-start gap-4">
               <span
-                class="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 text-green-600 text-2xl mt-1"
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 text-2xl mt-1 transition-colors duration-300"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -505,8 +586,14 @@
                 </svg>
               </span>
               <div>
-                <div class="font-bold text-xl mb-1">Tận lực</div>
-                <div class="text-gray-700 text-base">
+                <div
+                  class="font-bold text-xl mb-1 text-gray-900 dark:text-gray-100 transition-colors duration-300"
+                >
+                  Tận lực
+                </div>
+                <div
+                  class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+                >
                   Chúng tôi không chỉ cung cấp dịch vụ pháp lý đơn thuần, mà
                   luôn nỗ lực vượt qua mọi thử thách để bảo vệ quyền lợi hợp
                   pháp của khách hàng. Với đội ngũ luật sư giàu kinh nghiệm và
@@ -524,23 +611,31 @@
     <!-- Sứ mệnh và giá trị cốt lõi -->
     <section id="su-menh" class="container mx-auto py-12 px-4 section-animate">
       <div
-        class="bg-white rounded-3xl shadow-xl p-10 flex flex-col md:flex-row gap-10 border-l-4 border-[#095589]"
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10 flex flex-col md:flex-row gap-10 border-l-4 border-blue-800 dark:border-blue-300 transition-colors duration-300"
       >
         <div class="flex-1">
-          <h3 class="text-2xl font-bold text-[#095589] mb-4">
+          <h3
+            class="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-4 transition-colors duration-300"
+          >
             Tầm nhìn và sứ mệnh
           </h3>
-          <div class="text-gray-700 mb-2 text-lg">
+          <div
+            class="text-gray-700 dark:text-gray-300 mb-2 text-lg transition-colors duration-300"
+          >
             Trở thành hệ sinh thái pháp lý trực tuyến hàng đầu Việt Nam, cung
             cấp dịch vụ pháp lý chất lượng, minh bạch, thuận tiện cho mọi đối
             tượng khách hàng.
           </div>
         </div>
         <div class="flex-1">
-          <h3 class="text-2xl font-bold text-[#095589] mb-4">
+          <h3
+            class="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-4 transition-colors duration-300"
+          >
             Giá trị cốt lõi
           </h3>
-          <ul class="list-disc pl-6 text-gray-700 space-y-2 text-lg">
+          <ul
+            class="list-disc pl-6 text-gray-700 dark:text-gray-300 space-y-2 text-lg transition-colors duration-300"
+          >
             <li>Chính trực</li>
             <li>Chuyên nghiệp</li>
             <li>Đổi mới</li>
@@ -553,77 +648,123 @@
     <!-- Các con số ấn tượng -->
     <section id="con-so" class="container mx-auto py-12 px-4 section-animate">
       <div
-        class="bg-white rounded-3xl shadow-xl p-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center border-l-4 border-[#095589]"
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center border-l-4 border-blue-800 dark:border-blue-300 transition-colors duration-300"
       >
         <div class="flex flex-col items-center gap-2">
-          <div class="text-4xl font-extrabold text-[#095589]">5</div>
-          <div class="text-gray-700 text-lg">Văn phòng</div>
+          <div
+            class="text-4xl font-extrabold text-blue-800 dark:text-blue-300 transition-colors duration-300"
+          >
+            5
+          </div>
+          <div
+            class="text-gray-700 dark:text-gray-300 text-lg transition-colors duration-300"
+          >
+            Văn phòng
+          </div>
         </div>
         <div class="flex flex-col items-center gap-2">
-          <div class="text-4xl font-extrabold text-[#095589]">30+</div>
-          <div class="text-gray-700 text-lg">Luật sư & chuyên gia</div>
+          <div
+            class="text-4xl font-extrabold text-blue-800 dark:text-blue-300 transition-colors duration-300"
+          >
+            30+
+          </div>
+          <div
+            class="text-gray-700 dark:text-gray-300 text-lg transition-colors duration-300"
+          >
+            Luật sư & chuyên gia
+          </div>
         </div>
         <div class="flex flex-col items-center gap-2">
-          <div class="text-4xl font-extrabold text-[#095589]">1176</div>
-          <div class="text-gray-700 text-lg">Khách hàng doanh nghiệp</div>
+          <div
+            class="text-4xl font-extrabold text-blue-800 dark:text-blue-300 transition-colors duration-300"
+          >
+            1176
+          </div>
+          <div
+            class="text-gray-700 dark:text-gray-300 text-lg transition-colors duration-300"
+          >
+            Khách hàng doanh nghiệp
+          </div>
         </div>
         <div class="flex flex-col items-center gap-2">
-          <div class="text-4xl font-extrabold text-[#095589]">723</div>
-          <div class="text-gray-700 text-lg">Khách hàng cá nhân</div>
+          <div
+            class="text-4xl font-extrabold text-blue-800 dark:text-blue-300 transition-colors duration-300"
+          >
+            723
+          </div>
+          <div
+            class="text-gray-700 dark:text-gray-300 text-lg transition-colors duration-300"
+          >
+            Khách hàng cá nhân
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Dịch vụ của chúng tôi -->
     <section id="dich-vu" class="container mx-auto py-12 px-4 section-animate">
-      <h3 class="text-2xl font-bold text-[#095589] mb-8 text-center">
+      <h3
+        class="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-8 text-center transition-colors duration-300"
+      >
         Dịch vụ của Chúng tôi
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div
-          class="bg-white rounded-3xl shadow-xl p-8 flex flex-col gap-4 border-l-4 border-[#095589] hover:shadow-2xl transition-all duration-300"
+          class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 flex flex-col gap-4 border-l-4 border-blue-800 dark:border-blue-300 hover:shadow-2xl transition-all duration-300"
         >
           <div class="flex items-center gap-3 mb-2">
-            <span class="text-[#095589] text-2xl"
+            <span
+              class="text-blue-800 dark:text-blue-300 text-2xl transition-colors duration-300"
               ><font-awesome-icon :icon="['fas', 'gavel']"
             /></span>
-            <span class="font-semibold text-[#095589] text-lg"
+            <span
+              class="font-semibold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
               >Sở hữu trí tuệ</span
             >
           </div>
-          <div class="text-gray-700 text-base">
+          <div
+            class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+          >
             Tư vấn đăng ký, bảo hộ quyền sở hữu trí tuệ cho cá nhân, doanh
             nghiệp.
           </div>
         </div>
         <div
-          class="bg-white rounded-3xl shadow-xl p-8 flex flex-col gap-4 border-l-4 border-[#095589] hover:shadow-2xl transition-all duration-300"
+          class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 flex flex-col gap-4 border-l-4 border-blue-800 dark:border-blue-300 hover:shadow-2xl transition-all duration-300"
         >
           <div class="flex items-center gap-3 mb-2">
-            <span class="text-[#095589] text-2xl"
+            <span
+              class="text-blue-800 dark:text-blue-300 text-2xl transition-colors duration-300"
               ><font-awesome-icon :icon="['fas', 'handshake']"
             /></span>
-            <span class="font-semibold text-[#095589] text-lg"
+            <span
+              class="font-semibold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
               >Tư vấn doanh nghiệp</span
             >
           </div>
-          <div class="text-gray-700 text-base">
+          <div
+            class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+          >
             Tư vấn thành lập, vận hành, giải thể doanh nghiệp, hỗ trợ pháp lý
             toàn diện.
           </div>
         </div>
         <div
-          class="bg-white rounded-3xl shadow-xl p-8 flex flex-col gap-4 border-l-4 border-[#095589] hover:shadow-2xl transition-all duration-300"
+          class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 flex flex-col gap-4 border-l-4 border-blue-800 dark:border-blue-300 hover:shadow-2xl transition-all duration-300"
         >
           <div class="flex items-center gap-3 mb-2">
-            <span class="text-[#095589] text-2xl"
+            <span
+              class="text-blue-800 dark:text-blue-300 text-2xl transition-colors duration-300"
               ><font-awesome-icon :icon="['fas', 'balance-scale']"
             /></span>
-            <span class="font-semibold text-[#095589] text-lg"
+            <span
+              class="font-semibold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
               >Giải quyết tranh chấp</span
             >
           </div>
-          <div class="text-gray-700 text-base">
+          <div
+            class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+          >
             Đại diện, bảo vệ quyền lợi khách hàng trong các vụ việc tranh chấp
             dân sự, kinh doanh, lao động...
           </div>
@@ -640,39 +781,67 @@
 
     <!-- Địa chỉ văn phòng -->
     <section id="dia-chi" class="container mx-auto py-12 px-4 section-animate">
-      <h3 class="text-2xl font-bold text-[#095589] mb-8 text-center">
+      <h3
+        class="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-8 text-center transition-colors duration-300"
+      >
         Địa chỉ văn phòng
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div
-          class="bg-white rounded-3xl shadow-xl p-8 border-l-4 border-[#095589] flex flex-col items-center"
+          class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border-l-4 border-blue-800 dark:border-blue-300 flex flex-col items-center transition-colors duration-300"
         >
-          <div class="font-semibold text-[#095589] mb-2 text-lg">Hà Nội</div>
-          <div class="text-gray-700 text-base">
+          <div
+            class="font-semibold text-blue-800 dark:text-blue-300 mb-2 text-lg transition-colors duration-300"
+          >
+            Hà Nội
+          </div>
+          <div
+            class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+          >
             Tầng 5, Tòa nhà ABC, Quận Cầu Giấy
           </div>
         </div>
         <div
-          class="bg-white rounded-3xl shadow-xl p-8 border-l-4 border-[#095589] flex flex-col items-center"
+          class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border-l-4 border-blue-800 dark:border-blue-300 flex flex-col items-center transition-colors duration-300"
         >
-          <div class="font-semibold text-[#095589] mb-2 text-lg">
+          <div
+            class="font-semibold text-blue-800 dark:text-blue-300 mb-2 text-lg transition-colors duration-300"
+          >
             TP. Hồ Chí Minh
           </div>
-          <div class="text-gray-700 text-base">Lầu 3, Tòa nhà XYZ, Quận 1</div>
+          <div
+            class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+          >
+            Lầu 3, Tòa nhà XYZ, Quận 1
+          </div>
         </div>
         <div
-          class="bg-white rounded-3xl shadow-xl p-8 border-l-4 border-[#095589] flex flex-col items-center"
+          class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border-l-4 border-blue-800 dark:border-blue-300 flex flex-col items-center transition-colors duration-300"
         >
-          <div class="font-semibold text-[#095589] mb-2 text-lg">Đà Nẵng</div>
-          <div class="text-gray-700 text-base">
+          <div
+            class="font-semibold text-blue-800 dark:text-blue-300 mb-2 text-lg transition-colors duration-300"
+          >
+            Đà Nẵng
+          </div>
+          <div
+            class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+          >
             Số 12, Đường ABC, Quận Hải Châu
           </div>
         </div>
         <div
-          class="bg-white rounded-3xl shadow-xl p-8 border-l-4 border-[#095589] flex flex-col items-center"
+          class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border-l-4 border-blue-800 dark:border-blue-300 flex flex-col items-center transition-colors duration-300"
         >
-          <div class="font-semibold text-[#095589] mb-2 text-lg">Nghệ An</div>
-          <div class="text-gray-700 text-base">Số 8, Đường XYZ, TP. Vinh</div>
+          <div
+            class="font-semibold text-blue-800 dark:text-blue-300 mb-2 text-lg transition-colors duration-300"
+          >
+            Nghệ An
+          </div>
+          <div
+            class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+          >
+            Số 8, Đường XYZ, TP. Vinh
+          </div>
         </div>
       </div>
     </section>
@@ -680,13 +849,17 @@
     <!-- Liên hệ để được tư vấn ngay -->
     <section id="lien-he" class="container mx-auto py-12 px-4 section-animate">
       <div
-        class="bg-white rounded-3xl shadow-xl p-10 flex flex-col md:flex-row items-center justify-between gap-10 border-l-4 border-[#095589]"
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-10 flex flex-col md:flex-row items-center justify-between gap-10 border-l-4 border-blue-800 dark:border-blue-300 transition-colors duration-300"
       >
         <div class="flex-1">
-          <h3 class="text-2xl font-bold text-[#095589] mb-4">
+          <h3
+            class="text-2xl font-bold text-blue-800 dark:text-blue-300 mb-4 transition-colors duration-300"
+          >
             Liên hệ để được tư vấn ngay
           </h3>
-          <ul class="flex flex-wrap gap-6 text-[#095589] text-lg">
+          <ul
+            class="flex flex-wrap gap-6 text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
+          >
             <li>
               <font-awesome-icon :icon="['fas', 'phone']" class="mr-2" /> 0925
               555 875
@@ -707,12 +880,12 @@
         </div>
         <div class="flex-shrink-0 flex gap-4">
           <button
-            class="bg-[#095589] text-white px-8 py-3 rounded-xl font-semibold shadow hover:bg-[#073a5c] transition"
+            class="bg-blue-800 dark:bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold shadow hover:bg-blue-900 dark:hover:bg-blue-700 transition-colors duration-300"
           >
             Gọi ngay
           </button>
           <button
-            class="bg-white border border-[#095589] text-[#095589] px-8 py-3 rounded-xl font-semibold shadow hover:bg-[#095589]/10 transition"
+            class="bg-white dark:bg-gray-900 border border-blue-800 dark:border-blue-300 text-blue-800 dark:text-blue-300 px-8 py-3 rounded-xl font-semibold shadow hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-300"
           >
             Nhận tư vấn
           </button>

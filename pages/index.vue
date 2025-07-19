@@ -11,7 +11,7 @@
         <SectionsVideo :topViews="topViews" title="Đất đai" />
       </div>
       <div
-        class="w-1/4 min-w-[100px] max-w-xs h-fit bg-white rounded-2xl p-4 grid grid-cols-2 gap-4"
+        class="w-1/4 min-w-[100px] max-w-xs h-fit bg-white dark:bg-gray-800 rounded-2xl p-4 grid grid-cols-2 gap-4 transition-colors duration-300"
       >
         <div
           class="relative group rounded-2xl overflow-hidden h-48 cursor-pointer transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
@@ -26,7 +26,8 @@
           >
             <span
               class="text-white font-bold text-lg md:text-xl text-center mt-4 drop-shadow-lg"
-              >BÀI<br />TẬP<br />LUẬT</span
+            >
+              TƯ<br />VẤN<br />LUẬT</span
             >
           </div>
         </div>
@@ -43,7 +44,7 @@
           >
             <span
               class="text-white font-bold text-lg md:text-xl text-center mt-4 drop-shadow-lg"
-              >ĐỀ<br />THI<br />LUẬT</span
+              >VIDEO</span
             >
           </div>
         </div>
@@ -60,7 +61,7 @@
           >
             <span
               class="text-white font-bold text-lg md:text-xl text-center mt-4 drop-shadow-lg"
-              >ÔN<br />THI<br />LUẬT</span
+              >CHAT<br />VƠI<br />LUẬT<br />SƯ</span
             >
           </div>
         </div>
@@ -77,7 +78,7 @@
           >
             <span
               class="text-white font-bold text-lg md:text-xl text-center mt-4 drop-shadow-lg"
-              >SÁCH<br />LUẬT</span
+              >KIẾN<br />THỨC<br />PHÁP<br />LUẬT</span
             >
           </div>
         </div>

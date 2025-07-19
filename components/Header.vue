@@ -2,7 +2,7 @@
   <div>
     <!-- Marquee top bar -->
     <div
-      class="w-full bg-white border-b border-[#f58220]/20 overflow-hidden h-9 flex items-center"
+      class="w-full bg-white dark:bg-gray-800 border-b border-[#f58220]/20 overflow-hidden h-9 flex items-center transition-colors duration-300"
     >
       <div
         class="marquee whitespace-nowrap font-semibold text-[#f58220] text-sm px-4"
@@ -11,9 +11,13 @@
         nghiệp ưu đãi lớn | Đăng ký ngay để nhận nhiều quyền lợi...
       </div>
     </div>
-    <header class="bg-white w-full shadow z-50">
+    <header
+      class="bg-white dark:bg-gray-800 w-full shadow z-50 transition-colors duration-300"
+    >
       <!-- Top tier -->
-      <div class="flex items-center justify-between px-4 py-2 border-b">
+      <div
+        class="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-600 transition-colors duration-300"
+      >
         <!-- Logo -->
         <div class="flex items-center gap-2">
           <button
@@ -46,7 +50,7 @@
           <!-- Desktop search input -->
           <form class="w-full hidden md:block" @submit.prevent>
             <div
-              class="flex items-center bg-[#efefef] rounded-lg px-3 py-2 w-full shadow-sm"
+              class="flex items-center bg-[#efefef] dark:bg-gray-700 rounded-lg px-3 py-2 w-full shadow-sm transition-colors duration-300"
             >
               <svg
                 class="w-5 h-5 text-[#f58220] mr-2"
@@ -76,7 +80,7 @@
               <input
                 type="text"
                 placeholder="Nhập từ khoá tìm kiếm"
-                class="bg-transparent flex-1 outline-none text-gray-700 placeholder-gray-500"
+                class="bg-transparent flex-1 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
               />
               <button
                 type="submit"

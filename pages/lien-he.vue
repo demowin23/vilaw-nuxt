@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-gradient-to-br from-blue-50 via-white to-orange-50">
+  <div
+    class="bg-gradient-to-br from-blue-50 via-white to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300"
+  >
     <!-- Hero Section -->
     <div
       class="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500"

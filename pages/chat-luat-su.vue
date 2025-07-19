@@ -1,12 +1,12 @@
 <template>
   <div
-    class="flex flex-col w-full bg-white rounded-xl"
+    class="flex flex-col w-full bg-white dark:bg-gray-800 rounded-xl transition-colors duration-300"
     style="height: calc(100vh - 130px)"
   >
     <div class="flex flex-1 min-h-0 h-0">
       <!-- Sidebar chọn lĩnh vực luật sư -->
       <aside
-        class="w-24 md:w-56 flex-shrink-0 border-r border-[#eee] flex flex-col items-center py-4 bg-white"
+        class="w-24 md:w-56 flex-shrink-0 border-r border-gray-200 dark:border-gray-600 flex flex-col items-center py-4 bg-white dark:bg-gray-800 transition-colors duration-300"
       >
         <h2
           class="text-xs md:text-base font-bold text-[#f58220] mb-4 hidden md:block"
@@ -24,8 +24,8 @@
               :class="[
                 'w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full border-2 transition-all',
                 selectedCategory === cat.value
-                  ? 'border-[#f58220] bg-[#f58220]/10'
-                  : 'border-gray-200 bg-white',
+                  ? 'border-[#f58220] bg-[#f58220]/10 dark:bg-[#f58220]/20'
+                  : 'border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700',
                 'group-hover:border-[#f58220] mx-auto',
               ]"
             >
@@ -35,7 +35,7 @@
                   'text-xl md:text-3xl',
                   selectedCategory === cat.value
                     ? 'text-[#f58220]'
-                    : 'text-gray-400',
+                    : 'text-gray-400 dark:text-gray-500',
                 ]"
               />
             </div>
@@ -44,7 +44,7 @@
                 'mt-2 text-xs md:text-base font-medium text-center break-words px-1',
                 selectedCategory === cat.value
                   ? 'text-[#f58220]'
-                  : 'text-gray-500',
+                  : 'text-gray-500 dark:text-gray-400',
               ]"
               >{{ cat.label }}</span
             >
@@ -54,7 +54,7 @@
       <!-- Khu vực chat -->
       <div class="flex-1 flex flex-col min-h-0">
         <div
-          class="flex items-center justify-center border-b border-[#eee] min-h-[48px] relative"
+          class="flex items-center justify-center border-b border-gray-200 dark:border-gray-600 min-h-[48px] relative bg-white dark:bg-gray-800 transition-colors duration-300"
         >
           <h1
             class="text-lg md:text-2xl font-bold text-[#f58220] text-center m-0"
@@ -83,7 +83,10 @@
             </svg>
           </button>
         </div>
-        <div class="flex flex-col flex-1 min-h-0 h-0" v-if="selectedCategory">
+        <div
+          class="flex flex-col flex-1 min-h-0 h-0 bg-white dark:bg-gray-800 transition-colors duration-300"
+          v-if="selectedCategory"
+        >
           <!-- Danh sách tin nhắn -->
           <div
             ref="messagesEnd"
@@ -100,7 +103,7 @@
                 :class="
                   msg.isUser
                     ? 'bg-[#f58220] text-white'
-                    : 'bg-gray-100 text-gray-800'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
                 "
               >
                 <template v-if="msg.type === 'text'">
@@ -116,7 +119,7 @@
                   <a
                     :href="msg.content"
                     target="_blank"
-                    class="underline text-blue-600"
+                    class="underline text-blue-600 dark:text-blue-400"
                     >Tải file</a
                   >
                 </template>
@@ -125,14 +128,14 @@
           </div>
           <!-- Nhập tin nhắn và gửi -->
           <form
-            class="flex gap-2 items-end mt-2 p-2"
+            class="flex gap-2 items-end mt-2 p-2 bg-white dark:bg-gray-800 transition-colors duration-300"
             @submit.prevent="sendMessage"
           >
             <input
               v-model="input"
               type="text"
               placeholder="Nhập tin nhắn..."
-              class="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#f58220]"
+              class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#f58220] bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
               @keydown.enter.exact.prevent="sendMessage"
             />
             <input
@@ -144,7 +147,7 @@
             <button
               type="button"
               @click="triggerFileInput"
-              class="bg-gray-200 hover:bg-gray-300 rounded-lg px-3 py-2"
+              class="bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-lg px-3 py-2 transition-colors duration-300"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -163,7 +166,7 @@
             </button>
             <button
               type="submit"
-              class="bg-[#f58220] text-white font-bold rounded-lg px-4 py-2 hover:bg-[#e06d00] transition"
+              class="bg-[#f58220] text-white font-bold rounded-lg px-4 py-2 hover:bg-[#e06d00] transition-colors duration-300"
             >
               Gửi
             </button>
@@ -171,7 +174,7 @@
         </div>
         <div
           v-else
-          class="flex-1 flex items-center justify-center text-gray-400 text-lg"
+          class="flex-1 flex items-center justify-center text-gray-400 dark:text-gray-500 text-lg bg-white dark:bg-gray-800 transition-colors duration-300"
         >
           Vui lòng chọn lĩnh vực luật sư để bắt đầu chat.
         </div>
@@ -189,7 +192,11 @@ import {
   faLandmark,
   faBalanceScale,
 } from "@fortawesome/free-solid-svg-icons";
+import { useThemeStore } from "~/stores/theme";
+
 library.add(faGavel, faLandmark, faBalanceScale);
+
+const themeStore = useThemeStore();
 
 interface Message {
   type: "text" | "image" | "file";
@@ -467,6 +474,9 @@ watch(selectedCategory, (cat) => {
 });
 
 onMounted(() => {
+  // Khởi tạo theme
+  themeStore.initTheme();
+
   if (selectedCategory.value) selectCategory(selectedCategory.value);
 });
 </script>
@@ -475,15 +485,37 @@ onMounted(() => {
 .flex-1 {
   flex: 1 1 0%;
 }
-.bg-white {
-  background: #fff;
-}
 .min-h-0 {
   min-height: 0;
 }
-.bg-white.rounded-t-xl.shadow.p-2 {
-  border-bottom: 1px solid #eee;
+
+/* Dark mode scrollbar styling */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
 }
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.dark .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #6b7280;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+.dark .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Responsive design */
 @media (max-width: 900px) {
   aside {
     width: 64px !important;
@@ -495,6 +527,35 @@ onMounted(() => {
   aside span {
     font-size: 11px !important;
     padding: 0 2px;
+  }
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* Focus states for accessibility */
+input:focus,
+button:focus {
+  outline: 2px solid #f58220;
+  outline-offset: 2px;
+}
+
+/* Message bubble animations */
+.inline-block {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

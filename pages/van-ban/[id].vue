@@ -3,16 +3,24 @@
     <div class="flex gap-8">
       <!-- Main Content Column (2/3 width) -->
       <div class="w-2/3">
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <h1 class="text-3xl font-bold text-gray-800 mb-6">
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-colors duration-300"
+        >
+          <h1
+            class="text-3xl font-bold text-gray-800 dark:text-white mb-6 transition-colors duration-300"
+          >
             Chi tiết kiến thức pháp luật
           </h1>
           <div class="prose max-w-none">
-            <p class="text-gray-600 leading-relaxed">
+            <p
+              class="text-gray-600 dark:text-gray-300 leading-relaxed transition-colors duration-300"
+            >
               Nội dung chi tiết sẽ được hiển thị ở đây. Đây là cột chính chiếm
               2/3 chiều rộng của trang.
             </p>
-            <p class="text-gray-600 leading-relaxed mt-4">
+            <p
+              class="text-gray-600 dark:text-gray-300 leading-relaxed mt-4 transition-colors duration-300"
+            >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -25,7 +33,9 @@
       <!-- Sidebar Column (1/3 width) -->
       <div class="w-1/3">
         <!-- Advertisement Banner -->
-        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-6 transition-colors duration-300"
+        >
           <!-- Header Bar -->
           <div class="bg-blue-800 text-white px-4 py-3 flex items-center">
             <div class="w-1 h-6 bg-red-500 mr-3"></div>
@@ -171,64 +181,95 @@
         </div>
 
         <!-- Service Description -->
-        <div class="bg-blue-50 rounded-lg p-4 mb-6">
-          <p class="text-blue-700 text-sm leading-relaxed">
+        <div
+          class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6 transition-colors duration-300"
+        >
+          <p
+            class="text-blue-700 dark:text-blue-300 text-sm leading-relaxed transition-colors duration-300"
+          >
             Dịch vụ báo cáo thuế, BCTC cuối năm - Chỉ từ 500.000đ/tháng
           </p>
         </div>
 
         <!-- Article Links List -->
-        <div class="bg-white rounded-lg shadow-md">
-          <div class="p-4 border-b border-gray-200">
-            <h4 class="font-semibold text-gray-800">Bài viết liên quan</h4>
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md transition-colors duration-300"
+        >
+          <div class="p-4 border-b border-gray-200 dark:border-gray-600">
+            <h4
+              class="font-semibold text-gray-800 dark:text-white transition-colors duration-300"
+            >
+              Bài viết liên quan
+            </h4>
           </div>
-          <div class="divide-y divide-gray-200">
-            <a href="#" class="block p-4 hover:bg-gray-50 transition-colors">
+          <div class="divide-y divide-gray-200 dark:divide-gray-600">
+            <a
+              href="#"
+              class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
               <p
-                class="text-blue-600 text-sm leading-relaxed hover:text-blue-800"
+                class="text-blue-600 dark:text-blue-400 text-sm leading-relaxed hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300"
               >
                 Lựa Chọn Phương Pháp Kê Khai Thuế Gia Tăng Thế Nào Là Phù Hợp?
               </p>
             </a>
-            <a href="#" class="block p-4 hover:bg-gray-50 transition-colors">
+            <a
+              href="#"
+              class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
               <p
-                class="text-blue-600 text-sm leading-relaxed hover:text-blue-800"
+                class="text-blue-600 dark:text-blue-400 text-sm leading-relaxed hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300"
               >
                 Điều Kiện Khấu Trừ Thuế Giá Trị Gia Tăng Đầu Vào
               </p>
             </a>
-            <a href="#" class="block p-4 hover:bg-gray-50 transition-colors">
+            <a
+              href="#"
+              class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
               <p
-                class="text-blue-600 text-sm leading-relaxed hover:text-blue-800"
+                class="text-blue-600 dark:text-blue-400 text-sm leading-relaxed hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300"
               >
                 Mức phạt và cách tính tiền phạt chậm nộp thuế - Ví dụ cụ thể
               </p>
             </a>
-            <a href="#" class="block p-4 hover:bg-gray-50 transition-colors">
+            <a
+              href="#"
+              class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
               <p
-                class="text-blue-600 text-sm leading-relaxed hover:text-blue-800"
+                class="text-blue-600 dark:text-blue-400 text-sm leading-relaxed hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300"
               >
                 Chi phí quà tặng cho nhân viên vào các dịp lễ, Tết trong năm
               </p>
             </a>
-            <a href="#" class="block p-4 hover:bg-gray-50 transition-colors">
+            <a
+              href="#"
+              class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
               <p
-                class="text-blue-600 text-sm leading-relaxed hover:text-blue-800"
+                class="text-blue-600 dark:text-blue-400 text-sm leading-relaxed hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300"
               >
                 Cách tính thuế giá trị gia tăng phải nộp theo phương pháp khấu
                 trừ
               </p>
             </a>
-            <a href="#" class="block p-4 hover:bg-gray-50 transition-colors">
+            <a
+              href="#"
+              class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
               <p
-                class="text-blue-600 text-sm leading-relaxed hover:text-blue-800"
+                class="text-blue-600 dark:text-blue-400 text-sm leading-relaxed hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300"
               >
                 Cách miễn giảm thuế, chính sách hỗ trợ doanh nghiệp mùa dịch
               </p>
             </a>
-            <a href="#" class="block p-4 hover:bg-gray-50 transition-colors">
+            <a
+              href="#"
+              class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            >
               <p
-                class="text-blue-600 text-sm leading-relaxed hover:text-blue-800"
+                class="text-blue-600 dark:text-blue-400 text-sm leading-relaxed hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-300"
               >
                 Các ưu đãi thuế & đầu tư với doanh nghiệp sản xuất phần mềm
               </p>
@@ -240,7 +281,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useThemeStore } from "~/stores/theme";
+
+const themeStore = useThemeStore();
+
 // Get the ID from the route
 const route = useRoute();
 const id = route.params.id;
@@ -249,6 +294,11 @@ const id = route.params.id;
 useHead({
   title: `Kiến thức pháp luật - ${id}`,
   meta: [{ name: "description", content: "Chi tiết kiến thức pháp luật" }],
+});
+
+// Initialize theme on mount
+onMounted(() => {
+  themeStore.initTheme();
 });
 </script>
 
@@ -260,5 +310,62 @@ useHead({
 
 .prose p {
   margin-bottom: 1rem;
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* Focus states for accessibility */
+a:focus,
+button:focus {
+  outline: 2px solid #f58220;
+  outline-offset: 2px;
+}
+
+/* Hover effects for interactive elements */
+a:hover {
+  transform: translateY(-1px);
+}
+
+/* Custom scrollbar for dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #6b7280;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Dark mode specific adjustments */
+.dark .bg-gray-300 {
+  background-color: #4b5563;
+}
+
+.dark .text-gray-600 {
+  color: #9ca3af;
+}
+
+.dark .border-gray-200 {
+  border-color: #4b5563;
 }
 </style>

@@ -5,8 +5,12 @@
     <div class="grid grid-cols-3 gap-6">
       <!-- Cột trái - chiếm 2/3 -->
       <div class="col-span-2">
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-          <p class="text-gray-700 mb-4">
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 transition-colors duration-300"
+        >
+          <p
+            class="text-gray-700 dark:text-gray-300 mb-4 transition-colors duration-300"
+          >
             Công cụ hỗ trợ doanh nghiệp tra cứu, tìm kiếm và download miễn phí
             các văn bản pháp luật Việt Nam mới ban hành, văn bản pháp luật từ
             trung ương đến địa phương đầy đủ và chính xác nhất.
@@ -14,7 +18,9 @@
 
           <hr class="border-red-500 mb-6" />
 
-          <div class="bg-white rounded-lg border border-gray-200 p-6">
+          <div
+            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 p-6 transition-colors duration-300"
+          >
             <h2 class="text-xl font-semibold text-[#f58220] mb-4">
               Tra cứu văn bản/ hồ sơ mẫu
             </h2>
@@ -23,10 +29,10 @@
               <input
                 type="text"
                 placeholder="Nội dung cần tìm kiếm..."
-                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
               />
               <button
-                class="bg-[#f58220] text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-[#f58220]"
+                class="bg-[#f58220] text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-[#e06d00] transition-colors duration-300"
               >
                 <svg
                   class="w-4 h-4"
@@ -46,10 +52,14 @@
             </div>
 
             <div class="flex justify-between w-[60%]">
-              <p class="text-sm text-gray-600 mb-2">
+              <p
+                class="text-sm text-gray-600 dark:text-gray-400 mb-2 transition-colors duration-300"
+              >
                 Từ khóa tối thiểu 3 ký tự:
               </p>
-              <div class="flex gap-4 text-sm text-gray-700">
+              <div
+                class="flex gap-4 text-sm text-gray-700 dark:text-gray-300 transition-colors duration-300"
+              >
                 <span>*Tiêu đề</span>
                 <span>*Số hiệu</span>
                 <span>*Tên hồ sơ</span>
@@ -60,28 +70,36 @@
         <div class="header-row">
           <h2 class="section-title">VĂN BẢN PHÁP LUẬT</h2>
         </div>
-        <div class="bg-white rounded-lg shadow-md p-4 md:p-6">
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6 transition-colors duration-300"
+        >
           <!-- Danh sách văn bản -->
           <div class="space-y-4">
             <div
               v-for="(document, index) in legalDocuments"
               :key="index"
-              class="border-b border-gray-200 pb-4 last:border-b-0"
+              class="border-b border-gray-200 dark:border-gray-600 pb-4 last:border-b-0 transition-colors duration-300"
             >
               <div class="flex flex-col lg:flex-row lg:justify-between gap-4">
                 <!-- Thông tin văn bản -->
                 <div class="flex-1 grid grid-cols-2 gap-4">
                   <!-- Cột 1: Title và Description -->
                   <div>
-                    <h3 class="font-medium text-gray-900 mb-2">
+                    <h3
+                      class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300"
+                    >
                       {{ document.title }}
                     </h3>
-                    <p class="text-sm text-gray-600">
+                    <p
+                      class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300"
+                    >
                       {{ document.description }}
                     </p>
                   </div>
 
-                  <div class="space-y-1 text-xs text-gray-500">
+                  <div
+                    class="space-y-1 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
+                  >
                     <div>
                       <span class="font-medium">Ban hành:</span>
                       {{ document.issuedDate }}
@@ -95,8 +113,8 @@
                       <span
                         :class="
                           document.status === 'Còn hiệu lực'
-                            ? 'text-green-600'
-                            : 'text-red-600'
+                            ? 'text-green-600 dark:text-green-400'
+                            : 'text-red-600 dark:text-red-400'
                         "
                       >
                         {{ document.status }}
@@ -110,7 +128,7 @@
                   class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-24"
                 >
                   <button
-                    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors"
+                    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
                   >
                     <svg
                       class="w-4 h-4"
@@ -134,7 +152,7 @@
                     Xem
                   </button>
                   <button
-                    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors"
+                    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
                   >
                     <svg
                       class="w-4 h-4"
@@ -160,9 +178,13 @@
         <div class="header-row mt-8">
           <h2 class="section-title">VĂN BẢN THEO LĨNH VỰC</h2>
         </div>
-        <div class="bg-white rounded-lg shadow-md p-6">
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-colors duration-300"
+        >
           <div class="grid grid-cols-4 gap-4">
-            <div class="col-span-1 border-r border-gray-300 pr-4">
+            <div
+              class="col-span-1 border-r border-gray-300 dark:border-gray-600 pr-4 transition-colors duration-300"
+            >
               <div class="space-y-2">
                 <button
                   v-for="field in legalFields"
@@ -172,7 +194,7 @@
                     'w-full text-left rounded-lg transition-colors flex items-center gap-3',
                     selectedField === field.id
                       ? 'text-[#f58220]'
-                      : 'text-black',
+                      : 'text-gray-900 dark:text-gray-100',
                   ]"
                 >
                   <svg
@@ -197,7 +219,7 @@
                 <div
                   v-for="(document, index) in getPaginatedDocuments()"
                   :key="index"
-                  class="border-b border-gray-200 pb-4 last:border-b-0"
+                  class="border-b border-gray-200 dark:border-gray-600 pb-4 last:border-b-0 transition-colors duration-300"
                 >
                   <div
                     class="flex flex-col lg:flex-row lg:justify-between gap-4"
@@ -206,16 +228,22 @@
                     <div class="flex-1 grid grid-cols-2 gap-4">
                       <!-- Cột 1: Title và Description -->
                       <div>
-                        <h4 class="font-medium text-gray-900 mb-2">
+                        <h4
+                          class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300"
+                        >
                           {{ document.title }}
                         </h4>
-                        <p class="text-sm text-gray-600">
+                        <p
+                          class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300"
+                        >
                           {{ document.description }}
                         </p>
                       </div>
 
                       <!-- Cột 2: Ngày tháng và trạng thái -->
-                      <div class="space-y-1 text-xs text-gray-500">
+                      <div
+                        class="space-y-1 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
+                      >
                         <div>
                           <span class="font-medium">Ban hành:</span>
                           {{ document.issuedDate }}
@@ -229,8 +257,8 @@
                           <span
                             :class="
                               document.status === 'Còn hiệu lực'
-                                ? 'text-green-600'
-                                : 'text-red-600'
+                                ? 'text-green-600 dark:text-green-400'
+                                : 'text-red-600 dark:text-red-400'
                             "
                           >
                             {{ document.status }}
@@ -244,7 +272,7 @@
                       class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-24"
                     >
                       <button
-                        class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors"
+                        class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
                       >
                         <svg
                           class="w-4 h-4"
@@ -268,7 +296,7 @@
                         Xem
                       </button>
                       <button
-                        class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors"
+                        class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
                       >
                         <svg
                           class="w-4 h-4"
@@ -298,10 +326,10 @@
                     @click="currentPage = Math.max(1, currentPage - 1)"
                     :disabled="currentPage === 1"
                     :class="[
-                      'px-3 py-2 rounded-lg text-sm transition-colors',
+                      'px-3 py-2 rounded-lg text-sm transition-colors duration-300',
                       currentPage === 1
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-gray-600 hover:bg-gray-100',
+                        ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
                     ]"
                   >
                     <svg
@@ -326,10 +354,10 @@
                       :key="page"
                       @click="currentPage = page"
                       :class="[
-                        'px-3 py-2 rounded-lg text-sm transition-colors',
+                        'px-3 py-2 rounded-lg text-sm transition-colors duration-300',
                         currentPage === page
                           ? 'bg-[#f58220] text-white'
-                          : 'text-gray-600 hover:bg-gray-100',
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
                       ]"
                     >
                       {{ page }}
@@ -343,10 +371,10 @@
                     "
                     :disabled="currentPage === getTotalPages()"
                     :class="[
-                      'px-3 py-2 rounded-lg text-sm transition-colors',
+                      'px-3 py-2 rounded-lg text-sm transition-colors duration-300',
                       currentPage === getTotalPages()
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-gray-600 hover:bg-gray-100',
+                        ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
                     ]"
                   >
                     <svg
@@ -380,20 +408,24 @@
           <h2 class="section-title">BIỂU MẪU MỚI CẬP NHẬT</h2>
         </div>
 
-        <div class="bg-white rounded-lg shadow-md p-6">
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-colors duration-300"
+        >
           <div class="grid grid-cols-4 gap-4">
             <!-- Cột trái - Danh sách loại biểu mẫu -->
-            <div class="col-span-1 border-r border-gray-300 pr-4">
+            <div
+              class="col-span-1 border-r border-gray-300 dark:border-gray-600 pr-4 transition-colors duration-300"
+            >
               <div class="space-y-2">
                 <button
                   v-for="formType in formTypes"
                   :key="formType.id"
                   @click="selectedFormType = formType.id"
                   :class="[
-                    'w-full text-left py-2 transition-colors flex items-center gap-3',
+                    'w-full text-left py-2 transition-colors duration-300 flex items-center gap-3',
                     selectedFormType === formType.id
-                      ? 'text-red-600'
-                      : 'text-black',
+                      ? 'text-red-600 dark:text-red-400'
+                      : 'text-gray-900 dark:text-gray-100',
                   ]"
                 >
                   <svg
@@ -418,7 +450,7 @@
                 <div
                   v-for="(form, index) in getPaginatedForms()"
                   :key="index"
-                  class="border-b border-gray-200 pb-4 last:border-b-0"
+                  class="border-b border-gray-200 dark:border-gray-600 pb-4 last:border-b-0 transition-colors duration-300"
                 >
                   <div
                     class="flex flex-col lg:flex-row lg:justify-between gap-4"
@@ -427,16 +459,22 @@
                     <div class="flex-1 grid grid-cols-2 gap-4">
                       <!-- Cột 1: Title và Description -->
                       <div>
-                        <h4 class="font-medium text-gray-900 mb-2">
+                        <h4
+                          class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300"
+                        >
                           {{ form.title }}
                         </h4>
-                        <p class="text-sm text-gray-600">
+                        <p
+                          class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300"
+                        >
                           {{ form.description }}
                         </p>
                       </div>
 
                       <!-- Cột 2: Ngày tháng và trạng thái -->
-                      <div class="space-y-1 text-xs text-gray-500">
+                      <div
+                        class="space-y-1 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
+                      >
                         <div>
                           <span class="font-medium">Ban hành:</span>
                           {{ form.issuedDate }}
@@ -450,8 +488,8 @@
                           <span
                             :class="
                               form.status === 'Còn hiệu lực'
-                                ? 'text-green-600'
-                                : 'text-red-600'
+                                ? 'text-green-600 dark:text-green-400'
+                                : 'text-red-600 dark:text-red-400'
                             "
                           >
                             {{ form.status }}
@@ -465,7 +503,7 @@
                       class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-24"
                     >
                       <button
-                        class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors"
+                        class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
                       >
                         <svg
                           class="w-4 h-4"
@@ -489,7 +527,7 @@
                         Xem
                       </button>
                       <button
-                        class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors"
+                        class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
                       >
                         <svg
                           class="w-4 h-4"
@@ -511,7 +549,6 @@
                 </div>
               </div>
 
-              <!-- Phân trang cho biểu mẫu -->
               <div
                 v-if="getTotalFormPages() > 1"
                 class="mt-6 flex justify-center"
@@ -522,10 +559,10 @@
                     @click="currentFormPage = Math.max(1, currentFormPage - 1)"
                     :disabled="currentFormPage === 1"
                     :class="[
-                      'px-3 py-2 rounded-lg text-sm transition-colors',
+                      'px-3 py-2 rounded-lg text-sm transition-colors duration-300',
                       currentFormPage === 1
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-gray-600 hover:bg-gray-100',
+                        ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
                     ]"
                   >
                     <svg
@@ -550,10 +587,10 @@
                       :key="page"
                       @click="currentFormPage = page"
                       :class="[
-                        'px-3 py-2 rounded-lg text-sm transition-colors',
+                        'px-3 py-2 rounded-lg text-sm transition-colors duration-300',
                         currentFormPage === page
                           ? 'bg-[#f58220] text-white'
-                          : 'text-gray-600 hover:bg-gray-100',
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
                       ]"
                     >
                       {{ page }}
@@ -570,10 +607,10 @@
                     "
                     :disabled="currentFormPage === getTotalFormPages()"
                     :class="[
-                      'px-3 py-2 rounded-lg text-sm transition-colors',
+                      'px-3 py-2 rounded-lg text-sm transition-colors duration-300',
                       currentFormPage === getTotalFormPages()
-                        ? 'text-gray-400 cursor-not-allowed'
-                        : 'text-gray-600 hover:bg-gray-100',
+                        ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
                     ]"
                   >
                     <svg
@@ -719,8 +756,17 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, computed, watch } from "vue";
+import { useThemeStore } from "~/stores/theme";
+
+const themeStore = useThemeStore();
+
+// Initialize theme on mount
+onMounted(() => {
+  themeStore.initTheme();
+});
 
 const legalDocuments = [
   {
@@ -1201,5 +1247,54 @@ watch(selectedFormType, () => {
   display: flex;
   align-items: center;
   margin: 0;
+}
+
+/* Dark mode styles */
+.dark .section-title {
+  color: #f9fafb;
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* Focus states for accessibility */
+input:focus,
+button:focus {
+  outline: 2px solid #f58220;
+  outline-offset: 2px;
+}
+
+/* Hover effects for interactive elements */
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* Custom scrollbar for dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #6b7280;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 </style>

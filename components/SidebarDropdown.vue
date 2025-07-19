@@ -4,7 +4,7 @@
       @click="open = !open"
       :class="[
         'w-full flex items-center justify-between px-1 py-2 rounded font-semibold hover:bg-[#f58220]/10 transition-colors duration-200 focus:outline-none',
-        isActive ? 'text-[#f58220]' : 'text-[#181818]',
+        isActive ? 'text-[#f58220]' : 'text-gray-800 dark:text-gray-200',
       ]"
     >
       <span>
@@ -16,7 +16,9 @@
         :class="[
           'w-4 h-4 ml-2 transition-transform',
           open ? 'rotate-90' : '',
-          isActive ? 'stroke-[#f58220]' : 'stroke-[#181818]',
+          isActive
+            ? 'stroke-[#f58220]'
+            : 'stroke-gray-600 dark:stroke-gray-400',
         ]"
         fill="none"
         viewBox="0 0 24 24"

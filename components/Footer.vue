@@ -4,45 +4,59 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <!-- HÀNH NGHỀ LUẬT -->
         <div
-          class="rounded-xl border border-dashed border-orange-400 bg-gradient-to-br from-green-50 to-white p-6 relative overflow-hidden"
+          class="rounded-xl border border-dashed border-orange-400 bg-gradient-to-br from-green-50 to-white dark:from-gray-800 dark:to-gray-700 p-6 relative overflow-hidden transition-colors duration-300"
         >
           <div
-            class="absolute left-4 top-4 w-8 h-8 bg-green-100 rounded-full opacity-40"
+            class="absolute left-4 top-4 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full opacity-40"
           ></div>
           <h2 class="text-orange-500 font-bold text-xl mb-2">HÀNH NGHỀ LUẬT</h2>
-          <hr class="border-dashed border-gray-300 mb-4" />
-          <p class="text-gray-700 text-lg">
+          <hr
+            class="border-dashed border-gray-300 dark:border-gray-600 mb-4 transition-colors duration-300"
+          />
+          <p
+            class="text-gray-700 dark:text-gray-300 text-lg transition-colors duration-300"
+          >
             Cung cấp kho tài liệu pháp luật phục vụ cho nghiên cứu, tìm hiểu về
             pháp luật trực tuyến.
           </p>
         </div>
         <!-- TRÊN TRANG -->
         <div
-          class="rounded-xl border border-dashed border-orange-400 bg-gradient-to-br from-green-50 to-white p-6 relative overflow-hidden"
+          class="rounded-xl border border-dashed border-orange-400 bg-gradient-to-br from-green-50 to-white dark:from-gray-800 dark:to-gray-700 p-6 relative overflow-hidden transition-colors duration-300"
         >
           <div
-            class="absolute left-4 top-4 w-8 h-8 bg-green-100 rounded-full opacity-40"
+            class="absolute left-4 top-4 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full opacity-40"
           ></div>
           <h2 class="text-orange-500 font-bold text-xl mb-2">TRÊN TRANG</h2>
-          <hr class="border-dashed border-gray-300 mb-4" />
+          <hr
+            class="border-dashed border-gray-300 dark:border-gray-600 mb-4 transition-colors duration-300"
+          />
           <ul class="space-y-2 text-lg">
             <li>
-              <a href="#" class="hover:text-orange-500 transition"
+              <a
+                href="#"
+                class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
                 >Chính sách <span class="align-super text-xs">↗</span></a
               >
             </li>
             <li>
-              <a href="#" class="hover:text-orange-500 transition"
+              <a
+                href="#"
+                class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
                 >Liên hệ <span class="align-super text-xs">↗</span></a
               >
             </li>
             <li>
-              <a href="#" class="hover:text-orange-500 transition"
+              <a
+                href="#"
+                class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
                 >Giới thiệu <span class="align-super text-xs">↗</span></a
               >
             </li>
             <li>
-              <a href="#" class="hover:text-orange-500 transition"
+              <a
+                href="#"
+                class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
                 >Sơ đồ trang web <span class="align-super text-xs">↗</span></a
               >
             </li>
@@ -50,14 +64,18 @@
         </div>
         <!-- THÔNG TIN -->
         <div
-          class="rounded-xl border border-dashed border-orange-400 bg-gradient-to-br from-green-50 to-white p-6 relative overflow-hidden"
+          class="rounded-xl border border-dashed border-orange-400 bg-gradient-to-br from-green-50 to-white dark:from-gray-800 dark:to-gray-700 p-6 relative overflow-hidden transition-colors duration-300"
         >
           <div
-            class="absolute left-4 top-4 w-8 h-8 bg-green-100 rounded-full opacity-40"
+            class="absolute left-4 top-4 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full opacity-40"
           ></div>
           <h2 class="text-orange-500 font-bold text-xl mb-2">THÔNG TIN</h2>
-          <hr class="border-dashed border-gray-300 mb-4" />
-          <div class="text-lg text-gray-700 space-y-1">
+          <hr
+            class="border-dashed border-gray-300 dark:border-gray-600 mb-4 transition-colors duration-300"
+          />
+          <div
+            class="text-lg text-gray-700 dark:text-gray-300 space-y-1 transition-colors duration-300"
+          >
             <div>Ngõ 603 Lạc Long Quân,</div>
             <div>Xuân La, Tây Hồ, Hà Nội</div>
             <div>0925555875</div>
@@ -66,31 +84,41 @@
         </div>
         <!-- KHO TÀI LIỆU -->
         <div
-          class="rounded-xl border border-dashed border-orange-400 bg-gradient-to-br from-green-50 to-white p-6 relative overflow-hidden"
+          class="rounded-xl border border-dashed border-orange-400 bg-gradient-to-br from-green-50 to-white dark:from-gray-800 dark:to-gray-700 p-6 relative overflow-hidden transition-colors duration-300"
         >
           <div
-            class="absolute left-4 top-4 w-8 h-8 bg-green-100 rounded-full opacity-40"
+            class="absolute left-4 top-4 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full opacity-40"
           ></div>
           <h2 class="text-orange-500 font-bold text-xl mb-2">KHO TÀI LIỆU</h2>
-          <hr class="border-dashed border-gray-300 mb-4" />
+          <hr
+            class="border-dashed border-gray-300 dark:border-gray-600 mb-4 transition-colors duration-300"
+          />
           <ul class="space-y-2 text-lg">
             <li>
-              <a href="#" class="hover:text-orange-500 transition"
+              <a
+                href="#"
+                class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
                 >Bài tập luật <span class="align-super text-xs">↗</span></a
               >
             </li>
             <li>
-              <a href="#" class="hover:text-orange-500 transition"
+              <a
+                href="#"
+                class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
                 >Sách luật <span class="align-super text-xs">↗</span></a
               >
             </li>
             <li>
-              <a href="#" class="hover:text-orange-500 transition"
+              <a
+                href="#"
+                class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
                 >Đề thi luật <span class="align-super text-xs">↗</span></a
               >
             </li>
             <li>
-              <a href="#" class="hover:text-orange-500 transition"
+              <a
+                href="#"
+                class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
                 >Ôn thi luật <span class="align-super text-xs">↗</span></a
               >
             </li>
