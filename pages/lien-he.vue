@@ -33,7 +33,7 @@
         <div class="space-y-8">
           <!-- Company Info Card -->
           <div
-            class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300"
+            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 p-8 hover:shadow-2xl transition-all duration-300"
           >
             <div class="flex items-center mb-8">
               <div
@@ -59,7 +59,9 @@
                 >
                   Thông Tin Công Ty
                 </h2>
-                <p class="text-gray-600 mt-1">Thông tin pháp lý chính thức</p>
+                <p class="text-gray-600 dark:text-gray-300 mt-1">
+                  Thông tin pháp lý chính thức
+                </p>
               </div>
             </div>
 
@@ -83,10 +85,12 @@
                   </svg>
                 </div>
                 <div class="flex-1">
-                  <p class="font-bold text-gray-800 text-lg mb-1">
+                  <p
+                    class="font-bold text-gray-800 dark:text-gray-100 text-lg mb-1"
+                  >
                     Giấy CNĐKHĐ
                   </p>
-                  <p class="text-gray-600 leading-relaxed">
+                  <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
                     01021343/TP/ĐKHĐ cấp ngày 18/08/2017 tại Sở Tư pháp Hà Nội
                   </p>
                 </div>
@@ -111,8 +115,12 @@
                   </svg>
                 </div>
                 <div class="flex-1">
-                  <p class="font-bold text-gray-800 text-lg mb-1">Mã số thuế</p>
-                  <p class="text-gray-600 leading-relaxed">
+                  <p
+                    class="font-bold text-gray-800 dark:text-gray-100 text-lg mb-1"
+                  >
+                    Mã số thuế
+                  </p>
+                  <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
                     0107979476 cấp ngày 22/02/2018 tại Chi Cục Thuế Quận Cầu
                     Giấy
                   </p>
@@ -123,7 +131,7 @@
 
           <!-- Contact Details Card -->
           <div
-            class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300"
+            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 p-8 hover:shadow-2xl transition-all duration-300"
           >
             <div class="flex items-center mb-8">
               <div
@@ -149,7 +157,7 @@
                 >
                   Thông Tin Liên Hệ
                 </h2>
-                <p class="text-gray-600 mt-1">
+                <p class="text-gray-600 dark:text-gray-300 mt-1">
                   Liên hệ trực tiếp với chúng tôi
                 </p>
               </div>
@@ -182,8 +190,12 @@
                   </svg>
                 </div>
                 <div class="flex-1">
-                  <p class="font-bold text-gray-800 text-lg mb-2">Địa chỉ</p>
-                  <p class="text-gray-600 leading-relaxed">
+                  <p
+                    class="font-bold text-gray-800 dark:text-gray-100 text-lg mb-2"
+                  >
+                    Địa chỉ
+                  </p>
+                  <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
                     Tầng 6, Tòa tháp Ngôi sao, Dương Đình Nghệ, P. Yên Hòa, Q.
                     Cầu Giấy, Hà Nội
                   </p>
@@ -210,14 +222,18 @@
                   </svg>
                 </div>
                 <div class="flex-1">
-                  <p class="font-bold text-gray-800 text-lg mb-2">Hotline</p>
+                  <p
+                    class="font-bold text-gray-800 dark:text-gray-100 text-lg mb-2"
+                  >
+                    Hotline
+                  </p>
                   <a
                     href="tel:0919089888"
                     class="text-2xl font-bold bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent hover:from-red-600 hover:to-pink-700 transition-all duration-300"
                   >
                     0919 089 888
                   </a>
-                  <p class="text-sm text-gray-500 mt-1">
+                  <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     (Tư vấn miễn phí 24/7)
                   </p>
                 </div>
@@ -243,7 +259,11 @@
                   </svg>
                 </div>
                 <div class="flex-1">
-                  <p class="font-bold text-gray-800 text-lg mb-2">Email</p>
+                  <p
+                    class="font-bold text-gray-800 dark:text-gray-100 text-lg mb-2"
+                  >
+                    Email
+                  </p>
                   <a
                     href="mailto:luatsu@luatthanhdo.com.vn"
                     class="text-lg font-semibold bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent hover:from-emerald-600 hover:to-teal-700 transition-all duration-300"
@@ -257,7 +277,7 @@
 
           <!-- Business Hours -->
           <div
-            class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300"
+            class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 p-8 hover:shadow-2xl transition-all duration-300"
           >
             <div class="flex items-center mb-8">
               <div
@@ -283,28 +303,42 @@
                 >
                   Giờ Làm Việc
                 </h2>
-                <p class="text-gray-600 mt-1">Thời gian tư vấn</p>
+                <p class="text-gray-600 dark:text-gray-300 mt-1">
+                  Thời gian tư vấn
+                </p>
               </div>
             </div>
 
             <div class="space-y-4">
               <div
-                class="flex justify-between items-center p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-100"
+                class="flex justify-between items-center p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-100 dark:border-amber-800/30"
               >
-                <span class="text-gray-700 font-medium">Thứ 2 - Thứ 6</span>
-                <span class="font-bold text-amber-600">8:00 - 17:30</span>
+                <span class="text-gray-700 dark:text-gray-200 font-medium"
+                  >Thứ 2 - Thứ 6</span
+                >
+                <span class="font-bold text-amber-600 dark:text-amber-400"
+                  >8:00 - 17:30</span
+                >
               </div>
               <div
-                class="flex justify-between items-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100"
+                class="flex justify-between items-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30"
               >
-                <span class="text-gray-700 font-medium">Thứ 7</span>
-                <span class="font-bold text-blue-600">8:00 - 12:00</span>
+                <span class="text-gray-700 dark:text-gray-200 font-medium"
+                  >Thứ 7</span
+                >
+                <span class="font-bold text-blue-600 dark:text-blue-400"
+                  >8:00 - 12:00</span
+                >
               </div>
               <div
-                class="flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl border border-gray-100"
+                class="flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/50 dark:to-slate-800/50 rounded-xl border border-gray-100 dark:border-gray-700/50"
               >
-                <span class="text-gray-700 font-medium">Chủ nhật</span>
-                <span class="font-bold text-gray-600">Nghỉ</span>
+                <span class="text-gray-700 dark:text-gray-200 font-medium"
+                  >Chủ nhật</span
+                >
+                <span class="font-bold text-gray-600 dark:text-gray-400"
+                  >Nghỉ</span
+                >
               </div>
             </div>
           </div>
@@ -312,7 +346,7 @@
 
         <!-- Contact Form -->
         <div
-          class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300"
+          class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 p-8 hover:shadow-2xl transition-all duration-300"
         >
           <div class="flex items-center mb-8">
             <div
@@ -338,7 +372,9 @@
               >
                 Gửi Tin Nhắn
               </h2>
-              <p class="text-gray-600 mt-1">Liên hệ tư vấn miễn phí</p>
+              <p class="text-gray-600 dark:text-gray-300 mt-1">
+                Liên hệ tư vấn miễn phí
+              </p>
             </div>
           </div>
 
@@ -346,7 +382,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="group">
                 <label
-                  class="block text-sm font-bold text-gray-700 mb-3 group-hover:text-blue-600 transition-colors"
+                  class="block text-sm font-bold text-gray-700 dark:text-gray-200 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
                 >
                   Họ và tên *
                 </label>
@@ -354,13 +390,13 @@
                   v-model="form.name"
                   type="text"
                   required
-                  class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                  class="w-full px-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                   placeholder="Nhập họ và tên"
                 />
               </div>
               <div class="group">
                 <label
-                  class="block text-sm font-bold text-gray-700 mb-3 group-hover:text-blue-600 transition-colors"
+                  class="block text-sm font-bold text-gray-700 dark:text-gray-200 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
                 >
                   Số điện thoại *
                 </label>
@@ -368,7 +404,7 @@
                   v-model="form.phone"
                   type="tel"
                   required
-                  class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                  class="w-full px-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                   placeholder="Nhập số điện thoại"
                 />
               </div>
@@ -376,27 +412,27 @@
 
             <div class="group">
               <label
-                class="block text-sm font-bold text-gray-700 mb-3 group-hover:text-blue-600 transition-colors"
+                class="block text-sm font-bold text-gray-700 dark:text-gray-200 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
               >
                 Email
               </label>
               <input
                 v-model="form.email"
                 type="email"
-                class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                class="w-full px-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                 placeholder="Nhập email"
               />
             </div>
 
             <div class="group">
               <label
-                class="block text-sm font-bold text-gray-700 mb-3 group-hover:text-blue-600 transition-colors"
+                class="block text-sm font-bold text-gray-700 dark:text-gray-200 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
               >
                 Lĩnh vực tư vấn
               </label>
               <select
                 v-model="form.category"
-                class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm"
+                class="w-full px-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-gray-100"
               >
                 <option value="">Chọn lĩnh vực</option>
                 <option value="dan-su">Dân sự</option>
@@ -410,7 +446,7 @@
 
             <div class="group">
               <label
-                class="block text-sm font-bold text-gray-700 mb-3 group-hover:text-blue-600 transition-colors"
+                class="block text-sm font-bold text-gray-700 dark:text-gray-200 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
               >
                 Nội dung *
               </label>
@@ -418,7 +454,7 @@
                 v-model="form.message"
                 required
                 rows="5"
-                class="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 bg-white/50 backdrop-blur-sm resize-none"
+                class="w-full px-4 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-300 bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 resize-none"
                 placeholder="Mô tả vấn đề cần tư vấn..."
               ></textarea>
             </div>
@@ -451,7 +487,7 @@
       <!-- Map Section -->
       <div class="mt-20">
         <div
-          class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300"
+          class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 p-8 hover:shadow-2xl transition-all duration-300"
         >
           <div class="flex items-center mb-8">
             <div
@@ -477,12 +513,14 @@
               >
                 Bản Đồ
               </h2>
-              <p class="text-gray-600 mt-1">Vị trí văn phòng</p>
+              <p class="text-gray-600 dark:text-gray-300 mt-1">
+                Vị trí văn phòng
+              </p>
             </div>
           </div>
 
           <div
-            class="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl h-80 md:h-96 flex items-center justify-center border-2 border-dashed border-gray-300"
+            class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-2xl h-80 md:h-96 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600"
           >
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d658.3658409649598!2d105.78764914013858!3d21.021495463205078!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab539381cdf9%3A0xb7015760fb64e2b8!2zUC4gRMawxqFuZyDEkMOsbmggTmdo4buHLCBIw6AgTuG7mWksIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1752811885907!5m2!1svi!2s"

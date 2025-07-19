@@ -265,7 +265,7 @@ import { ref, computed, onMounted } from "vue";
 const route = useRoute();
 const isKienThucActive = computed(() => route.path.startsWith("/kien-thuc"));
 const kienThucHover = ref(false);
-const isChatPage = route.path === "/chat-luat-su";
+const isChatPage = computed(() => route.path === "/chat-luat-su");
 const sidebarStore = useSidebarStore();
 const themeStore = useThemeStore();
 const { isOpenSidebar } = storeToRefs(sidebarStore);

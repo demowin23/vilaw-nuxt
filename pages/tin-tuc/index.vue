@@ -264,6 +264,46 @@ const allNews = [
     date: "2024-01-01",
     views: 2430,
   },
+  {
+    id: 12,
+    thumbnail: "/images/bai-tap-luat.webp",
+    title: "Quy định về tội phạm rửa tiền và chống rửa tiền",
+    excerpt:
+      "Luật Phòng, chống rửa tiền có những quy định nghiêm ngặt về phòng chống tội phạm rửa tiền...",
+    category: "Hình sự",
+    date: "2024-01-04",
+    views: 2760,
+  },
+  {
+    id: 13,
+    thumbnail: "/images/de-thi-luat.webp",
+    title: "Quyền thừa kế của vợ chồng theo pháp luật Việt Nam",
+    excerpt:
+      "Bộ luật Dân sự quy định về quyền thừa kế của vợ chồng trong trường hợp một bên chết trước...",
+    category: "Thừa kế",
+    date: "2024-01-03",
+    views: 2650,
+  },
+  {
+    id: 14,
+    thumbnail: "/images/on-thi-luat.webp",
+    title: "Thủ tục đăng ký hộ khẩu thường trú mới nhất",
+    excerpt:
+      "Nghị định mới về đăng ký cư trú có những thay đổi quan trọng về thủ tục đăng ký hộ khẩu...",
+    category: "Hành chính",
+    date: "2024-01-02",
+    views: 2540,
+  },
+  {
+    id: 15,
+    thumbnail: "/images/sach-luat.webp",
+    title: "Quy định về bảo vệ môi trường trong hoạt động kinh doanh",
+    excerpt:
+      "Luật Bảo vệ môi trường 2020 có những quy định mới về trách nhiệm bảo vệ môi trường...",
+    category: "Môi trường",
+    date: "2024-01-01",
+    views: 2430,
+  },
 ];
 
 function formatDate(dateString: string): string {
