@@ -26,14 +26,7 @@
         </svg>
       </button>
       <div class="video-grid" ref="gridRef">
-        <VideoItem
-          v-for="(item, idx) in videos"
-          :key="idx"
-          :thumbnail="item.thumbnail"
-          :title="item.title"
-          :duration="item.duration"
-          :views="item.views"
-        />
+        <VideoItem v-for="(item, idx) in videos" :key="idx" :item="item" />
       </div>
       <button class="btn-nav btn-next" @click="scrollGrid(1)">
         <svg

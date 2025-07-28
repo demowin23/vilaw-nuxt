@@ -1,7 +1,11 @@
 <template>
   <div class="news-item">
     <div class="thumbnail-wrapper">
-      <img :src="thumbnail" alt="thumbnail" class="thumbnail" />
+      <img
+        :src="newsStore.getImage(thumbnail)"
+        :alt="title"
+        class="thumbnail"
+      />
       <div class="category-badge">{{ category }}</div>
     </div>
     <div class="info">
@@ -16,6 +20,10 @@
 </template>
 
 <script setup lang="ts">
+import { useNewsStore } from "~/stores/news";
+
+const newsStore = useNewsStore();
+
 defineProps<{
   thumbnail: string;
   title: string;

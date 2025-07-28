@@ -22,7 +22,7 @@ bun install
 
 ## Development Server
 
-Start the development server on `http://localhost:3000`:
+Start the development server on `http://localhost:4000`:
 
 ```bash
 # npm
@@ -73,3 +73,23 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Trang quản lý Category (Admin)
+
+- Đường dẫn: `/admin/category`
+- Chức năng: Quản lý danh mục (category) cho hệ thống. Cho phép admin xem, thêm, sửa, xóa (soft delete) các category.
+- Giao diện: Tương tự các trang quản lý khác (users, knowledge, news, videos).
+- API sử dụng:
+  - `GET    /api/v1/category` — Lấy tất cả category
+  - `GET    /api/v1/category/:id` — Lấy chi tiết category
+  - `POST   /api/v1/category` — Thêm category mới
+  - `PUT    /api/v1/category/:id` — Cập nhật category
+  - `DELETE /api/v1/category/:id` — Xóa category (soft delete)
+- Cấu trúc dữ liệu category:
+  ```json
+  {
+    "value": "ten_khong_dau_gach_duoi",
+    "label": "Tên hiển thị",
+    "description": "Mô tả (có thể bỏ trống)"
+  }
+  ```

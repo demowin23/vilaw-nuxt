@@ -1,3 +1,42 @@
+/* CSS Variables for theming */
+:root {
+  /* Primary colors */
+  --primary-color: #f58220;
+  --primary-dark: #ea580c;
+  --primary-light: #fef3c7;
+
+  /* Text colors */
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+
+  /* Background colors */
+  --bg-page: #f9fafb;
+  --bg-card: #ffffff;
+  --bg-hover: #f3f4f6;
+
+  /* Border colors */
+  --border-color: #e5e7eb;
+
+  /* Status colors */
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --danger-dark: #dc2626;
+  --danger-light: #fef2f2;
+  --warning-light: #fffbeb;
+}
+
+/* Dark mode variables */
+.dark {
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --bg-page: #111827;
+  --bg-card: #1f2937;
+  --bg-hover: #374151;
+  --border-color: #4b5563;
+  --primary-light: #451a03;
+}
+
 /* Global dark mode transitions */
 * {
   transition: background-color 0.3s ease, color 0.3s ease,
@@ -137,4 +176,70 @@ select {
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
+}
+
+/* QuillEditor styles */
+.ql-editor {
+  min-height: 200px;
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--bg-card);
+}
+
+.ql-toolbar {
+  background: var(--bg-hover);
+  border-color: var(--border-color) !important;
+  border-radius: 8px 8px 0 0;
+}
+
+.ql-container {
+  border-color: var(--border-color) !important;
+  border-radius: 0 0 8px 8px;
+}
+
+.dark .ql-editor {
+  color: var(--text-primary);
+  background: var(--bg-card);
+}
+
+.dark .ql-toolbar {
+  background: var(--bg-hover);
+  border-color: var(--border-color) !important;
+}
+
+.dark .ql-container {
+  border-color: var(--border-color) !important;
+}
+
+.dark .ql-stroke {
+  stroke: var(--text-primary);
+}
+
+.dark .ql-fill {
+  fill: var(--text-primary);
+}
+
+.dark .ql-picker {
+  color: var(--text-primary);
+}
+
+.dark .ql-picker-options {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+.dark .ql-picker-item {
+  color: var(--text-primary);
+}
+
+.dark .ql-picker-item:hover {
+  background: var(--bg-hover);
+}
+
+.dark .ql-picker-label {
+  color: var(--text-primary);
+}
+
+.dark .ql-picker-label:hover {
+  color: var(--primary-color);
 }

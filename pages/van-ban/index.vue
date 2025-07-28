@@ -27,14 +27,19 @@
 
             <div class="flex gap-3 mb-4">
               <input
+                v-model="searchQuery"
                 type="text"
                 placeholder="Nội dung cần tìm kiếm..."
+                @keyup.enter="performSearch"
                 class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
               />
               <button
-                class="bg-[#f58220] text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-[#e06d00] transition-colors duration-300"
+                @click="performSearch"
+                :disabled="isSearching"
+                class="bg-[#f58220] text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-[#e06d00] transition-colors duration-300 disabled:opacity-50"
               >
                 <svg
+                  v-if="!isSearching"
                   class="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
@@ -47,7 +52,11 @@
                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                   ></path>
                 </svg>
-                Tìm kiếm
+                <div
+                  v-else
+                  class="w-4 h-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+                ></div>
+                {{ isSearching ? "Đang tìm..." : "Tìm kiếm" }}
               </button>
             </div>
 
@@ -67,108 +76,255 @@
             </div>
           </div>
         </div>
-        <div class="header-row">
-          <h2 class="section-title">VĂN BẢN PHÁP LUẬT</h2>
-        </div>
-        <div
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6 transition-colors duration-300"
-        >
-          <!-- Danh sách văn bản -->
-          <div class="space-y-4">
-            <div
-              v-for="(document, index) in legalDocuments"
-              :key="index"
-              class="border-b border-gray-200 dark:border-gray-600 pb-4 last:border-b-0 transition-colors duration-300"
-            >
-              <div class="flex flex-col lg:flex-row lg:justify-between gap-4">
-                <!-- Thông tin văn bản -->
-                <div class="flex-1 grid grid-cols-2 gap-4">
-                  <!-- Cột 1: Title và Description -->
-                  <div>
-                    <h3
-                      class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300"
-                    >
-                      {{ document.title }}
-                    </h3>
-                    <p
-                      class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300"
-                    >
-                      {{ document.description }}
-                    </p>
-                  </div>
 
-                  <div
-                    class="space-y-1 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
-                  >
+        <div v-if="searchResults.length > 0" class="mb-6">
+          <div class="header-row">
+            <h2 class="section-title">KẾT QUẢ TÌM KIẾM</h2>
+            <button
+              @click="
+                searchResults = [];
+                searchQuery = '';
+              "
+              class="text-sm text-gray-500 hover:text-[#f58220]"
+            >
+              Xóa kết quả
+            </button>
+          </div>
+          <div
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6 transition-colors duration-300"
+          >
+            <div class="space-y-4">
+              <div
+                v-for="(document, index) in searchResults"
+                :key="document.id || index"
+                class="border-b border-gray-200 dark:border-gray-600 pb-4 last:border-b-0 transition-colors duration-300"
+              >
+                <div class="flex flex-col lg:flex-row lg:justify-between gap-4">
+                  <div class="flex-1 grid grid-cols-2 gap-4">
                     <div>
-                      <span class="font-medium">Ban hành:</span>
-                      {{ document.issuedDate }}
-                    </div>
-                    <div>
-                      <span class="font-medium">Hiệu lực:</span>
-                      {{ document.effectiveDate }}
-                    </div>
-                    <div>
-                      <span class="font-medium">Tình trạng:</span>
-                      <span
-                        :class="
-                          document.status === 'Còn hiệu lực'
-                            ? 'text-green-600 dark:text-green-400'
-                            : 'text-red-600 dark:text-red-400'
-                        "
+                      <h3
+                        class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300"
                       >
-                        {{ document.status }}
-                      </span>
+                        {{ document.title }}
+                      </h3>
                     </div>
+                    <div
+                      class="space-y-1 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
+                    >
+                      <div>
+                        <span class="font-medium">Ban hành:</span>
+                        {{ formatDate(document.issueDate) }}
+                      </div>
+                      <div>
+                        <span class="font-medium">Hiệu lực:</span>
+                        {{ formatDate(document.effectiveDate) }}
+                      </div>
+                      <div v-if="document.expiryDate">
+                        <span class="font-medium">Hết hiệu lực:</span>
+                        {{ formatDate(document.expiryDate) }}
+                      </div>
+                      <div>
+                        <span class="font-medium">Tình trạng:</span>
+                        <span
+                          :class="
+                            document.status === 'co_hieu_luc'
+                              ? 'text-green-600 dark:text-green-400'
+                              : 'text-red-600 dark:text-red-400'
+                          "
+                        >
+                          {{ getStatusText(document.status) }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-24"
+                  >
+                    <button
+                      @click="handleViewDocument(document)"
+                      class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        ></path>
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        ></path>
+                      </svg>
+                      Xem
+                    </button>
+                    <button
+                      v-if="document.file_url"
+                      @click="handleDownload(document)"
+                      class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        ></path>
+                      </svg>
+                      Tải về
+                    </button>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-                <!-- Nút hành động -->
-                <div
-                  class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-24"
-                >
-                  <button
-                    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+        <!-- Chỉ hiển thị danh sách mặc định khi không có searchResults -->
+        <div v-else>
+          <div class="header-row">
+            <h2 class="section-title">VĂN BẢN PHÁP LUẬT</h2>
+          </div>
+          <div
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6 transition-colors duration-300"
+          >
+            <!-- Loading state -->
+            <div v-if="loading" class="text-center py-8">
+              <div
+                class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#f58220]"
+              ></div>
+              <p class="mt-2 text-gray-600 dark:text-gray-400">
+                Đang tải văn bản...
+              </p>
+            </div>
+
+            <!-- Error state -->
+            <div v-else-if="error" class="text-center py-8">
+              <p class="text-red-600 dark:text-red-400">
+                Có lỗi xảy ra khi tải dữ liệu
+              </p>
+              <button
+                @click="getDocuments()"
+                class="mt-2 text-[#f58220] hover:underline"
+              >
+                Thử lại
+              </button>
+            </div>
+
+            <!-- Danh sách văn bản -->
+            <div
+              v-else-if="legalDocuments && legalDocuments.length > 0"
+              class="space-y-4"
+            >
+              <div
+                v-for="(document, index) in legalDocuments"
+                :key="document.id || index"
+                class="border-b border-gray-200 dark:border-gray-600 pb-4 last:border-b-0 transition-colors duration-300"
+              >
+                <div class="flex flex-col lg:flex-row lg:justify-between gap-4">
+                  <!-- Thông tin văn bản -->
+                  <div class="flex-1 grid grid-cols-2 gap-4">
+                    <!-- Cột 1: Title và Description -->
+                    <div>
+                      <h3
+                        class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300"
+                      >
+                        {{ document.title }}
+                      </h3>
+                    </div>
+
+                    <div
+                      class="space-y-1 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      ></path>
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      ></path>
-                    </svg>
-                    Xem
-                  </button>
-                  <button
-                    class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
+                      <div>
+                        <span class="font-medium">Ban hành:</span>
+                        {{ formatDate(document.issueDate) }}
+                      </div>
+                      <div>
+                        <span class="font-medium">Hiệu lực:</span>
+                        {{ formatDate(document.effectiveDate) }}
+                      </div>
+                      <div v-if="document.expiryDate">
+                        <span class="font-medium">Hết hiệu lực:</span>
+                        {{ formatDate(document.expiryDate) }}
+                      </div>
+                      <div>
+                        <span class="font-medium">Tình trạng:</span>
+                        <span
+                          :class="
+                            document.status === 'co_hieu_luc'
+                              ? 'text-green-600 dark:text-green-400'
+                              : 'text-red-600 dark:text-red-400'
+                          "
+                        >
+                          {{ getStatusText(document.status) }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Nút hành động -->
+                  <div
+                    class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-24"
                   >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                    <button
+                      @click="handleViewDocument(document)"
+                      class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      ></path>
-                    </svg>
-                    Tải về
-                  </button>
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        ></path>
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        ></path>
+                      </svg>
+                      Xem
+                    </button>
+                    <button
+                      v-if="document.wordFile"
+                      @click="handleDownload(document)"
+                      class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        ></path>
+                      </svg>
+                      Tải về
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -189,10 +345,10 @@
                 <button
                   v-for="field in legalFields"
                   :key="field.id"
-                  @click="selectedField = field.id"
+                  @click="selectedField = field.slug"
                   :class="[
                     'w-full text-left rounded-lg transition-colors flex items-center gap-3',
-                    selectedField === field.id
+                    selectedField === field.slug
                       ? 'text-[#f58220]'
                       : 'text-gray-900 dark:text-gray-100',
                   ]"
@@ -209,13 +365,25 @@
                     ></path>
                   </svg>
                   <div class="font-medium">{{ field.name }}</div>
+                  <span class="text-xs text-gray-500">({{ field.count }})</span>
                 </button>
               </div>
             </div>
 
             <!-- Cột phải - Danh sách văn bản theo lĩnh vực -->
             <div class="col-span-3 pl-4 flex flex-col justify-between">
-              <div class="space-y-4">
+              <!-- Loading state -->
+              <div v-if="fieldLoading" class="text-center py-8">
+                <div
+                  class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#f58220]"
+                ></div>
+                <p class="mt-2 text-gray-600 dark:text-gray-400">
+                  Đang tải văn bản...
+                </p>
+              </div>
+
+              <!-- Documents list -->
+              <div v-else class="space-y-4">
                 <div
                   v-for="(document, index) in getPaginatedDocuments()"
                   :key="index"
@@ -233,11 +401,6 @@
                         >
                           {{ document.title }}
                         </h4>
-                        <p
-                          class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300"
-                        >
-                          {{ document.description }}
-                        </p>
                       </div>
 
                       <!-- Cột 2: Ngày tháng và trạng thái -->
@@ -246,22 +409,26 @@
                       >
                         <div>
                           <span class="font-medium">Ban hành:</span>
-                          {{ document.issuedDate }}
+                          {{ formatDate(document.issueDate) }}
                         </div>
                         <div>
                           <span class="font-medium">Hiệu lực:</span>
-                          {{ document.effectiveDate }}
+                          {{ formatDate(document.effectiveDate) }}
+                        </div>
+                        <div v-if="document.expiryDate">
+                          <span class="font-medium">Hết hiệu lực:</span>
+                          {{ formatDate(document.expiryDate) }}
                         </div>
                         <div>
                           <span class="font-medium">Tình trạng:</span>
                           <span
                             :class="
-                              document.status === 'Còn hiệu lực'
+                              document.status === 'co_hieu_luc'
                                 ? 'text-green-600 dark:text-green-400'
                                 : 'text-red-600 dark:text-red-400'
                             "
                           >
-                            {{ document.status }}
+                            {{ getStatusText(document.status) }}
                           </span>
                         </div>
                       </div>
@@ -272,6 +439,7 @@
                       class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-24"
                     >
                       <button
+                        @click="handleViewDocument(document)"
                         class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
                       >
                         <svg
@@ -296,6 +464,8 @@
                         Xem
                       </button>
                       <button
+                        v-if="document.wordFile"
+                        @click="handleDownload(document)"
                         class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
                       >
                         <svg
@@ -396,253 +566,20 @@
             </div>
           </div>
         </div>
-
-        <img
-          src="/images/tra-cuu-1200px.jpg"
-          alt="van-ban-theo-linh-vuc"
-          class="w-full py-6"
-        />
-
-        <!-- Phần Biểu mẫu mới cập nhật -->
-        <div class="header-row mt-8">
-          <h2 class="section-title">BIỂU MẪU MỚI CẬP NHẬT</h2>
-        </div>
-
-        <div
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-colors duration-300"
-        >
-          <div class="grid grid-cols-4 gap-4">
-            <!-- Cột trái - Danh sách loại biểu mẫu -->
-            <div
-              class="col-span-1 border-r border-gray-300 dark:border-gray-600 pr-4 transition-colors duration-300"
-            >
-              <div class="space-y-2">
-                <button
-                  v-for="formType in formTypes"
-                  :key="formType.id"
-                  @click="selectedFormType = formType.id"
-                  :class="[
-                    'w-full text-left py-2 transition-colors duration-300 flex items-center gap-3',
-                    selectedFormType === formType.id
-                      ? 'text-red-600 dark:text-red-400'
-                      : 'text-gray-900 dark:text-gray-100',
-                  ]"
-                >
-                  <svg
-                    class="w-5 h-5 flex-shrink-0 text-blue-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                  <div class="font-medium">{{ formType.name }}</div>
-                </button>
-              </div>
-            </div>
-
-            <!-- Cột phải - Danh sách biểu mẫu -->
-            <div class="col-span-3 pl-4 flex flex-col justify-between">
-              <div class="space-y-4">
-                <div
-                  v-for="(form, index) in getPaginatedForms()"
-                  :key="index"
-                  class="border-b border-gray-200 dark:border-gray-600 pb-4 last:border-b-0 transition-colors duration-300"
-                >
-                  <div
-                    class="flex flex-col lg:flex-row lg:justify-between gap-4"
-                  >
-                    <!-- Thông tin biểu mẫu -->
-                    <div class="flex-1 grid grid-cols-2 gap-4">
-                      <!-- Cột 1: Title và Description -->
-                      <div>
-                        <h4
-                          class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300"
-                        >
-                          {{ form.title }}
-                        </h4>
-                        <p
-                          class="text-sm text-gray-600 dark:text-gray-400 transition-colors duration-300"
-                        >
-                          {{ form.description }}
-                        </p>
-                      </div>
-
-                      <!-- Cột 2: Ngày tháng và trạng thái -->
-                      <div
-                        class="space-y-1 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
-                      >
-                        <div>
-                          <span class="font-medium">Ban hành:</span>
-                          {{ form.issuedDate }}
-                        </div>
-                        <div>
-                          <span class="font-medium">Hiệu lực:</span>
-                          {{ form.effectiveDate }}
-                        </div>
-                        <div>
-                          <span class="font-medium">Tình trạng:</span>
-                          <span
-                            :class="
-                              form.status === 'Còn hiệu lực'
-                                ? 'text-green-600 dark:text-green-400'
-                                : 'text-red-600 dark:text-red-400'
-                            "
-                          >
-                            {{ form.status }}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Nút hành động -->
-                    <div
-                      class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-24"
-                    >
-                      <button
-                        class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
-                      >
-                        <svg
-                          class="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          ></path>
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                          ></path>
-                        </svg>
-                        Xem
-                      </button>
-                      <button
-                        class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
-                      >
-                        <svg
-                          class="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                          ></path>
-                        </svg>
-                        Tải về
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                v-if="getTotalFormPages() > 1"
-                class="mt-6 flex justify-center"
-              >
-                <div class="flex items-center gap-2">
-                  <!-- Nút Previous -->
-                  <button
-                    @click="currentFormPage = Math.max(1, currentFormPage - 1)"
-                    :disabled="currentFormPage === 1"
-                    :class="[
-                      'px-3 py-2 rounded-lg text-sm transition-colors duration-300',
-                      currentFormPage === 1
-                        ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
-                    ]"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 19l-7-7 7-7"
-                      ></path>
-                    </svg>
-                  </button>
-
-                  <!-- Các số trang -->
-                  <div class="flex gap-1">
-                    <button
-                      v-for="page in getVisibleFormPages()"
-                      :key="page"
-                      @click="currentFormPage = page"
-                      :class="[
-                        'px-3 py-2 rounded-lg text-sm transition-colors duration-300',
-                        currentFormPage === page
-                          ? 'bg-[#f58220] text-white'
-                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
-                      ]"
-                    >
-                      {{ page }}
-                    </button>
-                  </div>
-
-                  <!-- Nút Next -->
-                  <button
-                    @click="
-                      currentFormPage = Math.min(
-                        getTotalFormPages(),
-                        currentFormPage + 1
-                      )
-                    "
-                    :disabled="currentFormPage === getTotalFormPages()"
-                    :class="[
-                      'px-3 py-2 rounded-lg text-sm transition-colors duration-300',
-                      currentFormPage === getTotalFormPages()
-                        ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
-                    ]"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 5l7 7-7 7"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Cột phải - chiếm 1/3 -->
       <div class="col-span-1">
         <div class="bg-white rounded-lg shadow-md p-6">
           <h2 class="text-xl font-semibold text-[#f58220] mb-4">
-            Văn bản xem nhiều nhất
+            Văn bản tải về nhiều nhất
           </h2>
-
           <div class="space-y-3">
-            <div class="flex items-start gap-2 pb-3 border-b border-gray-200">
+            <div
+              v-for="(doc, idx) in popularDocuments"
+              :key="doc.id || idx"
+              class="flex items-start gap-2 pb-3 border-b border-gray-200"
+            >
               <svg
                 class="w-4 h-4 text-red-500 mt-1 flex-shrink-0"
                 fill="currentColor"
@@ -654,101 +591,12 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <div class="text-sm">
-                <strong>Công văn 1798/TCT-TTKT:</strong> Tổng cục Thuế công bố
-                danh sách 524 doanh nghiệp rủi ro về hóa đơn
-              </div>
+              <a :href="`/van-ban/${doc.id}`" class="text-sm hover:underline">
+                {{ doc.title }}
+              </a>
             </div>
-
-            <div class="flex items-start gap-2 pb-3 border-b border-gray-200">
-              <svg
-                class="w-4 h-4 text-red-500 mt-1 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <div class="text-sm">
-                <strong>Luật Doanh nghiệp 2020 số 59/2020/QH14</strong>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-2 pb-3 border-b border-gray-200">
-              <svg
-                class="w-4 h-4 text-red-500 mt-1 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <div class="text-sm">
-                <strong>Nghị định 136/2020/NĐ-CP</strong> hướng dẫn Luật Phòng
-                cháy và chữa cháy và Luật Phòng cháy và chữa cháy sửa đổi
-              </div>
-            </div>
-
-            <div class="flex items-start gap-2 pb-3 border-b border-gray-200">
-              <svg
-                class="w-4 h-4 text-red-500 mt-1 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <div class="text-sm">
-                <strong>Luật đất đai 2024 số 31/2024/QH15</strong>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-2 pb-3 border-b border-gray-200">
-              <svg
-                class="w-4 h-4 text-red-500 mt-1 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <div class="text-sm">
-                <strong>Nghị định 15/2022/NĐ-CP</strong> quy định chính sách
-                miễn, giảm thuế theo Nghị quyết 43/2022/QH15 về chính sách tài
-                khóa, tiền tệ hỗ trợ Chương trình phục hồi và phát triển kinh tế
-                - xã hội
-              </div>
-            </div>
-
-            <div class="flex items-start gap-2">
-              <svg
-                class="w-4 h-4 text-red-500 mt-1 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <div class="text-sm">
-                <strong>Thông tư 80/2021/TT-BTC</strong> hướng dẫn Luật Quản lý
-                thuế và Nghị định 126/2020/NĐ-CP hướng dẫn Luật Quản lý thuế do
-                Bộ trưởng Bộ Tài chính ban hành
-              </div>
+            <div v-if="!popularDocuments.length" class="text-gray-500 text-sm">
+              Không có dữ liệu.
             </div>
           </div>
         </div>
@@ -758,198 +606,153 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { useThemeStore } from "~/stores/theme";
+import { useDocuments } from "~/composables/useDocuments";
+import { useLegalFields } from "~/composables/useLegalFields";
 
 const themeStore = useThemeStore();
 
-// Initialize theme on mount
-onMounted(() => {
+// Initialize theme on mou
+
+const {
+  documents: legalDocuments,
+  loading,
+  error,
+  getDocuments,
+  getDocumentTypes,
+  getDocumentStatuses,
+  downloadWordFile,
+  getPopularDocuments,
+} = useDocuments();
+
+// Use legal fields composable
+const { legalFields: apiLegalFields, getLegalFields } = useLegalFields();
+
+// Search functionality
+const searchQuery = ref("");
+const searchResults = ref([]);
+const isSearching = ref(false);
+
+// Add ref for popular documents
+const popularDocuments = ref([]);
+
+// Load documents and legal fields on mount
+onMounted(async () => {
   themeStore.initTheme();
+
+  try {
+    await Promise.all([getDocuments(), getLegalFields()]);
+    // Initialize field documents with all documents
+    fieldDocuments.value = legalDocuments.value || [];
+
+    // Load popular documents
+    const popularResponse = await getPopularDocuments(20);
+    if (popularResponse.data) {
+      popularDocuments.value = popularResponse.data;
+    }
+  } catch (error) {
+    console.error("Error loading initial data:", error);
+  }
 });
 
-const legalDocuments = [
-  {
-    title: "Nghị định 181/2025/NĐ-CP",
-    description: "ngày 01/07/2025 hướng dẫn Luật Thuế giá trị gia tăng",
-    issuedDate: "01/07/2025",
-    effectiveDate: "01/07/2025",
-    status: "Còn hiệu lực",
-  },
-  {
-    title: "Nghị định 156/2025/NĐ-CP",
-    description: "ngày 16/06/2025 quy định về quản lý thuế và phí",
-    issuedDate: "16/06/2025",
-    effectiveDate: "01/07/2025",
-    status: "Còn hiệu lực",
-  },
-  {
-    title: "Nghị định 117/2025/NĐ-CP",
-    description: "ngày 09/06/2025 về chính sách hỗ trợ doanh nghiệp",
-    issuedDate: "09/06/2025",
-    effectiveDate: "01/07/2025",
-    status: "Chưa hiệu lực",
-  },
-  {
-    title: "Công điện 72/CĐ-CT 2025",
-    description: "ngày 01/06/2025 về tăng cường công tác phòng chống dịch",
-    issuedDate: "01/06/2025",
-    effectiveDate: "01/06/2025",
-    status: "Chưa hiệu lực",
-  },
-  {
-    title: "Thông tư 32/2025/TT-BTC",
-    description: "ngày 31/05/2025 hướng dẫn thực hiện Luật Thuế",
-    issuedDate: "31/05/2025",
-    effectiveDate: "01/06/2025",
-    status: "Còn hiệu lực",
-  },
-  {
-    title: "Công văn 623/TTg-KSTT",
-    description: "ngày 30/05/2025 về tăng cường kiểm soát thị trường",
-    issuedDate: "30/05/2025",
-    effectiveDate: "30/05/2025",
-    status: "Còn hiệu lực",
-  },
-  {
-    title: "Nghị quyết 198/2025/QH15",
-    description: "ngày 17/05/2025 về chính sách tài khóa năm 2025",
-    issuedDate: "17/05/2025",
-    effectiveDate: "17/05/2025",
-    status: "Còn hiệu lực",
-  },
-];
-
-// Data cho văn bản theo lĩnh vực
-const fieldDocuments = {
-  tax: [
-    {
-      title: "Nghị định 181/2025/NĐ-CP",
-      description: "ngày 01/07/2025 hướng dẫn Luật Thuế giá trị gia tăng",
-      issuedDate: "01/07/2025",
-      effectiveDate: "01/07/2025",
-      status: "Còn hiệu lực",
-    },
-    {
-      title: "Thông tư 32/2025/TT-BTC",
-      description: "ngày 31/05/2025 hướng dẫn thực hiện Luật Thuế",
-      issuedDate: "31/05/2025",
-      effectiveDate: "01/06/2025",
-      status: "Còn hiệu lực",
-    },
-    {
-      title: "Nghị định 156/2025/NĐ-CP",
-      description: "ngày 16/06/2025 quy định về quản lý thuế và phí",
-      issuedDate: "16/06/2025",
-      effectiveDate: "01/07/2025",
-      status: "Còn hiệu lực",
-    },
-  ],
-  business: [
-    {
-      title: "Nghị định 117/2025/NĐ-CP",
-      description: "ngày 09/06/2025 về chính sách hỗ trợ doanh nghiệp",
-      issuedDate: "09/06/2025",
-      effectiveDate: "01/07/2025",
-      status: "Chưa hiệu lực",
-    },
-    {
-      title: "Luật Doanh nghiệp 2020 số 59/2020/QH14",
-      description: "ngày 17/06/2020 về doanh nghiệp",
-      issuedDate: "17/06/2020",
-      effectiveDate: "01/01/2021",
-      status: "Còn hiệu lực",
-    },
-  ],
-  land: [
-    {
-      title: "Luật đất đai 2024 số 31/2024/QH15",
-      description: "ngày 18/01/2024 về quản lý và sử dụng đất đai",
-      issuedDate: "18/01/2024",
-      effectiveDate: "01/07/2024",
-      status: "Còn hiệu lực",
-    },
-  ],
-  fire: [
-    {
-      title: "Nghị định 136/2020/NĐ-CP",
-      description:
-        "hướng dẫn Luật Phòng cháy và chữa cháy và Luật Phòng cháy và chữa cháy sửa đổi",
-      issuedDate: "24/11/2020",
-      effectiveDate: "01/01/2021",
-      status: "Còn hiệu lực",
-    },
-  ],
-  health: [
-    {
-      title: "Công điện 72/CĐ-CT 2025",
-      description: "ngày 01/06/2025 về tăng cường công tác phòng chống dịch",
-      issuedDate: "01/06/2025",
-      effectiveDate: "01/06/2025",
-      status: "Chưa hiệu lực",
-    },
-  ],
-  finance: [
-    {
-      title: "Nghị quyết 198/2025/QH15",
-      description: "ngày 17/05/2025 về chính sách tài khóa năm 2025",
-      issuedDate: "17/05/2025",
-      effectiveDate: "17/05/2025",
-      status: "Còn hiệu lực",
-    },
-  ],
-  market: [
-    {
-      title: "Công văn 623/TTg-KSTT",
-      description: "ngày 30/05/2025 về tăng cường kiểm soát thị trường",
-      issuedDate: "30/05/2025",
-      effectiveDate: "30/05/2025",
-      status: "Còn hiệu lực",
-    },
-  ],
+// Helper function to format date
+const formatDate = (dateString: string) => {
+  if (!dateString) return "";
+  return new Date(dateString).toLocaleDateString("vi-VN");
 };
 
-const legalFields = [
-  { id: "tax", name: "Thuế", count: fieldDocuments.tax.length },
-  {
-    id: "business",
-    name: "Doanh nghiệp",
-    count: fieldDocuments.business.length,
-  },
-  { id: "land", name: "Đất đai", count: fieldDocuments.land.length },
-  {
-    id: "fire",
-    name: "Phòng cháy chữa cháy",
-    count: fieldDocuments.fire.length,
-  },
-  { id: "health", name: "Y tế", count: fieldDocuments.health.length },
-  { id: "finance", name: "Tài chính", count: fieldDocuments.finance.length },
-  { id: "market", name: "Thị trường", count: fieldDocuments.market.length },
-  { id: "environment", name: "Môi trường", count: 0 },
-  { id: "labor", name: "Lao động", count: 0 },
-  { id: "transport", name: "Giao thông", count: 0 },
-  { id: "education", name: "Giáo dục", count: 0 },
-  { id: "social", name: "Xã hội", count: 0 },
-  { id: "other", name: "Khác", count: 0 },
-];
+// Helper function to get status text
+const getStatusText = (status: string) => {
+  switch (status) {
+    case "co_hieu_luc":
+      return "Còn hiệu lực";
+    case "het_hieu_luc":
+      return "Hết hiệu lực";
+    case "chua_co_hieu_luc":
+      return "Chưa có hiệu lực";
+    case "chua_xac_dinh":
+      return "Chưa xác định";
+    default:
+      return status;
+  }
+};
 
-const selectedField = ref("tax");
+// Helper function to get tags array
+const getTagsArray = (tags: string | string[]) => {
+  if (!tags) return [];
+  if (Array.isArray(tags)) return tags;
+  return tags
+    .split(",")
+    .map((t) => t.trim())
+    .filter((t) => t);
+};
+
+// Function to check if document belongs to a field
+const documentBelongsToField = (document: any, fieldSlug: string) => {
+  if (!document.tags) return false;
+
+  const documentTags = getTagsArray(document.tags);
+  return documentTags.some((tag) =>
+    tag.toLowerCase().includes(fieldSlug.toLowerCase())
+  );
+};
+
+const getFieldCount = (fieldSlug: string) => {
+  if (!legalDocuments.value) return 0;
+  return legalDocuments.value.filter((doc) =>
+    documentBelongsToField(doc, fieldSlug)
+  ).length;
+};
+
+// Computed legal fields with counts
+const legalFields = computed(() => {
+  if (!apiLegalFields.value) return [];
+
+  return apiLegalFields.value.map((field) => ({
+    id: field.id,
+    slug: field.slug,
+    name: field.name,
+    count: getFieldCount(field.slug),
+  }));
+});
+
+const selectedField = ref("");
 
 // Phân trang
 const currentPage = ref(1);
 const itemsPerPage = 5; // Số văn bản hiển thị trên mỗi trang
 
-const getDocumentsByField = () => {
-  if (selectedField.value === "tax") {
-    return legalDocuments;
+// Documents for current field
+const fieldDocuments = ref([]);
+const fieldLoading = ref(false);
+
+const getDocumentsByField = async (fieldSlug?: string) => {
+  if (!fieldSlug) {
+    fieldDocuments.value = legalDocuments.value || [];
+    return;
   }
 
-  return fieldDocuments[selectedField.value] || [];
+  fieldLoading.value = true;
+  try {
+    console.log("Calling API with tags:", fieldSlug);
+    const results = await getDocuments({
+      tags: fieldSlug,
+      limit: 50,
+    });
+    console.log("API response:", results);
+    fieldDocuments.value = results.data || [];
+  } catch (error) {
+    console.error("Error loading documents by field:", error);
+    fieldDocuments.value = [];
+  } finally {
+    fieldLoading.value = false;
+  }
 };
 
 // Lấy văn bản theo trang hiện tại
 const getPaginatedDocuments = () => {
-  const documents = getDocumentsByField();
+  const documents = fieldDocuments.value;
   const startIndex = (currentPage.value - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   return documents.slice(startIndex, endIndex);
@@ -957,7 +760,7 @@ const getPaginatedDocuments = () => {
 
 // Tính tổng số trang
 const getTotalPages = () => {
-  const documents = getDocumentsByField();
+  const documents = fieldDocuments.value;
   return Math.ceil(documents.length / itemsPerPage);
 };
 
@@ -989,9 +792,50 @@ const getVisiblePages = () => {
   return [1, "...", current - 1, current, current + 1, "...", totalPages];
 };
 
-// Reset về trang 1 khi chọn lĩnh vực khác
-watch(selectedField, () => {
+// Search function
+const performSearch = async () => {
+  if (!searchQuery.value || searchQuery.value.length < 3) {
+    searchResults.value = [];
+    return;
+  }
+
+  isSearching.value = true;
+  try {
+    const results = await getDocuments({
+      search: searchQuery.value,
+      limit: 50,
+    });
+    searchResults.value = results.data || [];
+  } catch (error) {
+    console.error("Error searching documents:", error);
+    searchResults.value = [];
+  } finally {
+    isSearching.value = false;
+  }
+};
+
+// Download function
+const handleDownload = async (document: any) => {
+  try {
+    const filename = document.wordFile
+      ? document.wordFile.split("/").pop()
+      : document.file_url.split("/").pop();
+    await downloadWordFile(document.id, filename);
+  } catch (error) {
+    console.error("Error downloading document:", error);
+    alert("Có lỗi xảy ra khi tải xuống file!");
+  }
+};
+
+// View document function
+const handleViewDocument = (document: any) => {
+  // Navigate to document detail page
+  navigateTo(`/van-ban/${document.id}`);
+};
+// Reset về trang 1 và load documents khi chọn lĩnh vực khác
+watch(selectedField, async (newField) => {
   currentPage.value = 1;
+  await getDocumentsByField(newField);
 });
 
 // Data cho biểu mẫu
@@ -1241,7 +1085,7 @@ watch(selectedFormType, () => {
 .section-title {
   border-left: 4px solid #f58220;
   padding-left: 10px;
-  color: #181818;
+  color: #f58220;
   font-size: 1.5rem;
   font-weight: 700;
   display: flex;

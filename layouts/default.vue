@@ -4,7 +4,6 @@
   >
     <Header />
     <div class="flex flex-1 layout-main">
-      <!-- Sidebar dưới header -->
       <aside
         :class="[
           isOpenSidebar ? 'w-64' : 'w-16',
@@ -79,7 +78,7 @@
                   >
                 </template>
                 <NuxtLink
-                  to="/kien-thuc/dan-su"
+                  to="/kien-thuc/dan_su_thua_ke_hon_nhan_va_gia_dinh"
                   class="sidebar-sublink"
                   @click="
                     sidebarStore.setTitle(
@@ -89,37 +88,37 @@
                   >Dân sự – Thừa kế – Hôn nhân và gia đình</NuxtLink
                 >
                 <NuxtLink
-                  to="/kien-thuc/hinh-su"
+                  to="/kien-thuc/hinh_su"
                   class="sidebar-sublink"
                   @click="sidebarStore.setTitle('Hình sự')"
                   >Hình sự</NuxtLink
                 >
                 <NuxtLink
-                  to="/kien-thuc/tranh-chap"
+                  to="/kien-thuc/giai_quyet_tranh_chap"
                   class="sidebar-sublink"
                   @click="sidebarStore.setTitle('Giải quyết tranh chấp')"
                   >Giải quyết tranh chấp</NuxtLink
                 >
                 <NuxtLink
-                  to="/kien-thuc/kinh-doanh"
+                  to="/kien-thuc/kinh_doanh_thuong_mai"
                   class="sidebar-sublink"
                   @click="sidebarStore.setTitle('Kinh doanh thương mại')"
                   >Kinh doanh thương mại</NuxtLink
                 >
                 <NuxtLink
-                  to="/kien-thuc/lao-dong"
+                  to="/kien-thuc/lao_dong"
                   class="sidebar-sublink"
                   @click="sidebarStore.setTitle('Lao động')"
                   >Lao động</NuxtLink
                 >
                 <NuxtLink
-                  to="/kien-thuc/dat-dai"
+                  to="/kien-thuc/dat_dai"
                   class="sidebar-sublink"
                   @click="sidebarStore.setTitle('Đất đai')"
                   >Đất đai</NuxtLink
                 >
                 <NuxtLink
-                  to="/kien-thuc/khac"
+                  to="/kien-thuc/the_loai_khac"
                   class="sidebar-sublink"
                   @click="sidebarStore.setTitle('Thể loại khác')"
                   >Thể loại khác</NuxtLink
@@ -272,6 +271,10 @@ const { isOpenSidebar } = storeToRefs(sidebarStore);
 
 // Initialize theme on mount
 onMounted(() => {
+  // Close sidebar on small screens
+  if (window.innerWidth <= 1024) {
+    sidebarStore.closeSidebar();
+  }
   themeStore.initTheme();
 });
 </script>

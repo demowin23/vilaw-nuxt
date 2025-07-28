@@ -1,26 +1,31 @@
 <template>
   <div class="video-item">
-    <div class="thumbnail-wrapper">
-      <img :src="thumbnail" alt="thumbnail" class="thumbnail" />
-    </div>
-    <div class="info">
-      <div class="title" v-html="title"></div>
-      <div class="meta">
-        <span class="duration-meta">Thời lượng: {{ duration }}</span>
-        <span class="views">{{ views }} lượt xem</span>
+    <NuxtLink :to="`/video/${item.id}`">
+      <div class="thumbnail-wrapper">
+        <img
+          :src="getImageUrl(item.thumbnail)"
+          alt="thumbnail"
+          class="thumbnail"
+        />
       </div>
-    </div>
+      <div class="info">
+        <div class="title" v-html="item.title"></div>
+        <div class="meta">
+          <span class="duration-meta">Thời lượng: {{ item.duration }}</span>
+          <span class="views">{{ item.view_count }} lượt xem</span>
+        </div>
+      </div>
+    </NuxtLink>
   </div>
 </template>
 
 <script setup lang="ts">
 defineProps<{
-  thumbnail: string;
-  title: string;
-  duration: string;
-  views: number;
-  id: number;
+  item: Object;
 }>();
+const getImageUrl = (image: string) => {
+  return `http://localhost:4000${image}`;
+};
 </script>
 
 <style scoped>

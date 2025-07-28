@@ -29,9 +29,7 @@
       <!-- Section Heading -->
       <div class="flex items-center mb-6">
         <div class="w-1 h-8 bg-[#FF6600] mr-4"></div>
-        <h2 class="text-2xl font-bold text-gray-800">
-          Bài viết xem nhiều nhất
-        </h2>
+        <h2 class="text-2xl font-bold text-gray-800">Bài viết nổi bật</h2>
       </div>
 
       <!-- Two Equal Columns Layout -->
@@ -151,7 +149,7 @@
       <!-- Article Grid - 3x3 Responsive -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
-          v-for="(article, index) in paginatedArticles"
+          v-for="(article, index) in knowledgeList"
           :key="index"
           class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
         >
@@ -159,7 +157,7 @@
             <!-- Image -->
             <div class="w-28 h-24 flex-shrink-0">
               <img
-                :src="article.image"
+                :src="getImageUrl(article.image)"
                 :alt="article.title"
                 class="w-full h-full object-cover"
               />
@@ -169,6 +167,9 @@
               <h3 class="font-bold text-gray-800 text-sm leading-tight">
                 {{ article.title }}
               </h3>
+              <p class="text-gray-600 text-sm leading-relaxed">
+                {{ article.summary }}
+              </p>
             </div>
           </div>
         </div>
@@ -223,32 +224,49 @@
   </div>
 </template>
 
-<script setup>
-import { useSidebarStore } from "~/stores/sidebar";
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { ref, computed, onMounted } from "vue";
+import { useSidebarStore } from "~/stores/sidebar";
+import { useLegalKnowledge } from "~/composables/useLegalKnowledge";
 
-// Store setup
 const sidebarStore = useSidebarStore();
 const route = useRoute();
+const { getLegalKnowledge } = useLegalKnowledge();
 
-// Auto-set title based on route
-const routeTitles = {
-  "dan-su": "Dân sự – Thừa kế – Hôn nhân và gia đình",
-  "hinh-su": "Hình sự",
-  "tranh-chap": "Giải quyết tranh chấp",
-  "kinh-doanh": "Kinh doanh thương mại",
-  "lao-dong": "Lao động",
-  "dat-dai": "Đất đai",
-  khac: "Thể loại khác",
+const knowledgeList = ref<any[]>([]);
+const getImageUrl = (image: string) => {
+  return `http://localhost:4000${image}`;
+};
+const getStatusLabel = (status: string) => {
+  const labels: Record<string, string> = {
+    published: "Đã xuất bản",
+    draft: "Bản nháp",
+    archived: "Đã lưu trữ",
+  };
+  return labels[status] || status;
 };
 
-// Set title based on route when component mounts
-onMounted(() => {
+const routeTitles: Record<string, string> = {
+  dan_su_thua_ke_hon_nhan_va_gia_dinh:
+    "Dân sự – Thừa kế – Hôn nhân và gia đình",
+  hinh_su: "Hình sự",
+  giai_quyet_tranh_chap: "Giải quyết tranh chấp",
+  kinh_doanh_thuong_mai: "Kinh doanh thương mại",
+  lao_dong: "Lao động",
+  dat_dai: "Đất đai",
+  the_loai_khac: "Thể loại khác",
+};
+
+onMounted(async () => {
   const routeId = route.params.id;
   if (routeTitles[routeId]) {
     sidebarStore.setTitle(routeTitles[routeId]);
   }
+  const response = await getLegalKnowledge({
+    category: routeId,
+  });
+  knowledgeList.value = response.data;
 });
 
 // Pagination state
@@ -364,18 +382,16 @@ const articles = [
 ];
 
 // Computed properties for pagination
-const totalArticles = computed(() => articles.length);
-const totalPages = computed(() =>
-  Math.ceil(totalArticles.value / itemsPerPage)
-);
+const totalArticles = ref(articles.length);
+const totalPages = ref(Math.ceil(totalArticles.value / itemsPerPage));
 
-const paginatedArticles = computed(() => {
+const paginatedArticles = ref(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
   return articles.slice(start, end);
 });
 
-const visiblePages = computed(() => {
+const visiblePages = ref(() => {
   const pages = [];
   const maxVisible = 5;
   let start = Math.max(1, currentPage.value - Math.floor(maxVisible / 2));
@@ -392,3 +408,56 @@ const visiblePages = computed(() => {
   return pages;
 });
 </script>
+
+<style scoped>
+.knowledge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.knowledge-item {
+  display: flex;
+  gap: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  align-items: flex-start;
+}
+.knowledge-image {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.knowledge-content {
+  flex: 1;
+}
+.knowledge-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  color: #222;
+}
+.knowledge-meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+  align-items: center;
+}
+.featured-badge {
+  background: #ff9800;
+  color: #fff;
+  border-radius: 12px;
+  padding: 0.2rem 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.knowledge-summary {
+  color: #444;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+</style>

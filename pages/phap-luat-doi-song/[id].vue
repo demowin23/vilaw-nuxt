@@ -12,97 +12,53 @@
     </div>
 
     <div class="header-row">
-      <h2 class="section-title">HÌNH SỰ</h2>
+      <h2 class="section-title">{{ title }}</h2>
     </div>
     <div class="video-grid-wrapper">
       <div class="video-grid">
-        <VideoItem
-          v-for="(item, idx) in videos"
-          :key="idx"
-          :thumbnail="item.thumbnail"
-          :title="item.title"
-          :duration="item.duration"
-          :views="item.views"
-        />
+        <VideoItem v-for="(item, idx) in videos" :key="idx" :item="item" />
       </div>
     </div>
     <div class="category-buttons mt-4">
-      <NuxtLink to="/phap-luat-doi-song?id=1" class="cat-btn">Hình sự</NuxtLink>
-      <NuxtLink to="/kien-thuc/tranh-chap" class="cat-btn"
-        >Giải quyết tranh chấp</NuxtLink
+      <NuxtLink
+        v-for="item in videoTypes"
+        :key="item.id"
+        :to="`/phap-luat-doi-song/${item.slug}`"
+        class="cat-btn"
+        >{{ item.name }}</NuxtLink
       >
-      <NuxtLink to="/kien-thuc/kinh-doanh" class="cat-btn"
-        >Kinh doanh và thương mại</NuxtLink
-      >
-      <NuxtLink to="/kien-thuc/lao-dong" class="cat-btn">Lao động</NuxtLink>
-      <NuxtLink to="/kien-thuc/dat-dai" class="cat-btn">Đất đai</NuxtLink>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import VideoItem from "~/components/VideoItem.vue";
 import { NuxtLink } from "#components";
-
-const videos = [
+import { useVideoLifeLaw } from "~/composables/useVideoLifeLaw";
+import { onMounted, ref } from "vue";
+const { getVideoLifeLaw } = useVideoLifeLaw();
+let idRoute = useRoute().params.id;
+const videos = ref([]);
+const videoTypes = ref([
   {
     id: 1,
-    thumbnail: "/images/meclip.jpeg",
-    title: "Vụ án: Cái chết sau sự thật - PHẦN 2: TRẢ GIÀY LẠI CHO NẠN NHÂN",
-    duration: "8 phút",
-    views: 88,
+    name: "Dân sự – Thừa kế – Hôn nhân và gia đình",
+    slug: "dan_su_thua_ke_hon_nhan_va_gia_dinh",
   },
-  {
-    id: 2,
-    thumbnail: "/images/meclip.jpeg",
-    title: "Vụ án: Truy tìm kẻ sát nhân - PHẦN 2: MẶT NẠ TỰ VỠ",
-    duration: "8 phút",
-    views: 54,
-  },
-  {
-    id: 3,
-    thumbnail: "/images/meclip.jpeg",
-    title: "Vụ án: Trả thù - PHẦN 2: GIẢI MÃ LỜI THỀ",
-    duration: "13 phút",
-    views: 34,
-  },
-  {
-    id: 4,
-    thumbnail: "/images/meclip.jpeg",
-    title: "Vụ án: Cái chết sau sự thật- PHẦN 1: BÁO MỘNG",
-    duration: "7 phút",
-    views: 120,
-  },
-  {
-    id: 5,
-    thumbnail: "/images/meclip.jpeg",
-    title: "Vụ án: Quan hệ tình dục với vị thành niên",
-    duration: "6 phút",
-    views: 127,
-  },
-  {
-    id: 6,
-    thumbnail: "/images/meclip.jpeg",
-    title: "Vụ án: Truy tìm kẻ sát nhân- PHẦN 1: MẶT NẠ ĐEN",
-    duration: "8 phút",
-    views: 118,
-  },
-  {
-    id: 7,
-    thumbnail: "/images/meclip.jpeg",
-    title: "Vụ án: Quan hệ tình dục với vị thành niên",
-    duration: "6 phút",
-    views: 127,
-  },
-  {
-    id: 8,
-    thumbnail: "/images/meclip.jpeg",
-    title: "Vụ án: Truy tìm kẻ sát nhân- PHẦN 1: MẶT NẠ ĐEN",
-    duration: "8 phút",
-    views: 118,
-  },
-];
+  { id: 2, name: "Hình sự", slug: "hinh_su" },
+  { id: 3, name: "Giải quyết tranh chấp", slug: "giai_quyet_tranh_chap" },
+  { id: 4, name: "Kinh doanh thương mại", slug: "kinh_doanh_thuong_mai" },
+  { id: 5, name: "Lao động", slug: "lao_dong" },
+  { id: 6, name: "Đất đai", slug: "dat_dai" },
+  { id: 7, name: "Thể loại khác", slug: "the_loai_khac" },
+]);
+let title = ref("");
+onMounted(async () => {
+  const type = idRoute.replace(/-/g, "_");
+  const video = await getVideoLifeLaw({ type });
+  videos.value = video.data;
+  title.value = videoTypes.value.find((item) => item.slug === type)?.name;
+});
 </script>
 
 <style scoped>

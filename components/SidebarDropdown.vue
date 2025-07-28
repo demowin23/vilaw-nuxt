@@ -1,18 +1,18 @@
 <template>
   <div>
     <button
-      @click="open = !open"
       :class="[
         'w-full flex items-center justify-between px-1 py-2 rounded font-semibold hover:bg-[#f58220]/10 transition-colors duration-200 focus:outline-none',
         isActive ? 'text-[#f58220]' : 'text-gray-800 dark:text-gray-200',
       ]"
     >
-      <span>
+      <span @click="handleClick">
         <slot name="label">
           {{ label }}
         </slot>
       </span>
       <svg
+        @click="open = !open"
         :class="[
           'w-4 h-4 ml-2 transition-transform',
           open ? 'rotate-90' : '',
@@ -49,6 +49,12 @@ const isActive = computed(() => {
   if (!props.activePaths) return false;
   return props.activePaths.some((path) => route.path.startsWith(path));
 });
+
+const handleClick = () => {
+  if (route.path !== "/kien-thuc") {
+    navigateTo("/kien-thuc");
+  }
+};
 </script>
 
 <style scoped>

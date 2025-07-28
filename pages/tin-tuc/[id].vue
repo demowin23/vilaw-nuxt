@@ -6,177 +6,130 @@
       <span class="breadcrumb-separator">/</span>
       <NuxtLink to="/tin-tuc" class="breadcrumb-item">Tin tức</NuxtLink>
       <span class="breadcrumb-separator">/</span>
-      <span class="breadcrumb-current">{{ news?.title }}</span>
+      <span class="breadcrumb-current">{{ newsStore.currentNews?.title }}</span>
+    </div>
+
+    <!-- Loading State -->
+    <div v-if="newsStore.loading" class="text-center py-12">
+      <div
+        class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#f58220]"
+      ></div>
+      <p class="mt-4 text-gray-600 dark:text-gray-400">Đang tải tin tức...</p>
     </div>
 
     <!-- News Detail -->
-    <div v-if="news" class="news-detail">
+    <div v-else-if="newsStore.currentNews" class="news-detail">
       <div class="news-header">
-        <div class="news-category">{{ news.category }}</div>
-        <h1 class="news-title">{{ news.title }}</h1>
+        <div class="news-category">
+          {{ newsStore.currentNews.category || "Pháp luật" }}
+        </div>
+        <h1 class="news-title">{{ newsStore.currentNews.title }}</h1>
         <div class="news-meta">
-          <span class="news-date">{{ formatDate(news.date) }}</span>
-          <span class="news-views">{{ news.views }} lượt đọc</span>
-          <span class="news-author">Tác giả: {{ news.author || "Admin" }}</span>
+          <span class="news-date">{{
+            formatDate(newsStore.currentNews.created_at)
+          }}</span>
+          <span class="news-views"
+            >{{ newsStore.currentNews.view_count || 0 }} lượt đọc</span
+          >
+          <span class="news-author"
+            >Tác giả: {{ newsStore.currentNews.author || "Admin" }}</span
+          >
         </div>
       </div>
 
       <div class="news-content">
         <div class="news-thumbnail">
-          <img :src="news.thumbnail" :alt="news.title" />
+          <img
+            :src="newsStore.getImage(newsStore.currentNews.image)"
+            :alt="newsStore.currentNews.title"
+          />
         </div>
 
         <div class="news-body">
-          <p class="news-excerpt">{{ news.excerpt }}</p>
+          <p class="news-excerpt">{{ newsStore.currentNews.description }}</p>
 
-          <div class="news-text">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
-
-            <h2>1. Quy định chung</h2>
-            <p>
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit
-              anim id est laborum.
-            </p>
-
-            <h2>2. Điều kiện áp dụng</h2>
-            <p>
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt explicabo.
-            </p>
-
-            <h2>3. Thủ tục thực hiện</h2>
-            <p>
-              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit
-              aut fugit, sed quia consequuntur magni dolores eos qui ratione
-              voluptatem sequi nesciunt.
-            </p>
-
-            <h2>4. Lưu ý quan trọng</h2>
-            <p>
-              Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet,
-              consectetur, adipisci velit, sed quia non numquam eius modi
-              tempora incidunt ut labore et dolore magnam aliquam quaerat
-              voluptatem.
-            </p>
-          </div>
+          <div class="news-text" v-html="newsStore.currentNews.content"></div>
         </div>
       </div>
 
       <!-- Related News -->
-      <div class="related-news">
+      <div v-if="newsStore.relatedNews.length > 0" class="related-news">
         <h3 class="related-title">Tin tức liên quan</h3>
         <div class="related-grid">
           <div
-            v-for="related in relatedNews"
+            v-for="related in newsStore.relatedNews"
             :key="related.id"
             class="related-item"
             @click="navigateTo(`/tin-tuc/${related.id}`)"
           >
-            <img :src="related.thumbnail" :alt="related.title" />
+            <img
+              :src="newsStore.getImage(related.image)"
+              :alt="related.title"
+            />
             <div class="related-content">
               <h4>{{ related.title }}</h4>
-              <span class="related-date">{{ formatDate(related.date) }}</span>
+              <span class="related-date">{{
+                formatDate(related.created_at)
+              }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Loading State -->
-    <div v-else class="loading-state">
-      <div class="loading-spinner"></div>
-      <p>Đang tải tin tức...</p>
+    <!-- Error State -->
+    <div v-else class="text-center py-12">
+      <div class="text-red-600 dark:text-red-400 mb-4">
+        <svg class="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+        Không tìm thấy tin tức
+      </h3>
+      <p class="text-gray-500 dark:text-gray-400">
+        Tin tức bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
+import { useNewsStore } from "~/stores/news";
+
+// Get the ID from the route
 const route = useRoute();
-const newsId = route.params.id;
+const id = route.params.id;
 
-// Mock data - in real app, this would come from API
-const newsData = [
-  {
-    id: 1,
-    thumbnail: "/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp",
-    title: "Quy định mới về xử lý vi phạm giao thông đường bộ năm 2024",
-    excerpt:
-      "Bộ Công an vừa ban hành Thông tư mới về xử lý vi phạm hành chính trong lĩnh vực giao thông đường bộ với nhiều điểm đáng chú ý...",
-    category: "Giao thông",
-    date: "2024-01-15",
-    views: 15420,
-    author: "Luật sư Nguyễn Văn A",
-  },
-  {
-    id: 2,
-    thumbnail: "/images/meclip.jpeg",
-    title: "Hướng dẫn thủ tục ly hôn đơn phương mới nhất",
-    excerpt:
-      "Thủ tục ly hôn đơn phương có những thay đổi quan trọng theo quy định mới của Bộ luật Dân sự và Luật Hôn nhân và gia đình...",
-    category: "Hôn nhân",
-    date: "2024-01-14",
-    views: 12850,
-    author: "Luật sư Trần Thị B",
-  },
-  {
-    id: 3,
-    thumbnail: "/images/ton-chi-hoat-dong.DKjQaDsR_1Y6nqo.webp",
-    title: "Quyền thừa kế của con nuôi theo pháp luật Việt Nam",
-    excerpt:
-      "Con nuôi có quyền thừa kế như con đẻ theo quy định của pháp luật. Tuy nhiên, cần lưu ý một số điểm quan trọng...",
-    category: "Thừa kế",
-    date: "2024-01-13",
-    views: 9870,
-    author: "Luật sư Lê Văn C",
-  },
-  {
-    id: 4,
-    thumbnail: "/images/bai-tap-luat.webp",
-    title: "Phân tích án lệ về tranh chấp hợp đồng mua bán nhà đất",
-    excerpt:
-      "Án lệ số 23/2018/AL của Tòa án nhân dân tối cao về hiệu lực của hợp đồng mua bán nhà đất khi chưa có sổ đỏ...",
-    category: "Dân sự",
-    date: "2024-01-12",
-    views: 8760,
-    author: "Luật sư Phạm Thị D",
-  },
-  {
-    id: 5,
-    thumbnail: "/images/de-thi-luat.webp",
-    title: "Quy định về thời gian làm việc và nghỉ ngơi của người lao động",
-    excerpt:
-      "Luật Lao động 2019 có những quy định mới về thời gian làm việc, nghỉ ngơi và chế độ làm thêm giờ...",
-    category: "Lao động",
-    date: "2024-01-11",
-    views: 7650,
-    author: "Luật sư Hoàng Văn E",
-  },
-];
+// Use news store
+const newsStore = useNewsStore();
 
-const news = computed(() => {
-  return newsData.find((item) => item.id === parseInt(newsId as string));
-});
+// Fetch news detail from store
+const fetchNewsDetail = async () => {
+  try {
+    // Fetch news detail
+    await newsStore.fetchNewsDetail(id);
 
-const relatedNews = computed(() => {
-  if (!news.value) return [];
-  return newsData
-    .filter(
-      (item) =>
-        item.id !== news.value?.id && item.category === news.value?.category
-    )
-    .slice(0, 3);
-});
+    // Fetch related news if we have news data
+    if (newsStore.currentNews) {
+      await newsStore.fetchRelatedNews(
+        newsStore.currentNews.category || "phap-luat",
+        newsStore.currentNews.id,
+        4
+      );
+    }
+  } catch (error) {
+    console.error("Error fetching news detail:", error);
+  }
+};
 
 function formatDate(dateString: string): string {
+  if (!dateString) return "";
   const date = new Date(dateString);
   return date.toLocaleDateString("vi-VN", {
     year: "numeric",
@@ -185,11 +138,9 @@ function formatDate(dateString: string): string {
   });
 }
 
-// Set page title
-useHead({
-  title: news.value
-    ? `${news.value.title} - Tin tức pháp luật`
-    : "Tin tức pháp luật",
+// Load data on mount
+onMounted(() => {
+  fetchNewsDetail();
 });
 </script>
 

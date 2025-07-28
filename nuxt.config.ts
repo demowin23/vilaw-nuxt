@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
   ],
-  css: ['~/assets/css/global.css'],
+  css: ['~/assets/css/global.css', '~/assets/css/responsive.css'],
   nitro: {
     preset: 'cloudflare-pages'
   },
@@ -15,6 +15,9 @@ export default defineNuxtConfig({
       fs: {
         strict: false
       }
+    },
+    ssr: {
+      noExternal: ['@vueup/vue-quill']
     }
   },
   tailwindcss: {
@@ -29,5 +32,5 @@ export default defineNuxtConfig({
         './app.vue'
       ]
     }
-  }
-})
+  },
+});

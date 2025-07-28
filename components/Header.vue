@@ -193,11 +193,17 @@
               :icon="['far', 'circle-user']"
               class="text-2xl w-8 h-8"
             />
+            <span
+              v-if="isAuthenticated && user"
+              class="hidden md:inline text-sm"
+            >
+              {{ user.fullName }}
+            </span>
           </button>
           <transition name="fade">
             <div
               v-if="showUserPopup"
-              class="user-popup absolute top-[45px] right-0 mt-2 bg-white shadow-2xl rounded-lg px-4 py-3 z-50 min-w-[150px] max-w-xs flex flex-col items-center animate-fade-in"
+              class="user-popup absolute top-[45px] right-0 mt-2 bg-white dark:bg-gray-800 shadow-2xl rounded-lg px-4 py-3 z-50 min-w-[200px] max-w-xs flex flex-col items-center animate-fade-in"
               @mouseenter="showUserPopup = true"
               @mouseleave="showUserPopup = false"
             >
@@ -205,26 +211,73 @@
               <div
                 class="absolute right-[2px] top-0 -translate-x-1/2 -translate-y-1/2 w-4 h-4 z-50 pointer-events-none"
               >
-                <div class="w-4 h-4 bg-white shadow-2xl rotate-45"></div>
+                <div
+                  class="w-4 h-4 bg-white dark:bg-gray-800 shadow-2xl rotate-45"
+                ></div>
               </div>
-              <button
-                class="w-full mb-2 px-3 py-2 rounded bg-[#f58220] text-white font-semibold hover:bg-[#e06d00] transition flex items-center justify-center gap-2 text-sm"
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'sign-in-alt']"
-                  class="text-base"
-                />
-                Đăng nhập
-              </button>
-              <button
-                class="w-full px-3 py-2 rounded border border-[#f58220] text-[#f58220] font-semibold hover:bg-[#f58220]/10 transition flex items-center justify-center gap-2 text-sm"
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'user-plus']"
-                  class="text-base"
-                />
-                Đăng ký
-              </button>
+
+              <!-- User info when authenticated -->
+              <div v-if="isAuthenticated && user" class="w-full mb-3">
+                <div class="text-center mb-2">
+                  <div
+                    class="text-sm font-semibold text-gray-900 dark:text-white"
+                  >
+                    {{ user.fullName }}
+                  </div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ user.email }}
+                  </div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ user.phone }}
+                  </div>
+                </div>
+                <div class="border-t border-gray-200 dark:border-gray-600 pt-2">
+                  <button
+                    @click="navigateTo('/profile')"
+                    class="w-full mb-2 px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center gap-2 text-sm"
+                  >
+                    <font-awesome-icon
+                      :icon="['fas', 'user']"
+                      class="text-base"
+                    />
+                    Hồ sơ
+                  </button>
+                  <button
+                    @click="handleLogout"
+                    class="w-full px-3 py-2 rounded bg-red-500 text-white font-semibold hover:bg-red-600 transition flex items-center justify-center gap-2 text-sm"
+                  >
+                    <font-awesome-icon
+                      :icon="['fas', 'sign-out-alt']"
+                      class="text-base"
+                    />
+                    Đăng xuất
+                  </button>
+                </div>
+              </div>
+
+              <!-- Login/Register when not authenticated -->
+              <div v-else class="w-full">
+                <button
+                  @click="goToLogin"
+                  class="w-full mb-2 px-3 py-2 rounded bg-[#f58220] text-white font-semibold hover:bg-[#e06d00] transition flex items-center justify-center gap-2 text-sm"
+                >
+                  <font-awesome-icon
+                    :icon="['fas', 'sign-in-alt']"
+                    class="text-base"
+                  />
+                  Đăng nhập
+                </button>
+                <button
+                  @click="goToRegister"
+                  class="w-full px-3 py-2 rounded border border-[#f58220] text-[#f58220] font-semibold hover:bg-[#f58220]/10 transition flex items-center justify-center gap-2 text-sm"
+                >
+                  <font-awesome-icon
+                    :icon="['fas', 'user-plus']"
+                    class="text-base"
+                  />
+                  Đăng ký
+                </button>
+              </div>
             </div>
           </transition>
           <!-- Mobile search popup -->
@@ -301,6 +354,8 @@ import {
   faComments,
   faPhone,
   faShoppingCart,
+  faSignOutAlt,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSidebarStore } from "~/stores/sidebar";
 
@@ -311,12 +366,39 @@ library.add(
   faHome,
   faComments,
   faPhone,
-  faShoppingCart
+  faShoppingCart,
+  faSignOutAlt,
+  faUser
 );
+
 const sidebarStore = useSidebarStore();
+const { user, isAuthenticated, logout } = useAuth();
+const { handleApiError, handleApiSuccess } = useNotification();
 const hoverMenu = ref("");
 const showUserPopup = ref(false);
 const showMobileSearch = ref(false);
+
+const goToLogin = () => {
+  showUserPopup.value = false;
+  navigateTo("/dang-nhap");
+};
+
+const goToRegister = () => {
+  showUserPopup.value = false;
+  navigateTo("/dang-ky");
+};
+
+const handleLogout = async () => {
+  try {
+    await logout();
+    showUserPopup.value = false;
+    handleApiSuccess({ message: "Đăng xuất thành công!" });
+    await navigateTo("/");
+  } catch (error) {
+    console.error("Logout error:", error);
+    handleApiError(error, "Có lỗi xảy ra khi đăng xuất!");
+  }
+};
 </script>
 
 <style scoped>

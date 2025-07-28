@@ -1,0 +1,73 @@
+### Legal Knowledge API Tests
+
+# 1. Lấy danh sách bài viết
+GET http://localhost:4000/api/v1/legal-knowledge
+
+###
+
+# Lấy bài viết đã publish
+GET http://localhost:4000/api/v1/legal-knowledge?status=published
+
+###
+
+# Lọc theo category
+GET http://localhost:4000/api/v1/legal-knowledge?category=hinh_su&status=published
+
+###
+
+# Tìm kiếm
+GET http://localhost:4000/api/v1/legal-knowledge?search=phạm tội&status=published
+
+###
+
+# Phân trang
+GET http://localhost:4000/api/v1/legal-knowledge?limit=5&offset=10&status=published
+
+###
+
+# 2. Lấy danh sách categories
+GET http://localhost:4000/api/v1/legal-knowledge/categories
+
+###
+
+# 3. Lấy chi tiết bài viết
+GET http://localhost:4000/api/v1/legal-knowledge/1
+
+###
+
+# 4. Tạo bài viết mới (Admin only)
+POST http://localhost:4000/api/v1/legal-knowledge
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "title": "Tiêu đề bài viết",
+  "image": "https://example.com/image.jpg",
+  "summary": "Tóm tắt ngắn gọn về nội dung",
+  "content": "<p>Nội dung HTML từ QuillEditor...</p>",
+  "category": "hinh_su",
+  "author": "Luật sư Nguyễn Văn A",
+  "status": "draft",
+  "is_featured": false
+}
+
+###
+
+# 5. Cập nhật bài viết (Admin only)
+PUT http://localhost:4000/api/v1/legal-knowledge/1
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "title": "Tiêu đề mới",
+  "status": "published",
+  "is_featured": true
+}
+
+###
+
+# 6. Xóa bài viết (Admin only)
+DELETE http://localhost:4000/api/v1/legal-knowledge/1
+Authorization: Bearer {{admin_token}}
+
+### 

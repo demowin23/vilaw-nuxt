@@ -129,6 +129,5 @@
     <div class="bg-orange-500 text-white text-center py-4 mt-8 rounded-t-xl">
       © 2025 Hành Nghề Luật | Pháp luật số - Tài liệu số
     </div>
-    <div class="h-[105px]"></div>
   </footer>
 </template>

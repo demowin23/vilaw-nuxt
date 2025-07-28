@@ -14,8 +14,19 @@
       </p>
     </div>
 
+    <!-- Loading State -->
+    <div v-if="newsStore.loading" class="text-center py-12">
+      <div
+        class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#f58220]"
+      ></div>
+      <p class="mt-4 text-gray-600 dark:text-gray-400">Đang tải tin tức...</p>
+    </div>
+
     <!-- Featured News Section -->
-    <div class="featured-news mb-12">
+    <div
+      v-else-if="newsStore.featuredNews.length > 0"
+      class="featured-news mb-12"
+    >
       <h2
         class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6 transition-colors duration-300"
       >
@@ -23,110 +34,65 @@
       </h2>
       <div class="featured-grid">
         <!-- Box chính bên trái -->
-        <div class="featured-main">
+        <div
+          class="featured-main"
+          @click="handleNewsClick(newsStore.featuredNews[0])"
+        >
           <div class="featured-thumbnail">
             <img
-              src="/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp"
-              alt="Tin tức chính"
+              :src="newsStore.getImage(newsStore.featuredNews[0]?.image)"
+              :alt="newsStore.featuredNews[0]?.title"
             />
-            <div class="featured-category">Giao thông</div>
+            <div class="featured-category">
+              {{ newsStore.featuredNews[0]?.category || "Pháp luật" }}
+            </div>
           </div>
           <div class="featured-content">
             <h3 class="featured-title">
-              Quy định mới về xử lý vi phạm giao thông đường bộ năm 2024
+              {{ newsStore.featuredNews[0]?.title }}
             </h3>
             <p class="featured-excerpt">
-              Bộ Công an vừa ban hành Thông tư mới về xử lý vi phạm hành chính
-              trong lĩnh vực giao thông đường bộ với nhiều điểm đáng chú ý...
+              {{ newsStore.featuredNews[0]?.description }}
             </p>
             <div class="featured-meta">
-              <span class="featured-date">15 tháng 1, 2024</span>
-              <span class="featured-views">15,420 lượt đọc</span>
+              <span class="featured-date">{{
+                formatDate(newsStore.featuredNews[0]?.created_at)
+              }}</span>
+              <span class="featured-views"
+                >{{ newsStore.featuredNews[0]?.view_count || 0 }} lượt đọc</span
+              >
             </div>
           </div>
         </div>
 
         <!-- 4 item dọc bên phải -->
         <div class="featured-sidebar">
-          <div class="featured-item">
+          <div
+            v-for="(item, index) in newsStore.featuredNews.slice(1, 5)"
+            :key="item.id"
+            class="featured-item"
+            @click="handleNewsClick(item)"
+          >
             <div class="featured-item-thumbnail">
-              <img src="/images/meclip.jpeg" alt="Tin tức 1" />
-              <div class="featured-category">Hôn nhân</div>
-            </div>
-            <div class="featured-item-content">
-              <h3 class="featured-item-title">
-                Hướng dẫn thủ tục ly hôn đơn phương mới nhất
-              </h3>
-              <p class="featured-item-excerpt">
-                Thủ tục ly hôn đơn phương được quy định chi tiết trong Luật Hôn
-                nhân và gia đình...
-              </p>
-              <div class="featured-meta">
-                <span class="featured-date">14 tháng 1, 2024</span>
-                <span class="featured-views">12,850 lượt đọc</span>
+              <img :src="newsStore.getImage(item.image)" :alt="item.title" />
+              <div class="featured-category">
+                {{ item.category || "Pháp luật" }}
               </div>
             </div>
-          </div>
-
-          <div class="featured-item">
-            <div class="featured-item-thumbnail">
-              <img
-                src="/images/ton-chi-hoat-dong.DKjQaDsR_1Y6nqo.webp"
-                alt="Tin tức 2"
-              />
-              <div class="featured-category">Thừa kế</div>
-            </div>
             <div class="featured-item-content">
               <h3 class="featured-item-title">
-                Quyền thừa kế của con nuôi theo pháp luật Việt Nam
+                {{ item.title }}
               </h3>
               <p class="featured-item-excerpt">
-                Con nuôi có quyền thừa kế ngang bằng với con đẻ theo quy định
-                của Bộ luật Dân sự...
+                {{ item.description }}
               </p>
               <div class="featured-meta">
-                <span class="featured-date">13 tháng 1, 2024</span>
-                <span class="featured-views">9,870 lượt đọc</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="featured-item">
-            <div class="featured-item-thumbnail">
-              <img src="/images/bai-tap-luat.webp" alt="Tin tức 3" />
-              <div class="featured-category">Dân sự</div>
-            </div>
-            <div class="featured-item-content">
-              <h3 class="featured-item-title">
-                Phân tích án lệ về tranh chấp hợp đồng mua bán nhà đất
-              </h3>
-              <p class="featured-item-excerpt">
-                Án lệ số 23/2018/AL của Tòa án nhân dân tối cao về hiệu lực của
-                hợp đồng...
-              </p>
-              <div class="featured-meta">
-                <span class="featured-date">12 tháng 1, 2024</span>
-                <span class="featured-views">8,760 lượt đọc</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="featured-item">
-            <div class="featured-item-thumbnail">
-              <img src="/images/de-thi-luat.webp" alt="Tin tức 4" />
-              <div class="featured-category">Lao động</div>
-            </div>
-            <div class="featured-item-content">
-              <h3 class="featured-item-title">
-                Quy định về thời gian làm việc và nghỉ ngơi của người lao động
-              </h3>
-              <p class="featured-item-excerpt">
-                Luật Lao động 2019 có những quy định mới về thời gian làm việc
-                và chế độ nghỉ ngơi...
-              </p>
-              <div class="featured-meta">
-                <span class="featured-date">11 tháng 1, 2024</span>
-                <span class="featured-views">7,650 lượt đọc</span>
+                <span class="featured-date">{{
+                  formatDate(item.created_at)
+                }}</span>
+                <span class="featured-views"
+                  >{{ item.view_count || 0 }} lượt đọc</span
+                >
               </div>
             </div>
           </div>
@@ -135,178 +101,47 @@
     </div>
 
     <!-- Main News List -->
-    <NewsList :news="allNews" title="Tất cả tin tức" />
+    <NewsList :news="newsStore.allNews" title="Tất cả tin tức" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
 import NewsList from "~/components/NewsList.vue";
+import { useNewsStore } from "~/stores/news";
 
-// All news data
-const allNews = [
-  {
-    id: 4,
-    thumbnail: "/images/bai-tap-luat.webp",
-    title: "Phân tích án lệ về tranh chấp hợp đồng mua bán nhà đất",
-    excerpt:
-      "Án lệ số 23/2018/AL của Tòa án nhân dân tối cao về hiệu lực của hợp đồng mua bán nhà đất khi chưa có sổ đỏ...",
-    category: "Dân sự",
-    date: "2024-01-12",
-    views: 8760,
-  },
-  {
-    id: 5,
-    thumbnail: "/images/de-thi-luat.webp",
-    title: "Quy định về thời gian làm việc và nghỉ ngơi của người lao động",
-    excerpt:
-      "Luật Lao động 2019 có những quy định mới về thời gian làm việc, nghỉ ngơi và chế độ làm thêm giờ...",
-    category: "Lao động",
-    date: "2024-01-11",
-    views: 7650,
-  },
-  {
-    id: 6,
-    thumbnail: "/images/on-thi-luat.webp",
-    title: "Tội phạm về ma túy và hình phạt theo Bộ luật Hình sự",
-    excerpt:
-      "Bộ luật Hình sự 2015 quy định các tội phạm về ma túy với mức hình phạt nghiêm khắc...",
-    category: "Hình sự",
-    date: "2024-01-10",
-    views: 6540,
-  },
-  {
-    id: 7,
-    thumbnail: "/images/sach-luat.webp",
-    title: "Thủ tục đăng ký kinh doanh online theo quy định mới",
-    excerpt:
-      "Nghị định mới về thương mại điện tử có những quy định cụ thể về đăng ký kinh doanh online...",
-    category: "Kinh doanh",
-    date: "2024-01-09",
-    views: 5430,
-  },
-  {
-    id: 8,
-    thumbnail: "/images/n.png",
-    title: "Quyền sử dụng đất và thủ tục chuyển đổi mục đích sử dụng",
-    excerpt:
-      "Luật Đất đai 2013 quy định chi tiết về quyền sử dụng đất và thủ tục chuyển đổi mục đích sử dụng đất...",
-    category: "Đất đai",
-    date: "2024-01-08",
-    views: 4320,
-  },
-  {
-    id: 9,
-    thumbnail: "/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp",
-    title: "Bảo vệ quyền lợi người tiêu dùng trong giao dịch thương mại",
-    excerpt:
-      "Luật Bảo vệ quyền lợi người tiêu dùng có những quy định quan trọng về bảo vệ người tiêu dùng...",
-    category: "Kinh doanh",
-    date: "2024-01-07",
-    views: 3210,
-  },
-  {
-    id: 10,
-    thumbnail: "/images/meclip.jpeg",
-    title: "Quy định về bồi thường thiệt hại do vi phạm hợp đồng",
-    excerpt:
-      "Bộ luật Dân sự 2015 quy định chi tiết về bồi thường thiệt hại khi vi phạm nghĩa vụ hợp đồng...",
-    category: "Dân sự",
-    date: "2024-01-06",
-    views: 2980,
-  },
-  {
-    id: 11,
-    thumbnail: "/images/ton-chi-hoat-dong.DKjQaDsR_1Y6nqo.webp",
-    title: "Thủ tục giải quyết tranh chấp lao động tập thể",
-    excerpt:
-      "Luật Lao động quy định các bước giải quyết tranh chấp lao động tập thể một cách hòa bình...",
-    category: "Lao động",
-    date: "2024-01-05",
-    views: 2870,
-  },
-  {
-    id: 12,
-    thumbnail: "/images/bai-tap-luat.webp",
-    title: "Quy định về tội phạm rửa tiền và chống rửa tiền",
-    excerpt:
-      "Luật Phòng, chống rửa tiền có những quy định nghiêm ngặt về phòng chống tội phạm rửa tiền...",
-    category: "Hình sự",
-    date: "2024-01-04",
-    views: 2760,
-  },
-  {
-    id: 13,
-    thumbnail: "/images/de-thi-luat.webp",
-    title: "Quyền thừa kế của vợ chồng theo pháp luật Việt Nam",
-    excerpt:
-      "Bộ luật Dân sự quy định về quyền thừa kế của vợ chồng trong trường hợp một bên chết trước...",
-    category: "Thừa kế",
-    date: "2024-01-03",
-    views: 2650,
-  },
-  {
-    id: 14,
-    thumbnail: "/images/on-thi-luat.webp",
-    title: "Thủ tục đăng ký hộ khẩu thường trú mới nhất",
-    excerpt:
-      "Nghị định mới về đăng ký cư trú có những thay đổi quan trọng về thủ tục đăng ký hộ khẩu...",
-    category: "Hành chính",
-    date: "2024-01-02",
-    views: 2540,
-  },
-  {
-    id: 15,
-    thumbnail: "/images/sach-luat.webp",
-    title: "Quy định về bảo vệ môi trường trong hoạt động kinh doanh",
-    excerpt:
-      "Luật Bảo vệ môi trường 2020 có những quy định mới về trách nhiệm bảo vệ môi trường...",
-    category: "Môi trường",
-    date: "2024-01-01",
-    views: 2430,
-  },
-  {
-    id: 12,
-    thumbnail: "/images/bai-tap-luat.webp",
-    title: "Quy định về tội phạm rửa tiền và chống rửa tiền",
-    excerpt:
-      "Luật Phòng, chống rửa tiền có những quy định nghiêm ngặt về phòng chống tội phạm rửa tiền...",
-    category: "Hình sự",
-    date: "2024-01-04",
-    views: 2760,
-  },
-  {
-    id: 13,
-    thumbnail: "/images/de-thi-luat.webp",
-    title: "Quyền thừa kế của vợ chồng theo pháp luật Việt Nam",
-    excerpt:
-      "Bộ luật Dân sự quy định về quyền thừa kế của vợ chồng trong trường hợp một bên chết trước...",
-    category: "Thừa kế",
-    date: "2024-01-03",
-    views: 2650,
-  },
-  {
-    id: 14,
-    thumbnail: "/images/on-thi-luat.webp",
-    title: "Thủ tục đăng ký hộ khẩu thường trú mới nhất",
-    excerpt:
-      "Nghị định mới về đăng ký cư trú có những thay đổi quan trọng về thủ tục đăng ký hộ khẩu...",
-    category: "Hành chính",
-    date: "2024-01-02",
-    views: 2540,
-  },
-  {
-    id: 15,
-    thumbnail: "/images/sach-luat.webp",
-    title: "Quy định về bảo vệ môi trường trong hoạt động kinh doanh",
-    excerpt:
-      "Luật Bảo vệ môi trường 2020 có những quy định mới về trách nhiệm bảo vệ môi trường...",
-    category: "Môi trường",
-    date: "2024-01-01",
-    views: 2430,
-  },
-];
+// Use news store
+const newsStore = useNewsStore();
+
+// Fetch news data from store
+const fetchNews = async () => {
+  try {
+    // Fetch all news and featured news in parallel
+    await Promise.all([
+      newsStore.fetchAllNews({ page: 1, limit: 20 }),
+      newsStore.fetchFeaturedNews(5),
+    ]);
+  } catch (error) {
+    console.error("Error fetching news:", error);
+    // Fallback to static data if API fails
+    newsStore.allNews = [
+      {
+        id: 4,
+        thumbnail: "/images/bai-tap-luat.webp",
+        title: "Phân tích án lệ về tranh chấp hợp đồng mua bán nhà đất",
+        excerpt:
+          "Án lệ số 23/2018/AL của Tòa án nhân dân tối cao về hiệu lực của hợp đồng mua bán nhà đất khi chưa có sổ đỏ...",
+        category: "Dân sự",
+        date: "2024-01-12",
+        views: 8760,
+      },
+      // ... other fallback data
+    ];
+  }
+};
 
 function formatDate(dateString: string): string {
+  if (!dateString) return "";
   const date = new Date(dateString);
   return date.toLocaleDateString("vi-VN", {
     year: "numeric",
@@ -318,6 +153,11 @@ function formatDate(dateString: string): string {
 function handleNewsClick(news: any) {
   navigateTo(`/tin-tuc/${news.id}`);
 }
+
+// Load data on mount
+onMounted(() => {
+  fetchNews();
+});
 </script>
 
 <style scoped>
@@ -332,12 +172,11 @@ function handleNewsClick(news: any) {
 
 .featured-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 24px;
   align-items: stretch;
   height: 600px;
 }
-
 .featured-sidebar {
   display: flex;
   flex-direction: column;

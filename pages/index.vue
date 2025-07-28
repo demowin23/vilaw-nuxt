@@ -11,7 +11,7 @@
         <SectionsVideo :topViews="topViews" title="Đất đai" />
       </div>
       <div
-        class="w-1/4 min-w-[100px] max-w-xs h-fit bg-white dark:bg-gray-800 rounded-2xl p-4 grid grid-cols-2 gap-4 transition-colors duration-300"
+        class="w-1/4 mt-[50px] min-w-[100px] max-w-xs h-fit bg-white dark:bg-gray-800 rounded-2xl p-4 grid grid-cols-2 gap-4 transition-colors duration-300"
       >
         <div
           class="relative group rounded-2xl overflow-hidden h-48 cursor-pointer transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
