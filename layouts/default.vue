@@ -43,7 +43,7 @@
                 Video Pháp luật và Đời sống
               </NuxtLink>
             </li>
-            <li>
+            <li v-if="user?.role === 'user'">
               <NuxtLink to="/chat-luat-su" class="sidebar-link">
                 <font-awesome-icon
                   :icon="['fas', 'comments']"
@@ -260,7 +260,8 @@ import { storeToRefs } from "pinia";
 import ChatPopup from "~/components/ChatPopup.vue";
 import { useRoute } from "vue-router";
 import { ref, computed, onMounted } from "vue";
-
+import { useAuth } from "~/composables/useAuth";
+const { user } = useAuth();
 const route = useRoute();
 const isKienThucActive = computed(() => route.path.startsWith("/kien-thuc"));
 const kienThucHover = ref(false);

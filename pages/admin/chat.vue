@@ -312,7 +312,36 @@ const quickResponses = ref([
 // Methods
 const refreshConversations = async () => {
   try {
+    // Store current selected conversation details
+    const currentSelectedId = selectedConversation.value?.id;
+    const currentMessages = selectedConversation.value?.messages || [];
+
     await getAllConversations();
+
+    // Restore selected conversation with its detailed messages
+    if (currentSelectedId && selectedConversation.value) {
+      const updatedConversation = conversations.value.find(
+        (c) => c.id === currentSelectedId
+      );
+      if (updatedConversation) {
+        // Merge basic info from updated conversation but keep detailed messages
+        selectedConversation.value = {
+          ...updatedConversation,
+          messages: currentMessages, // Keep the detailed messages
+        };
+
+        // Also update the conversation in the list to keep it in sync
+        const conversationIndex = conversations.value.findIndex(
+          (c) => c.id === currentSelectedId
+        );
+        if (conversationIndex !== -1) {
+          conversations.value[conversationIndex] = {
+            ...updatedConversation,
+            messages: currentMessages,
+          };
+        }
+      }
+    }
   } catch (err) {
     console.error("Error loading conversations:", err);
   }
@@ -320,7 +349,18 @@ const refreshConversations = async () => {
 
 const handleSelectConversation = async (conversation) => {
   try {
-    await selectConversation(conversation);
+    // Get detailed conversation information
+    const { conversation: detailedConversation, messages } =
+      await getConversationDetail(conversation.id);
+
+    // Set the detailed conversation as selected
+    selectedConversation.value = detailedConversation;
+    selectedConversation.value.messages = messages;
+
+    // Mark as read
+    await markAsRead(conversation.id);
+    selectedConversation.value.unreadCount = 0;
+
     scrollToBottom();
   } catch (err) {
     console.error("Error selecting conversation:", err);
@@ -381,15 +421,12 @@ const handleSendMessage = async () => {
       messageFile
     );
 
-    // Refresh conversations to get updated data
-    await refreshConversations();
-
-    // Update selected conversation with fresh data
-    const updatedConversation = conversations.value.find(
-      (c) => c.id === selectedConversation.value?.id
-    );
-    if (updatedConversation) {
+    // Refresh only the current conversation detail instead of all conversations
+    if (selectedConversation.value) {
+      const { conversation: updatedConversation, messages } =
+        await getConversationDetail(selectedConversation.value.id);
       selectedConversation.value = updatedConversation;
+      selectedConversation.value.messages = messages;
     }
 
     scrollToBottom();
@@ -526,15 +563,34 @@ onMounted(() => {
     refreshInterval = setInterval(async () => {
       if (!loading.value) {
         try {
+          // Store current selected conversation details
+          const currentSelectedId = selectedConversation.value?.id;
+          const currentMessages = selectedConversation.value?.messages || [];
+
           await refreshConversations();
 
-          // Update selected conversation if it exists
-          if (selectedConversation.value) {
+          // Restore selected conversation with its detailed messages
+          if (currentSelectedId && selectedConversation.value) {
             const updatedConversation = conversations.value.find(
-              (c) => c.id === selectedConversation.value?.id
+              (c) => c.id === currentSelectedId
             );
             if (updatedConversation) {
-              selectedConversation.value = updatedConversation;
+              // Merge basic info from updated conversation but keep detailed messages
+              selectedConversation.value = {
+                ...updatedConversation,
+                messages: currentMessages, // Keep the detailed messages
+              };
+
+              // Also update the conversation in the list to keep it in sync
+              const conversationIndex = conversations.value.findIndex(
+                (c) => c.id === currentSelectedId
+              );
+              if (conversationIndex !== -1) {
+                conversations.value[conversationIndex] = {
+                  ...updatedConversation,
+                  messages: currentMessages,
+                };
+              }
             }
           }
         } catch (err) {
