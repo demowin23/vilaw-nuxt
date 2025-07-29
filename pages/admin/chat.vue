@@ -27,8 +27,13 @@
                 <div class="conversation-name">
                   {{ conversation.title || "Cuộc trò chuyện" }}
                 </div>
+                <div class="user-info">
+                  <span class="text-xl text-gray-500 font-bold">{{
+                    conversation.userName
+                  }}</span>
+                </div>
                 <div class="conversation-preview">
-                  {{ conversation.lastMessage || "Chưa có tin nhắn" }}
+                  {{ conversation.lastMessage }}
                 </div>
                 <div class="conversation-meta">
                   <span class="conversation-time">
@@ -42,12 +47,6 @@
                   </span>
                 </div>
                 <div class="conversation-details">
-                  <div class="user-info">
-                    <span class="user-name">{{ conversation.userName }}</span>
-                    <span v-if="conversation.userPhone" class="user-phone">
-                      📞 {{ conversation.userPhone }}
-                    </span>
-                  </div>
                   <div class="message-count">
                     💬 {{ conversation.totalMessages || 0 }} tin nhắn
                   </div>
@@ -76,12 +75,6 @@
                 </div>
                 <div class="user-details">
                   <h4>{{ selectedConversation.title || "Cuộc trò chuyện" }}</h4>
-                  <span
-                    class="user-status"
-                    :class="selectedConversation.status"
-                  >
-                    {{ getStatusText(selectedConversation.status) }}
-                  </span>
                   <div class="user-contact">
                     <span class="user-name">{{
                       selectedConversation.userName
@@ -143,7 +136,6 @@
                   </div>
                   <div class="message-content">
                     <div class="message-header">
-                      <span class="sender-name">{{ message.senderName }}</span>
                       <span class="message-time">{{
                         formatTime(message.createdAt)
                       }}</span>
@@ -362,6 +354,9 @@ const handleSelectConversation = async (conversation) => {
     selectedConversation.value.unreadCount = 0;
 
     scrollToBottom();
+
+    // Start auto-refresh for this conversation detail
+    startDetailRefresh();
   } catch (err) {
     console.error("Error selecting conversation:", err);
   }
@@ -556,43 +551,17 @@ watch(
   { deep: true }
 );
 
-// Auto refresh conversations every 30 seconds
+// Auto refresh conversations and current conversation detail
 let refreshInterval;
+let detailRefreshInterval;
+
 onMounted(() => {
   if (process.client && isLawyerOrAdmin.value) {
+    // Refresh conversations list every 10 seconds
     refreshInterval = setInterval(async () => {
       if (!loading.value) {
         try {
-          // Store current selected conversation details
-          const currentSelectedId = selectedConversation.value?.id;
-          const currentMessages = selectedConversation.value?.messages || [];
-
           await refreshConversations();
-
-          // Restore selected conversation with its detailed messages
-          if (currentSelectedId && selectedConversation.value) {
-            const updatedConversation = conversations.value.find(
-              (c) => c.id === currentSelectedId
-            );
-            if (updatedConversation) {
-              // Merge basic info from updated conversation but keep detailed messages
-              selectedConversation.value = {
-                ...updatedConversation,
-                messages: currentMessages, // Keep the detailed messages
-              };
-
-              // Also update the conversation in the list to keep it in sync
-              const conversationIndex = conversations.value.findIndex(
-                (c) => c.id === currentSelectedId
-              );
-              if (conversationIndex !== -1) {
-                conversations.value[conversationIndex] = {
-                  ...updatedConversation,
-                  messages: currentMessages,
-                };
-              }
-            }
-          }
         } catch (err) {
           console.error("Error auto-refreshing conversations:", err);
         }
@@ -601,9 +570,50 @@ onMounted(() => {
   }
 });
 
+// Function to start auto-refresh for conversation detail
+const startDetailRefresh = () => {
+  // Clear existing interval if any
+  if (detailRefreshInterval) {
+    clearInterval(detailRefreshInterval);
+  }
+
+  // Start new interval for conversation detail
+  detailRefreshInterval = setInterval(async () => {
+    if (!loading.value && selectedConversation.value?.id) {
+      try {
+        const { conversation: updatedConversation, messages } =
+          await getConversationDetail(selectedConversation.value.id);
+
+        // Update selected conversation with new messages
+        selectedConversation.value = updatedConversation;
+        selectedConversation.value.messages = messages;
+
+        // Also update in conversations list
+        const conversationIndex = conversations.value.findIndex(
+          (c) => c.id === selectedConversation.value.id
+        );
+        if (conversationIndex !== -1) {
+          conversations.value[conversationIndex] = {
+            ...updatedConversation,
+            messages: messages,
+          };
+        }
+
+        // Scroll to bottom if new messages
+        scrollToBottom();
+      } catch (err) {
+        console.error("Error auto-refreshing conversation detail:", err);
+      }
+    }
+  }, 3000);
+};
+
 onUnmounted(() => {
   if (refreshInterval) {
     clearInterval(refreshInterval);
+  }
+  if (detailRefreshInterval) {
+    clearInterval(detailRefreshInterval);
   }
 });
 </script>
@@ -631,29 +641,34 @@ onUnmounted(() => {
 
 .sidebar-header {
   padding: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  background: var(--primary-color);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-header h3 {
   margin: 0;
-  color: var(--text-primary);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .refresh-btn {
-  background: none;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 6px;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  color: white;
 }
 
 .refresh-btn:hover {
-  background: var(--bg-hover);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .conversation-list {
@@ -667,21 +682,23 @@ onUnmounted(() => {
   padding: 1rem;
   border-bottom: 1px solid var(--border-color);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
 }
 
 .conversation-item:hover {
   background: var(--bg-hover);
+  transform: translateX(4px);
 }
 
 .conversation-item.active {
   background: var(--primary-light);
-  border-right: 3px solid var(--primary-color);
+  border-right: 4px solid var(--primary-color);
+  box-shadow: 0 2px 8px rgba(245, 130, 32, 0.2);
 }
 
 .conversation-avatar {
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   background: var(--primary-color);
   color: white;
@@ -689,7 +706,9 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  font-size: 1.1rem;
   margin-right: 1rem;
+  box-shadow: 0 2px 8px rgba(245, 130, 32, 0.3);
 }
 
 .conversation-info {
@@ -724,16 +743,30 @@ onUnmounted(() => {
 }
 
 .unread-badge {
-  background: var(--primary-color);
+  background: var(--danger-color);
   color: white;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: bold;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .conversation-type {
@@ -779,15 +812,19 @@ onUnmounted(() => {
   flex: 1;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
 .chat-header {
   padding: 1rem;
   border-bottom: 1px solid var(--border-color);
-  background: var(--bg-card);
+  background: var(--primary-color);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .chat-user-info {
@@ -810,7 +847,9 @@ onUnmounted(() => {
 
 .user-details h4 {
   margin: 0 0 0.25rem 0;
-  color: var(--text-primary);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .user-status {
@@ -820,18 +859,21 @@ onUnmounted(() => {
 }
 
 .user-status.active {
-  background: var(--success-light);
-  color: var(--success-color);
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .user-status.pending {
-  background: var(--warning-light);
-  color: var(--warning-color);
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .user-status.resolved {
-  background: var(--info-light);
-  color: var(--info-color);
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .conversation-type-badge {
@@ -854,21 +896,25 @@ onUnmounted(() => {
 }
 
 .action-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.2s;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .refresh-conversation-btn {
-  background: var(--info-color);
+  background: rgba(255, 255, 255, 0.2);
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .refresh-conversation-btn:hover {
-  background: var(--info-dark);
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
 }
 
 .resolve-btn {
@@ -877,7 +923,9 @@ onUnmounted(() => {
 }
 
 .resolve-btn:hover {
-  background: var(--success-dark);
+  background: #059669;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .messages-container {
@@ -885,6 +933,8 @@ onUnmounted(() => {
   overflow-y: auto;
   padding: 1rem;
   background: var(--bg-page);
+  height: 0; /* Force flex to calculate height properly */
+  min-height: 0; /* Allow flex item to shrink */
 }
 
 .messages-list {
@@ -900,16 +950,17 @@ onUnmounted(() => {
 }
 
 .message-user {
+  align-self: flex-start;
+}
+
+.message-lawyer {
   align-self: flex-end;
   flex-direction: row-reverse;
 }
 
-.message-lawyer {
-  align-self: flex-start;
-}
-
 .message-admin {
-  align-self: flex-start;
+  align-self: flex-end;
+  flex-direction: row-reverse;
 }
 
 .message-avatar {
@@ -931,7 +982,7 @@ onUnmounted(() => {
 }
 
 .message-lawyer .message-avatar {
-  background: var(--info-color);
+  background: var(--primary-color);
 }
 
 .message-admin .message-avatar {
@@ -947,21 +998,21 @@ onUnmounted(() => {
 }
 
 .message-user .message-content {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.message-lawyer .message-content {
   background: var(--primary-color);
   color: white;
   border-color: var(--primary-color);
 }
 
-.message-lawyer .message-content {
-  background: var(--info-light);
-  color: var(--info-color);
-  border-color: var(--info-color);
-}
-
 .message-admin .message-content {
-  background: var(--bg-page);
-  color: var(--text-primary);
-  border-color: var(--border-color);
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
 }
 
 .message-header {
@@ -1000,18 +1051,21 @@ onUnmounted(() => {
 
 .message-input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
   resize: none;
   font-family: inherit;
-  background: var(--bg-page);
+  background: var(--bg-card);
   color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .message-input:focus {
   outline: none;
   border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(245, 130, 32, 0.1);
 }
 
 .input-actions {
@@ -1021,33 +1075,41 @@ onUnmounted(() => {
 }
 
 .quick-response-btn {
-  padding: 0.5rem 1rem;
-  background: var(--info-color);
+  padding: 0.6rem 1.2rem;
+  background: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.2s;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(245, 130, 32, 0.2);
 }
 
 .quick-response-btn:hover {
-  background: var(--info-dark);
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 130, 32, 0.3);
 }
 
 .file-btn {
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   background: var(--warning-color);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.2s;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
 }
 
 .file-btn:hover {
-  background: var(--warning-dark);
+  background: #d97706;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
 
 .selected-file {
@@ -1096,23 +1158,29 @@ onUnmounted(() => {
 }
 
 .send-btn {
-  padding: 0.5rem 1.5rem;
+  padding: 0.6rem 1.5rem;
   background: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(245, 130, 32, 0.2);
 }
 
 .send-btn:hover:not(:disabled) {
   background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 130, 32, 0.3);
 }
 
 .send-btn:disabled {
-  background: var(--text-light);
+  background: #cbd5e0;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Modal styles */
@@ -1215,17 +1283,11 @@ onUnmounted(() => {
 
 /* Message type styles */
 .message-lawyer {
-  align-self: flex-start;
+  align-self: flex-end;
 }
 
 .message-lawyer .message-avatar {
   background: var(--info-color);
-}
-
-.message-lawyer .message-content {
-  background: var(--info-light);
-  color: var(--info-dark);
-  border-color: var(--info-color);
 }
 
 .message-admin .message-content {
@@ -1319,14 +1381,13 @@ onUnmounted(() => {
 
 .user-name {
   font-weight: 600;
-  color: var(--text-primary);
+  color: #fff;
 }
 
 .user-phone {
-  color: var(--text-secondary);
+  color: #fff;
   font-size: 0.75rem;
 }
-
 .message-count {
   color: var(--info-color);
   font-size: 0.75rem;

@@ -128,10 +128,10 @@ export const useChat = () => {
         lawyerId: response.data.conversation.lawyer_id,
         lawyerName: response.data.conversation.lawyer_name,
         status: response.data.conversation.status,
-        lastMessage: response.data.conversation.last_message,
+        lastMessage: response.data.messages.at(-1).content,
         lastMessageTime: response.data.conversation.last_message_time,
         unreadCount: response.data.conversation.unread_count || 0,
-        totalMessages: response.data.conversation.total_messages || 0,
+        totalMessages: response.data.messages.length || 0,
         messages: response.data.messages.map((msg: any) => ({
           id: msg.id,
           content: msg.content,
