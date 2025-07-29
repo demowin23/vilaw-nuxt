@@ -158,7 +158,7 @@ onMounted(async () => {
 
 /* Header Section */
 .header-section {
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 }
 
 .title-container {
@@ -169,17 +169,17 @@ onMounted(async () => {
 }
 
 .title-accent {
-  width: 4px;
-  height: 40px;
+  width: 6px;
+  height: 32px;
   background: linear-gradient(135deg, #ff6b35, #f7931e);
   margin-right: 15px;
   border-radius: 2px;
 }
 
 .main-title {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #1e3a8a;
+  color: #f58220;
   margin: 0;
 }
 
@@ -189,13 +189,16 @@ onMounted(async () => {
   line-height: 1.6;
   margin: 0;
 }
-
+.dark .description {
+  color: #f9fafb;
+}
 /* Cards Grid */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 30px;
-  margin-top: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .card {
@@ -216,7 +219,6 @@ onMounted(async () => {
   flex-direction: column;
   height: 100%;
 }
-
 .card-title {
   font-size: 1.1rem;
   font-weight: 600;

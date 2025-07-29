@@ -151,6 +151,7 @@
           </button>
           <!-- Chat, Liên hệ, Mua gói: text to icon on <500px -->
           <NuxtLink
+            v-if="user?.role === 'user'"
             to="/chat-luat-su"
             class="menu-link menu-link-responsive"
             title="Chat với luật sư"
@@ -232,6 +233,17 @@
                   </div>
                 </div>
                 <div class="border-t border-gray-200 dark:border-gray-600 pt-2">
+                  <button
+                    v-if="user?.role !== 'user'"
+                    @click="navigateTo('/admin')"
+                    class="w-full mb-2 px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center gap-2 text-sm"
+                  >
+                    <font-awesome-icon
+                      :icon="['fas', 'user']"
+                      class="text-base"
+                    />
+                    Quản trị
+                  </button>
                   <button
                     @click="navigateTo('/profile')"
                     class="w-full mb-2 px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center gap-2 text-sm"

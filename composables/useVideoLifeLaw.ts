@@ -297,7 +297,7 @@ export const useVideoLifeLaw = () => {
       const response = await apiCall<{ success: boolean; message: string; data: { action: string } }>(`/video-life-law/${id}/like`, {
         method: 'POST',
         body: JSON.stringify({ action })
-      })
+      }, false, true)
       
       return response
     } finally {
@@ -335,7 +335,7 @@ export const useVideoLifeLaw = () => {
           content,
           parent_id: parentId || null
         })
-      })
+      }, false, true)
       
       return response
     } finally {
@@ -349,7 +349,7 @@ export const useVideoLifeLaw = () => {
     try {
       const response = await apiCall<{ success: boolean; message: string }>(`/video-life-law/comments/${commentId}/like`, {
         method: 'POST'
-      })
+      }, false, true)
       
       return response
     } finally {
@@ -363,7 +363,7 @@ export const useVideoLifeLaw = () => {
     try {
       const response = await apiCall<{ success: boolean; message: string }>(`/video-life-law/comments/${commentId}`, {
         method: 'DELETE'
-      })
+      }, false, true)
       
       return response
     } finally {
@@ -392,7 +392,7 @@ export const useVideoLifeLaw = () => {
       const response = await apiCall<{ success: boolean; message: string; data: VideoLifeLaw }>(`/video-life-law/admin/${id}/approve`, {
         method: 'PUT',
         body: JSON.stringify({ is_approved })
-      }, false, true) // isAdmin = true để gửi token
+      }, false, true) // isAdmin = true để gửi token admin
       
       return response
     } finally {

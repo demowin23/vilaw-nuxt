@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 rounded-2xl p-4 mb-6">
+  <div class="bg-gray-100 rounded-2xl p-4 mb-6" @click="handleClick">
     <div class="flex items-center mb-2">
       <span class="text-orange-500 font-bold text-lg flex items-center">
         {{ title }}
@@ -19,13 +19,14 @@
             'w-16 h-16 relative',
           ]"
         >
-          <img :src="item.icon" class="w-16 h-16 mx-auto" alt="icon" />
+          <img :src="item.thumbnail" class="w-16 h-16 mx-auto" alt="icon" />
           <span
             class="absolute -top-2 -left-2 w-7 h-7 flex items-center justify-center rounded-full font-bold text-white text-base shadow-lg"
             :class="item.badgeBg"
             >{{ idx + 1 }}</span
           >
         </div>
+
         <div class="flex-1 min-w-0">
           <div
             class="font-semibold text-gray-900 text-base group-hover:text-orange-600 transition line-clamp-2"
@@ -47,4 +48,7 @@ const props = defineProps<{
   topViews: any[];
   title: string;
 }>();
+const handleClick = () => {
+  router.push(`/video/${item.id}`);
+};
 </script>

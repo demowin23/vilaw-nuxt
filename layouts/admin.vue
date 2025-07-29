@@ -82,7 +82,7 @@
         </div>
         <div class="header-right">
           <div class="user-menu">
-            <span class="user-name">Admin</span>
+            <span class="user-name">{{ userName }}</span>
             <button @click="logout" class="logout-btn">Đăng xuất</button>
           </div>
         </div>
@@ -99,14 +99,25 @@
 <script setup>
 import { useAuth } from "~/composables/useAuth";
 
-const { isAdmin } = useAuth();
+const { isAdmin, user } = useAuth();
 const sidebarCollapsed = ref(false);
 const pageTitle = ref("Dashboard");
 
 const toggleSidebar = () => {
   sidebarCollapsed.value = !sidebarCollapsed.value;
 };
-
+const userName = computed(() => {
+  switch (user.value?.role) {
+    case "admin":
+      return "Admin";
+    case "lawyer":
+      return "Luật sư";
+    case "collaborator":
+      return "Cộng tác viên";
+    default:
+      return "Admin";
+  }
+});
 const logout = () => {
   // Xử lý đăng xuất
   navigateTo("/dang-nhap");

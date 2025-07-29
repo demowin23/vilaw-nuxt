@@ -86,9 +86,9 @@ onMounted(async () => {
   gap: 12px;
 }
 .section-title {
-  border-left: 4px solid #f58220;
+  border-left: 6px solid #f58220;
   padding-left: 10px;
-  color: #181818;
+  color: #f58220;
   font-size: 1.5rem;
   font-weight: 700;
   display: flex;

@@ -28,7 +28,7 @@
       class="featured-news mb-12"
     >
       <h2
-        class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6 transition-colors duration-300"
+        class="text-2xl font-bold text-[#f58220] dark:text-gray-200 mb-6 transition-colors duration-300"
       >
         Tin tức nổi bật
       </h2>

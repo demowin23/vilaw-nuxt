@@ -111,19 +111,22 @@
                     <div
                       class="space-y-1 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
                     >
-                      <div>
+                      <div class="dark:text-gray-100">
                         <span class="font-medium">Ban hành:</span>
                         {{ formatDate(document.issueDate) }}
                       </div>
-                      <div>
+                      <div class="dark:text-gray-100">
                         <span class="font-medium">Hiệu lực:</span>
                         {{ formatDate(document.effectiveDate) }}
                       </div>
-                      <div v-if="document.expiryDate">
+                      <div
+                        class="dark:text-gray-100"
+                        v-if="document.expiryDate"
+                      >
                         <span class="font-medium">Hết hiệu lực:</span>
                         {{ formatDate(document.expiryDate) }}
                       </div>
-                      <div>
+                      <div class="dark:text-gray-100">
                         <span class="font-medium">Tình trạng:</span>
                         <span
                           :class="
@@ -248,19 +251,22 @@
                     <div
                       class="space-y-1 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
                     >
-                      <div>
+                      <div class="dark:text-gray-100">
                         <span class="font-medium">Ban hành:</span>
                         {{ formatDate(document.issueDate) }}
                       </div>
-                      <div>
+                      <div class="dark:text-gray-100">
                         <span class="font-medium">Hiệu lực:</span>
                         {{ formatDate(document.effectiveDate) }}
                       </div>
-                      <div v-if="document.expiryDate">
+                      <div
+                        class="dark:text-gray-100"
+                        v-if="document.expiryDate"
+                      >
                         <span class="font-medium">Hết hiệu lực:</span>
                         {{ formatDate(document.expiryDate) }}
                       </div>
-                      <div>
+                      <div class="dark:text-gray-100">
                         <span class="font-medium">Tình trạng:</span>
                         <span
                           :class="
@@ -407,19 +413,22 @@
                       <div
                         class="space-y-1 text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300"
                       >
-                        <div>
+                        <div class="dark:text-gray-100">
                           <span class="font-medium">Ban hành:</span>
                           {{ formatDate(document.issueDate) }}
                         </div>
-                        <div>
+                        <div class="dark:text-gray-100">
                           <span class="font-medium">Hiệu lực:</span>
                           {{ formatDate(document.effectiveDate) }}
                         </div>
-                        <div v-if="document.expiryDate">
+                        <div
+                          class="dark:text-gray-100"
+                          v-if="document.expiryDate"
+                        >
                           <span class="font-medium">Hết hiệu lực:</span>
                           {{ formatDate(document.expiryDate) }}
                         </div>
-                        <div>
+                        <div class="dark:text-gray-100">
                           <span class="font-medium">Tình trạng:</span>
                           <span
                             :class="

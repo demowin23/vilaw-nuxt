@@ -1,13 +1,13 @@
 <template>
   <div
-    class="flex flex-col bg-gray-100 dark:bg-gray-900 h-screen overflow-hidden transition-colors duration-300"
+    class="flex flex-col bg-gray-100 dark:bg-gray-900 overflow-hidden transition-colors duration-300"
   >
     <Header />
     <div class="flex flex-1 layout-main">
       <aside
         :class="[
           isOpenSidebar ? 'w-64' : 'w-16',
-          'bg-white dark:bg-gray-800 shadow-lg z-40 min-h-screen flex flex-col transition-all duration-300',
+          'bg-white dark:bg-gray-800 shadow-lg z-40  flex flex-col transition-all duration-300',
           'sidebar-absolute',
         ]"
         style="flex-shrink: 0; min-width: 4rem; max-width: 16rem"

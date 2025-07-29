@@ -174,7 +174,7 @@ watch([selectedCategory, sortBy], () => {
 .section-title {
   border-left: 4px solid #f58220;
   padding-left: 12px;
-  color: #181818;
+  color: #f58220;
   font-size: 1.75rem;
   font-weight: 700;
   margin: 0;

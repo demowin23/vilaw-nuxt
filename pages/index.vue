@@ -4,11 +4,21 @@
     <div class="flex gap-4">
       <div class="w-3/4">
         <NewVideo />
-        <SectionsVideo :topViews="topViews" title="Hình sự" />
-        <SectionsVideo :topViews="topViews" title="Dân sự" />
-        <SectionsVideo :topViews="topViews" title="Kinh doanh" />
-        <SectionsVideo :topViews="topViews" title="Lao động" />
-        <SectionsVideo :topViews="topViews" title="Đất đai" />
+        <SectionsVideo :topViews="videosHinhSu" title="Hình sự" />
+        <SectionsVideo
+          :topViews="videosDanSu"
+          title="Dân sự - Thừa kế - Hôn nhân và gia đình"
+        />
+        <SectionsVideo
+          :topViews="videosTranhChap"
+          title="Giải quyết tranh chấp"
+        />
+        <SectionsVideo
+          :topViews="videosThuongMai"
+          title="Kinh doanh và thương mại"
+        />
+        <SectionsVideo :topViews="videosDatDai" title="Đất đai" />
+        <SectionsVideo :topViews="videosKhac" title="Khác" />
       </div>
       <div
         class="w-1/4 mt-[50px] min-w-[100px] max-w-xs h-fit bg-white dark:bg-gray-800 rounded-2xl p-4 grid grid-cols-2 gap-4 transition-colors duration-300"
@@ -91,53 +101,63 @@
 import HotVideo from "~/components/HotVideo.vue";
 import NewVideo from "~/components/NewVideo.vue";
 import SectionsVideo from "~/components/SectionsVideo.vue";
+import { ref } from "vue";
+import { onMounted } from "vue";
+import { useVideoStore } from "~/stores/video";
 
-const hotVideos = [
-  {
-    thumbnail: "/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp",
-    title: "Án lệ số 23/2018/AL về hiệu lực của hợp đồng",
-  },
-  {
-    thumbnail: "/images/meclip.jpeg",
-    title: "Án lệ số 24/2018/AL về tranh chấp đất đai",
-  },
-  {
-    thumbnail: "/images/ton-chi-hoat-dong.DKjQaDsR_1Y6nqo.webp",
-    title: "Án lệ số 25/2018/AL về quyền thừa kế",
-  },
-  {
-    thumbnail: "/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp",
-    title: "Án lệ số 26/2018/AL về hợp đồng lao động",
-  },
-  {
-    thumbnail: "/images/meclip.jpeg",
-    title: "Án lệ số 27/2018/AL về bồi thường thiệt hại",
-  },
-  {
-    thumbnail: "/images/ton-chi-hoat-dong.DKjQaDsR_1Y6nqo.webp",
-    title: "Án lệ số 28/2018/AL về tranh chấp kinh doanh",
-  },
-  {
-    thumbnail: "/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp",
-    title: "Án lệ số 29/2018/AL về hợp đồng dân sự",
-  },
-  {
-    thumbnail: "/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp",
-    title: "Án lệ số 29/2018/AL về hợp đồng dân sự",
-  },
-  {
-    thumbnail: "/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp",
-    title: "Án lệ số 29/2018/AL về hợp đồng dân sự",
-  },
-  {
-    thumbnail: "/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp",
-    title: "Án lệ số 29/2018/AL về hợp đồng dân sự",
-  },
-  {
-    thumbnail: "/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp",
-    title: "Án lệ số 29/2018/AL về hợp đồng dân sự",
-  },
-];
+const videoStore = useVideoStore();
+const videosHinhSu = ref([]);
+const videosDanSu = ref([]);
+const videosTranhChap = ref([]);
+const videosThuongMai = ref([]);
+const videosLaoDong = ref([]);
+const videosDatDai = ref([]);
+const videosKhac = ref([]);
+
+onMounted(async () => {
+  try {
+    // Fetch most viewed videos for hot videos section
+    await videoStore.fetchMostViewedVideos(10);
+
+    // Fetch videos by type for different sections
+    const [
+      resDanSu,
+      resHinhSu,
+      resTranhChap,
+      resThuongMai,
+      resLaoDong,
+      resDatDai,
+      resKhac,
+    ] = await Promise.all([
+      videoStore.fetchVideosByType("dan_su_thua_ke_hon_nhan_va_gia_dinh", 6),
+      videoStore.fetchVideosByType("hinh_su", 6),
+      videoStore.fetchVideosByType("giai_quyet_tranh_chap", 6),
+      videoStore.fetchVideosByType("kinh_doanh_thuong_mai", 6),
+      videoStore.fetchVideosByType("lao_dong", 6),
+      videoStore.fetchVideosByType("dat_dai", 6),
+      videoStore.fetchVideosByType("the_loai_khac", 6),
+    ]);
+
+    videosDanSu.value = resDanSu;
+    videosHinhSu.value = resHinhSu;
+    videosTranhChap.value = resTranhChap;
+    videosThuongMai.value = resThuongMai;
+    videosLaoDong.value = resLaoDong;
+    videosDatDai.value = resDatDai;
+    videosKhac.value = resKhac;
+  } catch (error) {
+    console.error("Error fetching videos:", error);
+  }
+});
+
+// Use most viewed videos from store for hot videos
+const hotVideos = computed(() => {
+  return videoStore.mostViewedVideos.map((video) => ({
+    thumbnail: video.thumbnail,
+    title: video.title,
+    id: video.id,
+  }));
+});
 
 const topViews = [
   {

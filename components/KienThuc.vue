@@ -100,7 +100,20 @@ const getImageUrl = (image: string) => {
   transform: translateY(-5px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
+.dark .card {
+  background: #1f2937;
+  color: #f9fafb;
+}
+.dark .card-title {
+  color: #f9fafb;
+}
 
+.dark .card-description {
+  color: #d1d5db;
+}
+.dark .card a {
+  color: #fbbf24;
+}
 .card-content {
   display: flex;
   flex-direction: column;
