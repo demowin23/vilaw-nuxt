@@ -14,6 +14,13 @@ export const API_CONFIG = {
       ME: '/auth/me',
       UPDATE_PROFILE: '/auth/update-profile',
       LOGOUT: '/auth/logout',
+    },
+    CHAT: {
+      CONVERSATIONS: '/chat/conversations',
+      MESSAGES: '/chat/conversations/:id/messages',
+      LAWYERS: '/chat/lawyers',
+      ONLINE_STATUS: '/chat/online-status',
+      STATS: '/chat/stats',
     }
   }
 }

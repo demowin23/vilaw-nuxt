@@ -81,6 +81,12 @@
         <h3>Quản lý danh mục</h3>
         <p>Thêm, sửa, xóa và xem danh sách danh mục</p>
       </NuxtLink>
+
+      <NuxtLink to="/admin/chat" class="management-card">
+        <div class="card-icon">💬</div>
+        <h3>Chat hỗ trợ</h3>
+        <p>Quản lý và trả lời các cuộc trò chuyện với người dùng</p>
+      </NuxtLink>
     </div>
   </div>
 </template>

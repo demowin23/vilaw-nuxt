@@ -166,6 +166,7 @@ export const useVideoLifeLaw = () => {
     search?: string
     is_featured?: boolean
     isAdmin?: boolean
+    isPending?: boolean
   } = {}): Promise<VideoLifeLawResponse> => {
     isLoading.value = true
     try {
@@ -180,7 +181,7 @@ export const useVideoLifeLaw = () => {
       if (params.offset) queryParams.append('offset', params.offset.toString())
       if (params.search) queryParams.append('search', params.search)
       if (params.is_featured !== undefined) queryParams.append('is_featured', params.is_featured.toString())
-
+      if (params.isPending !== undefined) queryParams.append('isPending', params.isPending.toString())
       // Nếu là admin thì dùng endpoint admin, ngược lại dùng endpoint thường
       const baseUrl = params.isAdmin ? '/video-life-law/admin/all' : '/video-life-law'
       const url = `${baseUrl}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
@@ -247,7 +248,8 @@ export const useVideoLifeLaw = () => {
           method: 'POST',
           body: isFormData ? (data as FormData) : JSON.stringify(data),
         },
-        isFormData
+        isFormData,
+        true // isAdmin = true
       )
       return response
     } finally {
@@ -265,7 +267,8 @@ export const useVideoLifeLaw = () => {
           method: 'PUT',
           body: isFormData ? (data as FormData) : JSON.stringify(data),
         },
-        isFormData
+        isFormData,
+        true // isAdmin = true
       )
       return response
     } finally {
@@ -279,7 +282,7 @@ export const useVideoLifeLaw = () => {
     try {
       const response = await apiCall<{ success: boolean; message: string }>(`/video-life-law/${id}`, {
         method: 'DELETE'
-      })
+      }, false, true) // isAdmin = true
       
       return response
     } finally {

@@ -58,6 +58,7 @@
             <th>Tiêu đề</th>
             <th>Danh mục</th>
             <th>Tác giả</th>
+            <th>Nổi bật</th>
             <th>Trạng thái</th>
             <th>Ngày tạo</th>
             <th>Lượt xem</th>
@@ -76,7 +77,15 @@
                 {{ getCategoryLabel(item.category) }}
               </span>
             </td>
+
             <td>{{ item.author }}</td>
+            <td>
+              <input
+                type="checkbox"
+                v-model="item.is_featured"
+                @change="updateFeatured(item)"
+              />
+            </td>
             <td>
               <input
                 type="checkbox"
@@ -201,11 +210,6 @@
                 </option>
               </select>
             </div>
-
-            <div class="form-group">
-              <label>Tác giả *</label>
-              <input v-model="itemForm.author" type="text" required />
-            </div>
           </div>
 
           <div class="form-row">
@@ -292,7 +296,7 @@ const {
   isLoading,
 } = useLegalKnowledge();
 const { handleApiError, handleApiSuccess } = useNotification();
-const { isAdmin } = useAuth();
+const { isAdmin, user } = useAuth();
 
 // State
 const knowledgeList = ref<any[]>([]);
@@ -314,7 +318,6 @@ const itemForm = ref({
   summary: "",
   content: "",
   category: "hinh_su",
-  author: "",
   is_featured: false,
 });
 
@@ -419,6 +422,19 @@ const viewItem = (item: any) => {
   showViewModal.value = true;
 };
 
+const updateFeatured = async (item: any) => {
+  try {
+    const payload = {
+      is_featured: item.is_featured,
+    };
+    const response = await updateLegalKnowledge(item.id, payload, false);
+    handleApiSuccess(response, "Cập nhật bài viết thành công!");
+    loadKnowledge();
+  } catch (error) {
+    handleApiError(error, "Không thể lưu bài viết");
+  }
+};
+
 const editItem = (item: any) => {
   selectedItem.value = item;
   itemForm.value = {
@@ -427,7 +443,6 @@ const editItem = (item: any) => {
     summary: item.summary || "",
     content: item.content,
     category: item.category,
-    author: item.author,
     is_featured: item.is_featured || false,
   };
   showEditModal.value = true;
@@ -472,7 +487,7 @@ const saveItem = async () => {
       payload.append("summary", itemForm.value.summary || "");
       payload.append("content", itemForm.value.content);
       payload.append("category", itemForm.value.category);
-      payload.append("author", itemForm.value.author);
+      payload.append("author", user.value?.fullName);
       payload.append(
         "is_featured",
         itemForm.value.is_featured ? "true" : "false"
@@ -511,7 +526,6 @@ const closeModal = () => {
     summary: "",
     content: "",
     category: "hinh_su",
-    author: "",
     is_featured: false,
   };
   imagePreview.value = "";

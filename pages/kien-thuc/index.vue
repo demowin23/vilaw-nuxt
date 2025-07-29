@@ -10,33 +10,8 @@
         dân sự, thừa kế, hôn nhân và gia đình...
       </p>
     </div>
-    <div class="cards-grid">
-      <!-- Row 1 -->
-      <div class="card" v-for="item in KienThucDanSu" :key="item.id">
-        <div class="card-content">
-          <div class="card-illustration">
-            <img
-              :src="getImageUrl(item.image)"
-              :alt="item.title"
-              class="illustration-image"
-            />
-          </div>
-          <div class="p-3 h-[125px] relative">
-            <div>
-              <h3 class="card-title">{{ item.title }}</h3>
-              <p class="card-description">{{ item.summary }}</p>
-            </div>
-            <a
-              :href="`/kien-thuc/chi-tiet/${item.id}`"
-              class="text-[#FF6600] font-semibold hover:underline flex items-center absolute bottom-3 right-3"
-            >
-              Xem chi tiết
-              <span class="ml-1">&gt;&gt;</span></a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
+    <KienThuc :KienThuc="KienThucDanSu" />
+
     <div class="header-section">
       <div class="title-container">
         <div class="title-accent"></div>
@@ -47,33 +22,8 @@
         hình sự...
       </p>
     </div>
-    <div class="cards-grid">
-      <!-- Row 1 -->
-      <div class="card" v-for="item in KienThucHinhSu" :key="item.id">
-        <div class="card-content">
-          <div class="card-illustration">
-            <img
-              :src="getImageUrl(item.image)"
-              :alt="item.title"
-              class="illustration-image"
-            />
-          </div>
-          <div class="p-3 h-[125px] relative">
-            <div>
-              <h3 class="card-title">{{ item.title }}</h3>
-              <p class="card-description">{{ item.summary }}</p>
-            </div>
-            <a
-              :href="`/kien-thuc/chi-tiet/${item.id}`"
-              class="text-[#FF6600] font-semibold hover:underline flex items-center absolute bottom-3 right-3"
-            >
-              Xem chi tiết
-              <span class="ml-1">&gt;&gt;</span></a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
+    <KienThuc :KienThuc="KienThucHinhSu" />
+
     <div class="header-section">
       <div class="title-container">
         <div class="title-accent"></div>
@@ -84,33 +34,8 @@
         giải quyết tranh chấp...
       </p>
     </div>
-    <div class="cards-grid">
-      <!-- Row 1 -->
-      <div class="card" v-for="item in KienThucTranhChap" :key="item.id">
-        <div class="card-content">
-          <div class="card-illustration">
-            <img
-              :src="getImageUrl(item.image)"
-              :alt="item.title"
-              class="illustration-image"
-            />
-          </div>
-          <div class="p-3 h-[125px] relative">
-            <div>
-              <h3 class="card-title">{{ item.title }}</h3>
-              <p class="card-description">{{ item.summary }}</p>
-            </div>
-            <a
-              :href="`/kien-thuc/chi-tiet/${item.id}`"
-              class="text-[#FF6600] font-semibold hover:underline flex items-center absolute bottom-3 right-3"
-            >
-              Xem chi tiết
-              <span class="ml-1">&gt;&gt;</span></a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
+    <KienThuc :KienThuc="KienThucTranhChap" />
+
     <div class="header-section">
       <div class="title-container">
         <div class="title-accent"></div>
@@ -121,33 +46,8 @@
         kinh doanh thương mại...
       </p>
     </div>
-    <div class="cards-grid">
-      <!-- Row 1 -->
-      <div class="card" v-for="item in KienThucThuongMai" :key="item.id">
-        <div class="card-content">
-          <div class="card-illustration">
-            <img
-              :src="getImageUrl(item.image)"
-              :alt="item.title"
-              class="illustration-image"
-            />
-          </div>
-          <div class="p-3 h-[125px] relative">
-            <div>
-              <h3 class="card-title">{{ item.title }}</h3>
-              <p class="card-description">{{ item.summary }}</p>
-            </div>
-            <a
-              :href="`/kien-thuc/chi-tiet/${item.id}`"
-              class="text-[#FF6600] font-semibold hover:underline flex items-center absolute bottom-3 right-3"
-            >
-              Xem chi tiết
-              <span class="ml-1">&gt;&gt;</span></a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
+    <KienThuc :KienThuc="KienThucThuongMai" />
+
     <div class="header-section">
       <div class="title-container">
         <div class="title-accent"></div>
@@ -158,33 +58,8 @@
         lao động...
       </p>
     </div>
-    <div class="cards-grid">
-      <!-- Row 1 -->
-      <div class="card" v-for="item in KienThucLaoDong" :key="item.id">
-        <div class="card-content">
-          <div class="card-illustration">
-            <img
-              :src="getImageUrl(item.image)"
-              :alt="item.title"
-              class="illustration-image"
-            />
-          </div>
-          <div class="p-3 h-[125px] relative">
-            <div>
-              <h3 class="card-title">{{ item.title }}</h3>
-              <p class="card-description">{{ item.summary }}</p>
-            </div>
-            <a
-              :href="`/kien-thuc/chi-tiet/${item.id}`"
-              class="text-[#FF6600] font-semibold hover:underline flex items-center absolute bottom-3 right-3"
-            >
-              Xem chi tiết
-              <span class="ml-1">&gt;&gt;</span></a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
+    <KienThuc :KienThuc="KienThucLaoDong" />
+
     <div class="header-section">
       <div class="title-container">
         <div class="title-accent"></div>
@@ -195,33 +70,8 @@
         đất đai...
       </p>
     </div>
-    <div class="cards-grid">
-      <!-- Row 1 -->
-      <div class="card" v-for="item in KienThucDatDai" :key="item.id">
-        <div class="card-content">
-          <div class="card-illustration">
-            <img
-              :src="getImageUrl(item.image)"
-              :alt="item.title"
-              class="illustration-image"
-            />
-          </div>
-          <div class="p-3 h-[125px] relative">
-            <div>
-              <h3 class="card-title">{{ item.title }}</h3>
-              <p class="card-description">{{ item.summary }}</p>
-            </div>
-            <a
-              :href="`/kien-thuc/chi-tiet/${item.id}`"
-              class="text-[#FF6600] font-semibold hover:underline flex items-center absolute bottom-3 right-3"
-            >
-              Xem chi tiết
-              <span class="ml-1">&gt;&gt;</span></a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
+    <KienThuc :KienThuc="KienThucDatDai" />
+
     <div class="header-section">
       <div class="title-container">
         <div class="title-accent"></div>
@@ -232,33 +82,7 @@
         thể loại khác...
       </p>
     </div>
-    <div class="cards-grid">
-      <!-- Row 1 -->
-      <div class="card" v-for="item in KienThucKhac" :key="item.id">
-        <div class="card-content">
-          <div class="card-illustration">
-            <img
-              :src="getImageUrl(item.image)"
-              :alt="item.title"
-              class="illustration-image"
-            />
-          </div>
-          <div class="p-3 h-[125px] relative">
-            <div>
-              <h3 class="card-title">{{ item.title }}</h3>
-              <p class="card-description">{{ item.summary }}</p>
-            </div>
-            <a
-              :href="`/kien-thuc/chi-tiet/${item.id}`"
-              class="text-[#FF6600] font-semibold hover:underline flex items-center absolute bottom-3 right-3"
-            >
-              Xem chi tiết
-              <span class="ml-1">&gt;&gt;</span></a
-            >
-          </div>
-        </div>
-      </div>
-    </div>
+    <KienThuc :KienThuc="KienThucKhac" />
   </div>
 </template>
 
@@ -267,7 +91,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useSidebarStore } from "~/stores/sidebar";
 import { useLegalKnowledge } from "~/composables/useLegalKnowledge";
-
+import KienThuc from "~/components/KienThuc.vue";
 const sidebarStore = useSidebarStore();
 const route = useRoute();
 const { getLegalKnowledge } = useLegalKnowledge();

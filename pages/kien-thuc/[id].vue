@@ -35,31 +35,29 @@
       <!-- Two Equal Columns Layout -->
       <div class="grid lg:grid-cols-2 gap-4">
         <!-- Large Featured Service Card (Left) -->
-        <div>
+        <div v-if="featuredArticles.length > 0">
           <div
             class="bg-white rounded-xl shadow-lg border border-gray-200 h-full flex flex-col"
           >
             <!-- Image -->
             <img
-              src="/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp"
-              alt="Dịch vụ thành lập doanh nghiệp"
+              :src="getImageUrl(featuredArticles[0].image)"
+              :alt="featuredArticles[0].title"
               class="w-full h-64 object-cover rounded-t-xl"
             />
 
             <!-- Content -->
             <div class="p-4 flex-1 flex flex-col">
               <h3 class="text-xl font-bold text-gray-800 mb-3">
-                Dịch vụ thành lập công ty, doanh nghiệp Giá Rẻ - 250.000₫
+                {{ featuredArticles[0].title }}
               </h3>
 
               <p class="text-gray-600 mb-4 leading-relaxed flex-1">
-                Phí thành lập công ty trọn gói là 1.000.000đ. Bao gồm 250.000₫
-                phí dịch vụ và 750.000₫ phí nhà nước. Chỉ trong 3 ngày doanh
-                nghiệp có GPKD.
+                {{ featuredArticles[0].summary }}
               </p>
 
               <a
-                href="#"
+                :href="`/kien-thuc/chi-tiet/${featuredArticles[0].id}`"
                 class="text-[#FF6600] font-semibold hover:underline flex items-center mt-auto"
               >
                 Xem chi tiết
@@ -71,66 +69,70 @@
 
         <!-- Four Smaller Service Cards (Right) - 2x2 Grid -->
         <div class="grid grid-cols-2 gap-4 h-full">
-          <!-- Card 1: Partnership Company (Top Left) -->
+          <!-- Card 1: Second featured article (Top Left) -->
           <div
+            v-if="featuredArticles.length > 1"
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
             <img
-              src="/images/bai-tap-luat.webp"
-              alt="Công ty hợp danh"
+              :src="getImageUrl(featuredArticles[1].image)"
+              :alt="featuredArticles[1].title"
               class="w-full h-32 object-cover rounded-t-xl"
             />
             <div class="p-4 flex-1 flex flex-col">
               <h4 class="font-bold text-gray-800 text-sm">
-                Dịch vụ thành lập công ty hợp danh - Phí 250.000 đồng, 3 ngày
+                {{ featuredArticles[1].title }}
               </h4>
             </div>
           </div>
 
-          <!-- Card 2: LLC Company (Top Right) -->
+          <!-- Card 2: Third featured article (Top Right) -->
           <div
+            v-if="featuredArticles.length > 2"
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
             <img
-              src="/images/de-thi-luat.webp"
-              alt="Công ty TNHH"
+              :src="getImageUrl(featuredArticles[2].image)"
+              :alt="featuredArticles[2].title"
               class="w-full h-32 object-cover rounded-t-xl"
             />
             <div class="p-4 flex-1 flex flex-col">
               <h4 class="font-bold text-gray-800 text-sm">
-                Dịch vụ thành lập công ty TNHH 2 thành viên trở lên - 250.000₫
+                {{ featuredArticles[2].title }}
               </h4>
             </div>
           </div>
 
-          <!-- Card 3: Joint Stock Company (Bottom Left) -->
+          <!-- Card 3: Fourth featured article (Bottom Left) -->
           <div
+            v-if="featuredArticles.length > 3"
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
             <img
-              src="/images/sach-luat.webp"
-              alt="Công ty cổ phần"
+              :src="getImageUrl(featuredArticles[3].image)"
+              :alt="featuredArticles[3].title"
               class="w-full h-32 object-cover rounded-t-xl"
             />
             <div class="p-4 flex-1 flex flex-col">
               <h4 class="font-bold text-gray-800 text-sm">
-                Dịch vụ thành lập công ty cổ phần từ 3 ngày xong - 250.000₫
+                {{ featuredArticles[3].title }}
               </h4>
             </div>
           </div>
 
-          <!-- Card 4: Private Enterprise (Bottom Right) -->
+          <!-- Card 4: Fifth featured article (Bottom Right) -->
           <div
+            v-if="featuredArticles.length > 4"
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
             <img
-              src="/images/on-thi-luat.webp"
-              alt="Doanh nghiệp tư nhân"
+              :src="getImageUrl(featuredArticles[4].image)"
+              :alt="featuredArticles[4].title"
               class="w-full h-32 object-cover rounded-t-xl"
             />
             <div class="p-4 flex-1 flex flex-col">
               <h4 class="font-bold text-gray-800 text-sm">
-                Dịch vụ thành lập Công Ty, Doanh Nghiệp Tư Nhân - 250.000Đ
+                {{ featuredArticles[4].title }}
               </h4>
             </div>
           </div>
@@ -146,7 +148,6 @@
         <h2 class="text-2xl font-bold text-gray-800">Danh sách bài viết</h2>
       </div>
 
-      <!-- Article Grid - 3x3 Responsive -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
           v-for="(article, index) in knowledgeList"
@@ -163,11 +164,13 @@
               />
             </div>
             <!-- Text Content -->
-            <div class="p-4 flex-1">
-              <h3 class="font-bold text-gray-800 text-sm leading-tight">
+            <div class="px-4 flex-1">
+              <h3
+                class="font-bold text-gray-800 text-sm leading-tight line-clamp-2"
+              >
                 {{ article.title }}
               </h3>
-              <p class="text-gray-600 text-sm leading-relaxed">
+              <p class="text-gray-600 text-sm leading-relaxed line-clamp-2">
                 {{ article.summary }}
               </p>
             </div>
@@ -175,7 +178,6 @@
         </div>
       </div>
     </div>
-
     <!-- Pagination Section -->
     <div class="container mx-auto px-4 pb-8">
       <div class="flex justify-center items-center space-x-2">
@@ -232,9 +234,11 @@ import { useLegalKnowledge } from "~/composables/useLegalKnowledge";
 
 const sidebarStore = useSidebarStore();
 const route = useRoute();
-const { getLegalKnowledge } = useLegalKnowledge();
+const { getLegalKnowledge, getFeaturedLegalKnowledge } = useLegalKnowledge();
 
 const knowledgeList = ref<any[]>([]);
+const featuredArticles = ref<any[]>([]);
+
 const getImageUrl = (image: string) => {
   return `http://localhost:4000${image}`;
 };
@@ -263,10 +267,24 @@ onMounted(async () => {
   if (routeTitles[routeId]) {
     sidebarStore.setTitle(routeTitles[routeId]);
   }
+
+  // Fetch regular knowledge articles
   const response = await getLegalKnowledge({
     category: routeId,
   });
   knowledgeList.value = response.data;
+
+  // Fetch featured articles
+  try {
+    const featuredResponse = await getFeaturedLegalKnowledge({
+      limit: 5, // Get 5 featured articles
+    });
+    featuredArticles.value = featuredResponse.data;
+  } catch (error) {
+    console.error("Error fetching featured articles:", error);
+    // Fallback to empty array if API fails
+    featuredArticles.value = [];
+  }
 });
 
 // Pagination state

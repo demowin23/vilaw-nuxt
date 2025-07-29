@@ -1,108 +1,28 @@
 <template>
-  <div
-    class="flex flex-col w-full bg-white dark:bg-gray-800 rounded-xl transition-colors duration-300"
-    style="height: calc(100vh - 130px)"
-  >
-    <div class="flex flex-1 min-h-0 h-0">
-      <!-- Khu vực chat -->
-      <div class="flex-1 flex flex-col min-h-0">
-        <div
-          class="flex items-center justify-center border-b border-gray-200 dark:border-gray-600 min-h-[48px] relative bg-white dark:bg-gray-800 transition-colors duration-300"
-        >
-          <h1
-            class="text-lg md:text-2xl font-bold text-[#f58220] text-center m-0"
-          >
-            Chat với Luật sư
-          </h1>
-          <button
-            type="button"
-            @click="handleCall"
-            class="absolute right-4 bg-[#f58220] hover:bg-[#e06d00] text-white rounded-full p-2 transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-              />
-            </svg>
-          </button>
-        </div>
-        <div
-          class="flex flex-col flex-1 min-h-0 h-0 bg-white dark:bg-gray-800 transition-colors duration-300"
-        >
-          <!-- Danh sách tin nhắn -->
+  <ClientOnly>
+    <div
+      class="flex flex-col w-full bg-white dark:bg-gray-800 rounded-xl transition-colors duration-300"
+      style="height: calc(100vh - 130px)"
+    >
+      <div class="flex flex-1 min-h-0 h-0">
+        <!-- Khu vực chat -->
+        <div class="flex-1 flex flex-col min-h-0">
           <div
-            ref="messagesEnd"
-            class="flex-1 space-y-3 my-2 pr-2 h-[calc(100vh-130px)] overflow-y-auto"
+            class="flex items-center justify-center border-b border-gray-200 dark:border-gray-600 min-h-[48px] relative bg-white dark:bg-gray-800 transition-colors duration-300"
           >
-            <div
-              v-for="(msg, idx) in messages"
-              :key="idx"
-              class="flex flex-col"
-              :class="msg.isUser ? 'items-end' : 'items-start'"
+            <h1
+              class="text-lg md:text-2xl font-bold text-[#f58220] text-center m-0"
             >
-              <div
-                class="inline-block px-4 py-2 rounded-lg mb-1 mx-2"
-                :class="
-                  msg.isUser
-                    ? 'bg-[#f58220] text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
-                "
-              >
-                <template v-if="msg.type === 'text'">
-                  {{ msg.content }}
-                </template>
-                <template v-else-if="msg.type === 'image'">
-                  <img
-                    :src="msg.content"
-                    class="max-w-xs max-h-48 rounded-lg"
-                  />
-                </template>
-                <template v-else-if="msg.type === 'file'">
-                  <a
-                    :href="msg.content"
-                    target="_blank"
-                    class="underline text-blue-600 dark:text-blue-400"
-                    >Tải file</a
-                  >
-                </template>
-              </div>
-            </div>
-          </div>
-          <!-- Nhập tin nhắn và gửi -->
-          <form
-            class="flex gap-2 items-end mt-2 p-2 bg-white dark:bg-gray-800 transition-colors duration-300"
-            @submit.prevent="sendMessage"
-          >
-            <input
-              v-model="input"
-              type="text"
-              placeholder="Nhập tin nhắn..."
-              class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#f58220] bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
-              @keydown.enter.exact.prevent="sendMessage"
-            />
-            <input
-              ref="fileInput"
-              type="file"
-              class="hidden"
-              @change="handleFileChange"
-            />
+              Chat với Luật sư
+            </h1>
             <button
               type="button"
-              @click="triggerFileInput"
-              class="bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-lg px-3 py-2 transition-colors duration-300"
+              @click="handleCall"
+              class="absolute right-4 bg-[#f58220] hover:bg-[#e06d00] text-white rounded-full p-2 transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 text-[#f58220]"
+                class="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -111,127 +31,378 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.586-6.586a4 4 0 10-5.656-5.656l-6.586 6.586a6 6 0 108.486 8.486l6.586-6.586"
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                 />
               </svg>
             </button>
-            <button
-              type="submit"
-              class="bg-[#f58220] text-white font-bold rounded-lg px-4 py-2 hover:bg-[#e06d00] transition-colors duration-300"
+          </div>
+          <div
+            class="flex flex-col flex-1 min-h-0 h-0 bg-white dark:bg-gray-800 transition-colors duration-300"
+          >
+            <!-- Welcome Screen for New Users -->
+            <div
+              v-if="showWelcomeScreen"
+              class="flex-1 flex items-center justify-center"
             >
-              Gửi
-            </button>
-          </form>
+              <div
+                class="bg-white dark:bg-gray-700 rounded-lg p-6 max-w-md w-full mx-4"
+              >
+                <h3 class="text-lg font-semibold mb-4 text-center">
+                  Bắt đầu tư vấn pháp luật
+                </h3>
+                <div class="text-center mb-6">
+                  <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    Tạo cuộc trò chuyện chung và bất kỳ luật sư nào cũng có thể
+                    trả lời bạn
+                  </p>
+                  <div
+                    class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-4"
+                  >
+                    <h4
+                      class="font-semibold text-blue-800 dark:text-blue-200 mb-2"
+                    >
+                      🌐 Cuộc trò chuyện chung
+                    </h4>
+                    <ul
+                      class="text-sm text-blue-700 dark:text-blue-300 space-y-1"
+                    >
+                      <li>• Không cần chọn luật sư cụ thể</li>
+                      <li>• Tin nhắn tự động gửi đến tất cả luật sư</li>
+                      <li>• Bất kỳ luật sư nào cũng có thể trả lời</li>
+                      <li>• Phản hồi nhanh chóng</li>
+                    </ul>
+                  </div>
+                </div>
+                <button
+                  @click="startNewConversation"
+                  class="w-full bg-[#f58220] hover:bg-[#e06d00] text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+                >
+                  Bắt đầu tư vấn
+                </button>
+              </div>
+            </div>
+
+            <!-- Danh sách tin nhắn -->
+            <div
+              v-else
+              ref="messagesEnd"
+              class="flex-1 space-y-3 my-2 pr-2 h-[calc(100vh-130px)] overflow-y-auto"
+            >
+              <div
+                v-for="(msg, idx) in messages"
+                :key="msg.id"
+                class="flex flex-col"
+                :class="msg.senderRole === 'user' ? 'items-end' : 'items-start'"
+              >
+                <div
+                  class="inline-block px-4 py-2 rounded-lg mb-1 mx-2 max-w-xs md:max-w-md"
+                  :class="
+                    msg.senderRole === 'user'
+                      ? 'bg-[#f58220] text-white'
+                      : msg.senderRole === 'lawyer'
+                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                  "
+                >
+                  <!-- Message Header -->
+                  <div
+                    v-if="msg.senderRole !== 'user'"
+                    class="text-xs font-semibold mb-1"
+                  >
+                    {{ msg.senderName }}
+                  </div>
+
+                  <!-- Message Content -->
+                  <template v-if="msg.messageType === 'text'">
+                    {{ msg.content }}
+                  </template>
+                  <template v-else-if="msg.messageType === 'image'">
+                    <img
+                      :src="msg.content"
+                      class="max-w-xs max-h-48 rounded-lg"
+                    />
+                  </template>
+                  <template v-else-if="msg.messageType === 'file'">
+                    <a
+                      :href="msg.fileUrl"
+                      target="_blank"
+                      class="underline text-blue-600 dark:text-blue-400"
+                      >📎 {{ msg.fileName || "Tải file" }}</a
+                    >
+                  </template>
+
+                  <!-- Message Time -->
+                  <div class="text-xs opacity-70 mt-1">
+                    {{ formatTime(msg.createdAt) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nhập tin nhắn và gửi -->
+            <form
+              v-if="!showWelcomeScreen"
+              class="flex gap-2 items-end mt-2 p-2 bg-white dark:bg-gray-800 transition-colors duration-300"
+              @submit.prevent="handleSendMessage"
+            >
+              <input
+                v-model="input"
+                type="text"
+                placeholder="Nhập tin nhắn..."
+                class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#f58220] bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
+                @keydown.enter.exact.prevent="handleSendMessage"
+              />
+              <input
+                ref="fileInput"
+                type="file"
+                class="hidden"
+                @change="handleFileChange"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt"
+                v-if="isClient"
+              />
+              <button
+                type="button"
+                @click="triggerFileInput"
+                class="bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-lg px-3 py-2 transition-colors duration-300"
+                v-if="isClient"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 text-[#f58220]"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.586-6.586a4 4 0 10-5.656-5.656l-6.586 6.586a6 6 0 108.486 8.486l6.586-6.586"
+                  />
+                </svg>
+              </button>
+              <button
+                type="submit"
+                class="bg-[#f58220] text-white font-bold rounded-lg px-4 py-2 hover:bg-[#e06d00] transition-colors duration-300"
+                :disabled="!input.trim() && !selectedFile"
+              >
+                Gửi
+              </button>
+            </form>
+
+            <!-- Selected file display -->
+            <div v-if="selectedFile && !showWelcomeScreen" class="px-2 pb-2">
+              <div
+                class="flex items-center gap-2 p-2 bg-gray-100 dark:bg-gray-700 rounded-lg"
+              >
+                <span class="text-sm">📎 {{ selectedFile.name }}</span>
+                <button
+                  @click="selectedFile = null"
+                  class="text-red-500 hover:text-red-700 text-sm"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, onMounted } from "vue";
+import { ref, nextTick, onMounted, onUnmounted } from "vue";
 import { useThemeStore } from "~/stores/theme";
+import { useChat } from "~/composables/useChat";
+import { useAuth } from "~/composables/useAuth";
+
+// Ensure we're on the client side
+const isClient = ref(false);
 
 const themeStore = useThemeStore();
+const { user } = useAuth();
+const {
+  conversations,
+  loading,
+  error,
+  getConversations,
+  createConversation,
+  getMessages,
+  sendUserMessage,
+} = useChat();
 
 interface Message {
-  type: "text" | "image" | "file";
+  id: number;
   content: string;
-  isUser: boolean;
+  messageType: "text" | "image" | "file";
+  senderId: number;
+  senderName: string;
+  senderRole: "user" | "lawyer" | "admin";
+  fileUrl?: string;
+  fileName?: string;
+  createdAt: string;
+  isRead: boolean;
 }
 
-const messages = ref<Message[]>([
-  {
-    type: "text",
-    content: "Xin chào Luật sư! Tôi muốn hỏi về thủ tục ly hôn.",
-    isUser: true,
-  },
-  {
-    type: "text",
-    content:
-      "Chào bạn! Tôi rất vui được hỗ trợ bạn. Bạn vui lòng cung cấp thêm thông tin về trường hợp của mình?",
-    isUser: false,
-  },
-  {
-    type: "text",
-    content:
-      "Tôi và chồng đã ly thân 2 năm, có 1 con chung 5 tuổi. Chúng tôi đã thống nhất về việc nuôi con.",
-    isUser: true,
-  },
-  {
-    type: "text",
-    content:
-      "Cảm ơn bạn đã chia sẻ. Để tiến hành ly hôn, bạn cần chuẩn bị: giấy đăng ký kết hôn, giấy khai sinh của con, sổ hộ khẩu và các giấy tờ tài sản chung nếu có.",
-    isUser: false,
-  },
-  {
-    type: "text",
-    content: "Vậy thủ tục sẽ mất bao lâu và chi phí như thế nào ạ?",
-    isUser: true,
-  },
-  {
-    type: "text",
-    content:
-      "Thủ tục ly hôn thuận tình thường mất 1-2 tháng. Chi phí bao gồm: lệ phí tòa án khoảng 300.000đ, phí công chứng hợp đồng ly hôn khoảng 200.000đ. Bạn có muốn tôi hỗ trợ soạn đơn không?",
-    isUser: false,
-  },
-]);
+const messages = ref<Message[]>([]);
 const input = ref("");
-const fileInput = ref<HTMLInputElement | null>(null);
-const messagesEnd = ref<HTMLElement | null>(null);
+const fileInput = ref<any>(null);
+const messagesEnd = ref<any>(null);
+const selectedFile = ref<any>(null);
+const currentConversationId = ref<number | null>(null);
+const showWelcomeScreen = ref(false);
 
-function sendMessage() {
-  if (input.value.trim() !== "") {
-    messages.value.push({ type: "text", content: input.value, isUser: true });
-    input.value = "";
-    scrollToBottom();
-    // Giả lập phản hồi luật sư (demo)
-    setTimeout(() => {
-      messages.value.push({
-        type: "text",
-        content: "Luật sư đã nhận được tin nhắn của bạn.",
-        isUser: false,
-      });
+// Load initial data
+const loadInitialData = async () => {
+  try {
+    await getConversations();
+
+    // If user has existing conversations, select the first one
+    if (conversations.value.length > 0) {
+      await selectConversation(conversations.value[0]);
+      showWelcomeScreen.value = false;
+    } else {
+      // Show welcome screen for new conversation
+      showWelcomeScreen.value = true;
+    }
+  } catch (err) {
+    console.error("Error loading initial data:", err);
+  }
+};
+
+const selectConversation = async (conversation: any) => {
+  currentConversationId.value = conversation.id;
+  const messagesList = await getMessages(conversation.id);
+  messages.value = messagesList;
+  scrollToBottom();
+};
+
+// Function to manually refresh messages
+const refreshMessages = async () => {
+  if (currentConversationId.value) {
+    try {
+      const messagesList = await getMessages(currentConversationId.value);
+      messages.value = messagesList;
       scrollToBottom();
-    }, 800);
+    } catch (err) {
+      console.error("Error refreshing messages:", err);
+    }
+  }
+};
+
+const startNewConversation = async () => {
+  try {
+    const response = await createConversation(
+      `Tư vấn pháp luật - ${new Date().toLocaleDateString("vi-VN")}`
+    );
+
+    // Refresh conversations and select the new one
+    await getConversations();
+    const newConversation = conversations.value.find(
+      (c) => c.id === response.data.id
+    );
+    if (newConversation) {
+      await selectConversation(newConversation);
+    }
+    showWelcomeScreen.value = false;
+  } catch (err) {
+    console.error("Error creating conversation:", err);
+  }
+};
+
+async function handleSendMessage() {
+  if (
+    (!input.value.trim() && !selectedFile.value) ||
+    !currentConversationId.value
+  )
+    return;
+
+  const messageContent = input.value;
+  const messageFile = selectedFile.value;
+
+  // Clear input immediately for better UX
+  input.value = "";
+  selectedFile.value = null;
+
+  // Add message to UI immediately (optimistic update)
+  const newMessage: Message = {
+    id: Date.now(), // Temporary ID
+    content: messageContent,
+    messageType: messageFile ? "file" : "text",
+    senderId: user.value?.id || 0,
+    senderName: user.value?.name || "Người dùng",
+    senderRole: "user",
+    fileUrl: messageFile ? URL.createObjectURL(messageFile) : undefined,
+    fileName: messageFile?.name,
+    createdAt: new Date().toISOString(),
+    isRead: false,
+  };
+
+  messages.value.push(newMessage);
+  scrollToBottom();
+
+  try {
+    // Send message to server
+    await sendUserMessage(
+      currentConversationId.value,
+      messageContent,
+      messageFile
+    );
+
+    // Refresh messages from server to get the real message with correct ID
+    const messagesList = await getMessages(currentConversationId.value);
+    messages.value = messagesList;
+    scrollToBottom();
+  } catch (err) {
+    console.error("Error sending message:", err);
+    // Remove the optimistic message if sending failed
+    messages.value = messages.value.filter((msg) => msg.id !== newMessage.id);
+    // Restore the input
+    input.value = messageContent;
+    selectedFile.value = messageFile;
   }
 }
 
 function triggerFileInput() {
-  fileInput.value?.click();
+  if (fileInput.value) {
+    fileInput.value.click();
+  }
 }
 
 function handleFileChange(e: Event) {
-  const files = (e.target as HTMLInputElement).files;
+  const target = e.target as any;
+  const files = target?.files;
   if (!files || files.length === 0) return;
   const file = files[0];
-  if (file.type.startsWith("image/")) {
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      messages.value.push({
-        type: "image",
-        content: ev.target?.result as string,
-        isUser: true,
-      });
-      scrollToBottom();
-    };
-    reader.readAsDataURL(file);
-  } else {
-    // File khác (pdf, doc, ...)
-    const url = URL.createObjectURL(file);
-    messages.value.push({ type: "file", content: url, isUser: true });
-    scrollToBottom();
+
+  // Check file size (10MB limit)
+  if (file.size > 10 * 1024 * 1024) {
+    alert("File quá lớn. Vui lòng chọn file nhỏ hơn 10MB.");
+    return;
   }
+
+  selectedFile.value = file;
   // Reset input để có thể upload lại cùng file
-  (e.target as HTMLInputElement).value = "";
+  target.value = "";
 }
 
 function handleCall() {
+  if (!currentConversationId.value) {
+    alert("Vui lòng bắt đầu cuộc trò chuyện trước.");
+    return;
+  }
+
   // Thêm tin nhắn yêu cầu gọi điện
   messages.value.push({
-    type: "text",
+    id: Date.now(),
     content: "Tôi muốn gọi điện thoại với luật sư",
-    isUser: true,
+    messageType: "text",
+    senderId: user.value?.id || 0,
+    senderName: user.value?.name || "Người dùng",
+    senderRole: "user",
+    createdAt: new Date().toISOString(),
+    isRead: false,
   });
 
   scrollToBottom();
@@ -239,10 +410,15 @@ function handleCall() {
   // Giả lập phản hồi từ luật sư
   setTimeout(() => {
     messages.value.push({
-      type: "text",
+      id: Date.now() + 1,
       content:
         "Luật sư sẽ gọi lại cho bạn trong vòng 5 phút. Vui lòng chuẩn bị sẵn sàng.",
-      isUser: false,
+      messageType: "text",
+      senderId: 0,
+      senderName: "Luật sư",
+      senderRole: "lawyer",
+      createdAt: new Date().toISOString(),
+      isRead: false,
     });
     scrollToBottom();
   }, 1000);
@@ -250,15 +426,62 @@ function handleCall() {
 
 function scrollToBottom() {
   nextTick(() => {
-    if (messagesEnd.value) {
-      messagesEnd.value.scrollTop = messagesEnd.value.scrollHeight;
-    }
+    setTimeout(() => {
+      if (messagesEnd.value) {
+        messagesEnd.value.scrollTop = messagesEnd.value.scrollHeight;
+      }
+    }, 100); // Small delay to ensure DOM is updated
   });
 }
 
-onMounted(() => {
+const formatTime = (date: string) => {
+  if (!date) return "";
+  const now = new Date();
+  const diff = now.getTime() - new Date(date).getTime();
+  const minutes = Math.floor(diff / (1000 * 60));
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  if (minutes < 1) return "Vừa xong";
+  if (minutes < 60) return `${minutes} phút trước`;
+  if (hours < 24) return `${hours} giờ trước`;
+  return `${days} ngày trước`;
+};
+
+// Auto refresh messages every 5 seconds (more frequent)
+let refreshInterval: NodeJS.Timeout;
+
+onMounted(async () => {
+  // Set client flag
+  isClient.value = true;
+
   // Khởi tạo theme
   themeStore.initTheme();
+
+  // Load initial data
+  await loadInitialData();
+
+  // Set up auto refresh every 5 seconds
+  refreshInterval = setInterval(async () => {
+    if (currentConversationId.value && !loading.value) {
+      try {
+        const messagesList = await getMessages(currentConversationId.value);
+        // Only update if there are new messages
+        if (messagesList.length !== messages.value.length) {
+          messages.value = messagesList;
+          scrollToBottom();
+        }
+      } catch (err) {
+        console.error("Error refreshing messages:", err);
+      }
+    }
+  }, 3000); // Reduced from 10 seconds to 5 seconds
+});
+
+onUnmounted(() => {
+  if (refreshInterval) {
+    clearInterval(refreshInterval);
+  }
 });
 </script>
 

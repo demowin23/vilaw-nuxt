@@ -18,14 +18,14 @@
           <span v-if="!sidebarCollapsed" class="nav-text">Dashboard</span>
         </NuxtLink>
 
-        <NuxtLink to="/admin/users" class="nav-item" active-class="active">
+        <NuxtLink
+          v-if="isAdmin"
+          to="/admin/users"
+          class="nav-item"
+          active-class="active"
+        >
           <span class="nav-icon">👥</span>
           <span v-if="!sidebarCollapsed" class="nav-text">Tài khoản</span>
-        </NuxtLink>
-
-        <NuxtLink to="/admin/actions" class="nav-item" active-class="active">
-          <span class="nav-icon">📋</span>
-          <span v-if="!sidebarCollapsed" class="nav-text">Lịch sử Admin</span>
         </NuxtLink>
 
         <NuxtLink to="/admin/knowledge" class="nav-item" active-class="active">
@@ -57,6 +57,11 @@
         <NuxtLink to="/admin/category" class="nav-item" active-class="active">
           <span class="nav-icon">🏷️</span>
           <span v-if="!sidebarCollapsed" class="nav-text">Danh mục</span>
+        </NuxtLink>
+
+        <NuxtLink to="/admin/chat" class="nav-item" active-class="active">
+          <span class="nav-icon">💬</span>
+          <span v-if="!sidebarCollapsed" class="nav-text">Chat hỗ trợ</span>
         </NuxtLink>
       </nav>
 
@@ -92,6 +97,9 @@
 </template>
 
 <script setup>
+import { useAuth } from "~/composables/useAuth";
+
+const { isAdmin } = useAuth();
 const sidebarCollapsed = ref(false);
 const pageTitle = ref("Dashboard");
 
@@ -117,6 +125,7 @@ watch(
       "/admin/documents": "Quản lý văn bản pháp luật",
       "/admin/news": "Quản lý tin tức pháp luật",
       "/admin/videos": "Quản lý video pháp luật",
+      "/admin/chat": "Chat hỗ trợ",
     };
     pageTitle.value = titles[newPath] || "Dashboard";
   },

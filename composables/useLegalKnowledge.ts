@@ -176,7 +176,8 @@ export const useLegalKnowledge = () => {
           method: 'POST',
           body: isFormData ? (data as FormData) : JSON.stringify(data),
         },
-        isFormData
+        isFormData,
+        true // isAdmin = true để gửi token
       );
       return response;
     } finally {
@@ -194,7 +195,8 @@ export const useLegalKnowledge = () => {
           method: 'PUT',
           body: isFormData ? (data as FormData) : JSON.stringify(data),
         },
-        isFormData
+        isFormData,
+        true // isAdmin = true để gửi token
       );
       return response;
     } finally {
@@ -208,7 +210,7 @@ export const useLegalKnowledge = () => {
     try {
       const response = await apiCall<{ success: boolean; message: string }>(`/legal-knowledge/${id}`, {
         method: 'DELETE'
-      })
+      }, false, true) // isAdmin = true để gửi token
       
       return response
     } finally {
@@ -231,6 +233,30 @@ export const useLegalKnowledge = () => {
     }
   }
 
+  // 8. Lấy danh sách bài viết nổi bật
+  const getFeaturedLegalKnowledge = async (params: {
+    limit?: number
+    offset?: number
+  } = {}): Promise<LegalKnowledgeResponse> => {
+    isLoading.value = true
+    try {
+      const queryParams = new URLSearchParams()
+      
+      if (params.limit) queryParams.append('limit', params.limit.toString())
+      if (params.offset) queryParams.append('offset', params.offset.toString())
+      
+      const url = `/legal-knowledge/featured${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
+      
+      const response = await apiCall<LegalKnowledgeResponse>(url, {
+        method: 'GET'
+      }, false, false)
+      
+      return response
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   return {
     // State
     isLoading: readonly(isLoading),
@@ -242,6 +268,7 @@ export const useLegalKnowledge = () => {
     createLegalKnowledge,
     updateLegalKnowledge,
     deleteLegalKnowledge,
-    approveLegalKnowledge
+    approveLegalKnowledge,
+    getFeaturedLegalKnowledge
   }
 } 

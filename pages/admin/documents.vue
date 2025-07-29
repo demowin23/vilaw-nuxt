@@ -104,12 +104,12 @@
               <input
                 type="checkbox"
                 v-if="isAdmin"
-                v-model="doc.is_approved"
+                v-model="doc.isApproved"
                 @change="approveDoc(doc)"
               />
               <span
                 :class="`status-badge ${
-                  doc.is_approved ? 'status-published' : 'status-pending'
+                  doc.isApproved ? 'status-published' : 'status-pending'
                 }`"
               >
                 {{ getStatusLabel(doc) }}
@@ -495,7 +495,7 @@ const getEffectiveLabel = (status) => {
   return statusObj.name;
 };
 const getStatusLabel = (doc) => {
-  if (doc.is_approved) {
+  if (doc.isApproved) {
     return "Đã xuất bản";
   } else {
     return "Chờ duyệt";
@@ -570,12 +570,12 @@ const loadDocumentTypes = async () => {
   try {
     // Hardcode document types for now
     documentTypes.value = [
-      { value: "law", label: "Luật" },
-      { value: "decree", label: "Nghị định" },
-      { value: "circular", label: "Thông tư" },
-      { value: "resolution", label: "Nghị quyết" },
-      { value: "decision", label: "Quyết định" },
-      { value: "other", label: "Văn bản khác" },
+      { value: "luat", label: "Luật" },
+      { value: "nghi_dinh", label: "Nghị định" },
+      { value: "thong_tu", label: "Thông tư" },
+      { value: "nghi_quyet", label: "Nghị quyết" },
+      { value: "quyet_dinh", label: "Quyết định" },
+      { value: "van_ban_khac", label: "Văn bản khác" },
     ];
   } catch (error) {
     console.error("Error loading document types:", error);
@@ -615,12 +615,21 @@ const editDoc = (doc) => {
     return date.toISOString().split("T")[0];
   };
 
+  // Process tags to ensure they are in the correct format for checkboxes
+  let processedTags = [];
+  if (doc.tags) {
+    if (Array.isArray(doc.tags)) {
+      processedTags = doc.tags;
+    } else if (typeof doc.tags === "string") {
+      processedTags = getTagsArray(doc.tags);
+    }
+  }
   docForm.value = {
     ...doc,
     issueDate: formatDateForInput(doc.issueDate),
     effectiveDate: formatDateForInput(doc.effectiveDate),
     expiryDate: formatDateForInput(doc.expiryDate),
-    tags: doc.tags || [],
+    tags: processedTags,
   };
 
   // Set file info if exists
@@ -647,16 +656,16 @@ const deleteDoc = async (doc) => {
 
 const approveDoc = async (doc) => {
   try {
-    await approveDocument(doc.id, doc.is_approved);
+    await approveDocument(doc.id, doc.isApproved);
     handleApiSuccess({
-      message: doc.is_approved
+      message: doc.isApproved
         ? "Đã duyệt văn bản thành công!"
         : "Đã từ chối văn bản thành công!",
     });
     // Không cần reload vì checkbox đã update trực tiếp
   } catch (error) {
     // Revert checkbox nếu có lỗi
-    doc.is_approved = !doc.is_approved;
+    doc.isApproved = !doc.isApproved;
     handleApiError(error, "Không thể thay đổi trạng thái duyệt");
   }
 };

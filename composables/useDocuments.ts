@@ -57,7 +57,7 @@ export const useDocuments = () => {
 
   // Helper function để handle API calls
   const apiCall = async <T>(url: string, options: RequestInit = {}, isFormData = false, isAdmin = false): Promise<T> => {
-    const headers = createHeaders(isAdmin, isFormData)
+    const headers = createHeaders(true, isFormData) // Always include auth for all API calls
     const response = await fetch(`${API_CONFIG.BASE_URL}${url}`, {
       ...options,
       headers,
@@ -92,7 +92,7 @@ export const useDocuments = () => {
       const baseUrl = params.isAdmin ? '/legal-documents/admin/all' : '/legal-documents'
       const url = `${baseUrl}?${queryParams.toString()}`
       
-      const response: any = await apiCall(url, {}, false, params.isAdmin)
+      const response: any = await apiCall(url, {}, false, true) // Always include auth
       
       // Map API response to frontend format
       documents.value = response.data.map((doc: any) => ({
@@ -105,6 +105,7 @@ export const useDocuments = () => {
         effectiveDate: doc.effective_date,
         expiryDate: doc.expiry_date,
         status: doc.status,
+        isApproved: doc.is_approved,
         content: doc.content || '',
         wordFile: doc.file_url || '',
         tags: Array.isArray(doc.tags) ? doc.tags.join(', ') : doc.tags || '',
@@ -130,7 +131,7 @@ export const useDocuments = () => {
         const response: any = await apiCall('/legal-documents', {
           method: 'POST',
           body: formData
-        }, true)
+        }, true, true) // Always include auth
         return response
       } else {
         const docData = data as Partial<Document>
@@ -158,7 +159,7 @@ export const useDocuments = () => {
         const response: any = await apiCall('/legal-documents', {
           method: 'POST',
           body: JSON.stringify(payload)
-        })
+        }, false, true) // Always include auth
         return response
       }
     } catch (err: any) {
@@ -179,7 +180,7 @@ export const useDocuments = () => {
         const response: any = await apiCall(`/legal-documents/${id}`, {
           method: 'PUT',
           body: formData
-        }, true)
+        }, true, true) // Always include auth
         return response
       } else {
         const docData = data as Partial<Document>
@@ -207,7 +208,7 @@ export const useDocuments = () => {
         const response: any = await apiCall(`/legal-documents/${id}`, {
           method: 'PUT',
           body: JSON.stringify(payload)
-        })
+        }, false, true) // Always include auth
         return response
       }
     } catch (err: any) {
@@ -223,7 +224,7 @@ export const useDocuments = () => {
     loading.value = true
     error.value = null
     try {
-      const response: any = await apiCall(`/legal-documents/${id}`, { method: 'DELETE' })
+      const response: any = await apiCall(`/legal-documents/${id}`, { method: 'DELETE' }, false, true) // Always include auth
       return response
     } catch (err: any) {
       error.value = err
@@ -286,7 +287,7 @@ export const useDocuments = () => {
   // Lấy danh sách loại văn bản
   const getDocumentTypes = async () => {
     try {
-      const response: any = await apiCall('/legal-documents/types')
+      const response: any = await apiCall('/legal-documents/types', {}, false, true) // Always include auth
       return response.data
     } catch (err: any) {
       error.value = err
@@ -297,7 +298,7 @@ export const useDocuments = () => {
   // Lấy danh sách trạng thái
   const getDocumentStatuses = async () => {
     try {
-      const response: any = await apiCall('/legal-documents/statuses')
+      const response: any = await apiCall('/legal-documents/statuses', {}, false, true) // Always include auth
       return response.data
     } catch (err: any) {
       error.value = err
@@ -318,7 +319,7 @@ export const useDocuments = () => {
         queryParams.append('tags', tags)
       }
       
-      const response: any = await apiCall(`/legal-documents/popular?${queryParams.toString()}`)
+      const response: any = await apiCall(`/legal-documents/popular?${queryParams.toString()}`, {}, false, true) // Always include auth
       
       // Map API response to frontend format
       const popularDocs = response.data.map((doc: any) => ({
@@ -416,7 +417,7 @@ export const useDocuments = () => {
     loading.value = true
     error.value = null
     try {
-      const response: any = await apiCall(`/legal-documents/${id}`)
+      const response: any = await apiCall(`/legal-documents/${id}`, {}, false, true) // Always include auth
       
       // Map API response to frontend format
       const document = {
@@ -455,7 +456,7 @@ export const useDocuments = () => {
       const response: any = await apiCall(`/legal-documents/admin/${id}/approve`, {
         method: 'PUT',
         body: JSON.stringify({ is_approved })
-      }, false, true) // isAdmin = true để gửi token
+      }, false, true) // Always include auth
       return response
     } catch (err: any) {
       error.value = err

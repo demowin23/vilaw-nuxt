@@ -22,6 +22,7 @@
       <div class="search-box">
         <input
           v-model="searchQuery"
+          @input="onSearchInput"
           type="text"
           placeholder="Tìm kiếm theo tiêu đề..."
           class="search-input"
@@ -30,14 +31,22 @@
       </div>
 
       <div class="filter-group">
-        <select v-model="typeFilter" class="filter-select">
+        <select
+          v-model="typeFilter"
+          @change="onFilterChange"
+          class="filter-select"
+        >
           <option value="">Tất cả loại video</option>
           <option v-for="type in videoTypes" :key="type.id" :value="type.slug">
             {{ type.name }}
           </option>
         </select>
 
-        <select v-model="ageGroupFilter" class="filter-select">
+        <select
+          v-model="ageGroupFilter"
+          @change="onFilterChange"
+          class="filter-select"
+        >
           <option value="">Tất cả độ tuổi</option>
           <option value="all">Tất cả</option>
           <option value="13+">13+</option>
@@ -45,10 +54,23 @@
           <option value="18+">18+</option>
         </select>
 
-        <select v-model="featuredFilter" class="filter-select">
+        <select
+          v-model="featuredFilter"
+          @change="onFilterChange"
+          class="filter-select"
+        >
           <option value="">Tất cả</option>
           <option value="true">Video nổi bật</option>
           <option value="false">Video thường</option>
+        </select>
+        <select
+          v-model="isPending"
+          @change="onFilterChange"
+          class="filter-select"
+        >
+          <option value="">Tất cả</option>
+          <option value="true">Chờ duyệt</option>
+          <option value="false">Đã duyệt</option>
         </select>
       </div>
     </div>
@@ -97,7 +119,7 @@
             <td>{{ formatDuration(item.duration) }}</td>
             <td>{{ item.view_count }}</td>
             <td>{{ item.like_count }}</td>
-            <td>
+            <td class="status">
               <input
                 type="checkbox"
                 v-if="isAdmin"
@@ -112,7 +134,7 @@
                 {{ item.is_approved ? "Đã xuất bản" : "Chờ duyệt" }}
               </span>
             </td>
-            <td>
+            <td class="status">
               <button
                 @click="viewItem(item)"
                 class="action-btn view-btn"
@@ -361,6 +383,7 @@ const { handleApiError, handleApiSuccess } = useNotification();
 const { isAdmin } = useAuth();
 
 // State
+let isPending = ref(false);
 const videoList = ref<any[]>([]);
 const videoTypes = ref([
   {
@@ -448,9 +471,9 @@ onMounted(() => {
 const loadVideos = async () => {
   try {
     const params: any = {
-      limit: itemsPerPage.value,
-      offset: (currentPage.value - 1) * itemsPerPage.value,
       isAdmin: true,
+      limit: 10,
+      offset: 0,
     };
 
     if (searchQuery.value) {
@@ -467,6 +490,10 @@ const loadVideos = async () => {
 
     if (featuredFilter.value) {
       params.is_featured = featuredFilter.value === "true";
+    }
+
+    if (isPending.value) {
+      params.isPending = isPending.value;
     }
 
     const response = await getVideoLifeLaw(params);
@@ -487,11 +514,34 @@ const loadAgeGroups = async () => {
   }
 };
 
-// Watch for filter changes
-watch([searchQuery, typeFilter, ageGroupFilter, featuredFilter], () => {
-  currentPage.value = 1;
-  loadVideos();
-});
+// Debounce timer for search
+let searchTimer = null;
+
+// Filter change handler
+const onFilterChange = async () => {
+  try {
+    await loadVideos();
+  } catch (error) {
+    console.error("Error filtering videos:", error);
+  }
+};
+
+// Search input handler with debounce
+const onSearchInput = () => {
+  // Clear previous timer
+  if (searchTimer) {
+    clearTimeout(searchTimer);
+  }
+
+  // Set new timer
+  searchTimer = setTimeout(async () => {
+    try {
+      await loadVideos();
+    } catch (error) {
+      console.error("Error searching videos:", error);
+    }
+  }, 500); // 500ms delay
+};
 
 // Methods
 const getAgeGroupLabel = (ageGroup: string) => {
@@ -1098,6 +1148,10 @@ const closeModal = () => {
   font-weight: 500;
 }
 
+.status {
+  white-space-collapse: preserve;
+  text-wrap-mode: nowrap;
+}
 .status-pending {
   background: #ffd43b;
   color: white;
