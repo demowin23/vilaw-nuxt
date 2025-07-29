@@ -66,7 +66,7 @@
       </nav>
 
       <div class="sidebar-footer">
-        <NuxtLink to="/" class="nav-item">
+        <NuxtLink to="/" class="">
           <span class="nav-icon">🏠</span>
           <span v-if="!sidebarCollapsed" class="nav-text">Về trang chủ</span>
         </NuxtLink>
@@ -195,6 +195,8 @@ watch(
 .sidebar-nav {
   flex: 1;
   padding: 1rem 0;
+  overflow-y: auto;
+  min-height: 0; /* Allow flex item to shrink */
 }
 
 .nav-item {
@@ -231,6 +233,7 @@ watch(
 .sidebar-footer {
   padding: 1rem 1.5rem;
   border-top: 1px solid var(--border-color);
+  flex-shrink: 0; /* Prevent footer from shrinking */
 }
 
 .admin-main {

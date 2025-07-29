@@ -620,15 +620,17 @@ onUnmounted(() => {
 
 <style scoped>
 .admin-chat {
-  height: 100vh;
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .chat-container {
   display: flex;
-  height: calc(100vh - 80px);
+  height: 100%;
   background: var(--bg-page);
+  overflow: hidden;
 }
 
 .chat-sidebar {
