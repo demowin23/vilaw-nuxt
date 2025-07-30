@@ -13,56 +13,161 @@
       </div>
 
       <nav class="sidebar-nav">
-        <NuxtLink to="/admin" class="nav-item" active-class="active">
-          <span class="nav-icon">📊</span>
-          <span v-if="!sidebarCollapsed" class="nav-text">Dashboard</span>
-        </NuxtLink>
+        <!-- 1. Quản lý website -->
+        <div class="menu-section">
+          <div class="section-header" @click="toggleWebsiteSection">
+            <span class="section-title">Quản lý website</span>
+            <span
+              class="section-toggle"
+              :class="{ collapsed: !websiteSectionOpen }"
+            >
+              {{ websiteSectionOpen ? "▼" : "▶" }}
+            </span>
+          </div>
 
-        <NuxtLink
-          v-if="isAdmin"
-          to="/admin/users"
-          class="nav-item"
-          active-class="active"
-        >
-          <span class="nav-icon">👥</span>
-          <span v-if="!sidebarCollapsed" class="nav-text">Tài khoản</span>
-        </NuxtLink>
-
-        <NuxtLink to="/admin/knowledge" class="nav-item" active-class="active">
-          <span class="nav-icon">📚</span>
-          <span v-if="!sidebarCollapsed" class="nav-text"
-            >Kiến thức pháp luật</span
+          <div
+            class="section-content"
+            :class="{ collapsed: !websiteSectionOpen }"
           >
-        </NuxtLink>
+            <NuxtLink to="/admin" class="nav-item" active-class="active">
+              <span class="nav-icon">📊</span>
+              <span v-if="!sidebarCollapsed" class="nav-text">Dashboard</span>
+            </NuxtLink>
 
-        <NuxtLink to="/admin/documents" class="nav-item" active-class="active">
-          <span class="nav-icon">📄</span>
-          <span v-if="!sidebarCollapsed" class="nav-text"
-            >Văn bản pháp luật</span
+            <NuxtLink
+              v-if="isAdmin"
+              to="/admin/users"
+              class="nav-item"
+              active-class="active"
+            >
+              <span class="nav-icon">👥</span>
+              <span v-if="!sidebarCollapsed" class="nav-text">Tài khoản</span>
+            </NuxtLink>
+
+            <NuxtLink
+              to="/admin/knowledge"
+              class="nav-item"
+              active-class="active"
+            >
+              <span class="nav-icon">📚</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Kiến thức pháp luật</span
+              >
+            </NuxtLink>
+
+            <NuxtLink
+              to="/admin/documents"
+              class="nav-item"
+              active-class="active"
+            >
+              <span class="nav-icon">📄</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Văn bản pháp luật</span
+              >
+            </NuxtLink>
+
+            <NuxtLink to="/admin/news" class="nav-item" active-class="active">
+              <span class="nav-icon">📰</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Tin tức pháp luật</span
+              >
+            </NuxtLink>
+
+            <NuxtLink to="/admin/videos" class="nav-item" active-class="active">
+              <span class="nav-icon">🎥</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Video pháp luật</span
+              >
+            </NuxtLink>
+
+            <NuxtLink
+              to="/admin/category"
+              class="nav-item"
+              active-class="active"
+            >
+              <span class="nav-icon">🏷️</span>
+              <span v-if="!sidebarCollapsed" class="nav-text">Danh mục</span>
+            </NuxtLink>
+
+            <NuxtLink to="/admin/chat" class="nav-item" active-class="active">
+              <span class="nav-icon">💬</span>
+              <span v-if="!sidebarCollapsed" class="nav-text">Chat hỗ trợ</span>
+            </NuxtLink>
+          </div>
+        </div>
+
+        <!-- 2. Quản lý dịch vụ -->
+        <div class="menu-section">
+          <div class="section-header" @click="toggleServiceSection">
+            <span class="section-title">Quản lý dịch vụ</span>
+            <span
+              class="section-toggle"
+              :class="{ collapsed: !serviceSectionOpen }"
+            >
+              {{ serviceSectionOpen ? "▼" : "▶" }}
+            </span>
+          </div>
+
+          <div
+            class="section-content"
+            :class="{ collapsed: !serviceSectionOpen }"
           >
-        </NuxtLink>
+            <NuxtLink
+              to="/admin/service-usage"
+              class="nav-item"
+              active-class="active"
+            >
+              <span class="nav-icon">🔍</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Tra cứu sử dụng dịch vụ</span
+              >
+            </NuxtLink>
 
-        <NuxtLink to="/admin/news" class="nav-item" active-class="active">
-          <span class="nav-icon">📰</span>
-          <span v-if="!sidebarCollapsed" class="nav-text"
-            >Tin tức pháp luật</span
-          >
-        </NuxtLink>
+            <NuxtLink
+              to="/admin/service-config"
+              class="nav-item"
+              active-class="active"
+            >
+              <span class="nav-icon">⚙️</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Cài đặt dịch vụ</span
+              >
+            </NuxtLink>
 
-        <NuxtLink to="/admin/videos" class="nav-item" active-class="active">
-          <span class="nav-icon">🎥</span>
-          <span v-if="!sidebarCollapsed" class="nav-text">Video pháp luật</span>
-        </NuxtLink>
+            <NuxtLink
+              to="/admin/reports"
+              class="nav-item"
+              active-class="active"
+            >
+              <span class="nav-icon">📈</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Báo cáo thống kê</span
+              >
+            </NuxtLink>
 
-        <NuxtLink to="/admin/category" class="nav-item" active-class="active">
-          <span class="nav-icon">🏷️</span>
-          <span v-if="!sidebarCollapsed" class="nav-text">Danh mục</span>
-        </NuxtLink>
+            <NuxtLink
+              to="/admin/subscribers"
+              class="nav-item"
+              active-class="active"
+            >
+              <span class="nav-icon">📞</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Tra cứu thuê bao</span
+              >
+            </NuxtLink>
 
-        <NuxtLink to="/admin/chat" class="nav-item" active-class="active">
-          <span class="nav-icon">💬</span>
-          <span v-if="!sidebarCollapsed" class="nav-text">Chat hỗ trợ</span>
-        </NuxtLink>
+            <NuxtLink
+              to="/admin/service-info"
+              class="nav-item"
+              active-class="active"
+            >
+              <span class="nav-icon">ℹ️</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Thông tin dịch vụ</span
+              >
+            </NuxtLink>
+          </div>
+        </div>
       </nav>
 
       <div class="sidebar-footer">
@@ -123,6 +228,17 @@ const logout = () => {
   navigateTo("/dang-nhap");
 };
 
+// Collapsible sections
+const websiteSectionOpen = ref(true);
+const serviceSectionOpen = ref(true);
+
+const toggleWebsiteSection = () => {
+  websiteSectionOpen.value = !websiteSectionOpen.value;
+};
+const toggleServiceSection = () => {
+  serviceSectionOpen.value = !serviceSectionOpen.value;
+};
+
 // Cập nhật title dựa trên route
 const route = useRoute();
 watch(
@@ -137,6 +253,21 @@ watch(
       "/admin/news": "Quản lý tin tức pháp luật",
       "/admin/videos": "Quản lý video pháp luật",
       "/admin/chat": "Chat hỗ trợ",
+      "/admin/service-usage": "Tra cứu sử dụng dịch vụ",
+      "/admin/service-history": "Lịch sử sử dụng",
+      "/admin/service-config": "Cấu hình dịch vụ",
+      "/admin/service-packages": "Gói dịch vụ",
+      "/admin/service-pricing": "Bảng giá",
+      "/admin/reports/overview": "Báo cáo tổng quan",
+      "/admin/reports/revenue": "Báo cáo doanh thu",
+      "/admin/reports/users": "Báo cáo người dùng",
+      "/admin/reports/services": "Báo cáo dịch vụ",
+      "/admin/subscribers": "Danh sách thuê bao",
+      "/admin/subscriber-search": "Tìm kiếm thuê bao",
+      "/admin/subscriber-status": "Trạng thái thuê bao",
+      "/admin/service-info": "Thông tin dịch vụ",
+      "/admin/service-support": "Hỗ trợ dịch vụ",
+      "/admin/service-faq": "Câu hỏi thường gặp",
     };
     pageTitle.value = titles[newPath] || "Dashboard";
   },
@@ -164,11 +295,11 @@ watch(
 }
 
 .sidebar-header {
-  padding: 1.5rem;
+  padding: 14px 0;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .sidebar-header h2 {
@@ -197,6 +328,60 @@ watch(
   padding: 1rem 0;
   overflow-y: auto;
   min-height: 0; /* Allow flex item to shrink */
+}
+
+.menu-section {
+  margin-bottom: 1.5rem;
+}
+
+.section-header {
+  padding: 0.5rem 1.5rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-toggle {
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  transition: transform 0.3s ease;
+}
+
+.section-content {
+  overflow: hidden;
+  transition: all 0.3s ease-out;
+  max-height: 1000px;
+}
+
+.section-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.section-header {
+  padding: 0.5rem 1.5rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.section-header:hover {
+  background: var(--bg-hover);
+  border-radius: 6px;
 }
 
 .nav-item {
