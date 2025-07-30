@@ -237,11 +237,9 @@ const route = useRoute();
 const { getLegalKnowledge, getFeaturedLegalKnowledge } = useLegalKnowledge();
 
 const knowledgeList = ref<any[]>([]);
-const featuredArticles = ref<any[]>([]);
+import { getImageUrl } from "~/utils/config";
 
-const getImageUrl = (image: string) => {
-  return `http://14.225.17.139:4000${image}`;
-};
+const featuredArticles = ref<any[]>([]);
 const getStatusLabel = (status: string) => {
   const labels: Record<string, string> = {
     published: "Đã xuất bản",

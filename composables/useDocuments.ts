@@ -84,7 +84,7 @@ export const useDocuments = () => {
         issuing_authority: params.issuing_authority || '',
         is_important: params.is_important || '',
         tags: params.tags || '',
-        limit: params.limit || '10',
+        limit: params.limit || '100',
         offset: params.offset || '0'
       })
       

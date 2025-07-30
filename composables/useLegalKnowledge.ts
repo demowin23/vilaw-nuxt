@@ -109,7 +109,6 @@ export const useLegalKnowledge = () => {
     offset?: number
     search?: string
     is_featured?: boolean
-    include_pending?: boolean
     isAdmin?: boolean
   } = {}): Promise<LegalKnowledgeResponse> => {
     isLoading.value = true
@@ -122,7 +121,6 @@ export const useLegalKnowledge = () => {
       if (params.offset) queryParams.append('offset', params.offset.toString())
       if (params.search) queryParams.append('search', params.search)
       if (params.is_featured !== undefined) queryParams.append('is_featured', params.is_featured.toString())
-      if (params.include_pending !== undefined) queryParams.append('include_pending', params.include_pending.toString())
       
       // Nếu là admin thì dùng endpoint admin, ngược lại dùng endpoint thường
       const baseUrl = params.isAdmin ? '/legal-knowledge/admin/all' : '/legal-knowledge'

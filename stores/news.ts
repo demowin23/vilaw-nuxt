@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { API_CONFIG } from '~/utils/config'
+import { API_CONFIG, getImageUrl } from '~/utils/config'
 
 interface NewsParams {
   page?: number
@@ -23,7 +23,7 @@ export const useNewsStore = defineStore('news', () => {
   // Getters
   const getImage = (image: string) => {
     if (!image) return '/images/bai-tap-luat.webp'
-    return `http://14.225.17.139:4000${image}`
+    return getImageUrl(image)
   }
 
   // Actions

@@ -422,18 +422,12 @@ const itemForm = ref({
   is_featured: false,
 });
 
+import { getImageUrl, getVideoUrl } from "~/utils/config";
+
 const thumbnailFile = ref<File | null>(null);
 const videoFile = ref<File | null>(null);
 const thumbnailPreview = ref<string>("");
 const videoPreview = ref<string>("");
-
-const getImageUrl = (image: string) => {
-  return `http://14.225.17.139:4000${image}`;
-};
-
-const getVideoUrl = (video: string) => {
-  return `http://14.225.17.139:4000${video}`;
-};
 
 const onThumbnailChange = (e: Event) => {
   const files = (e.target as HTMLInputElement).files;
@@ -471,7 +465,7 @@ const loadVideos = async () => {
   try {
     const params: any = {
       isAdmin: true,
-      limit: 10,
+      limit: 100,
       offset: 0,
     };
 

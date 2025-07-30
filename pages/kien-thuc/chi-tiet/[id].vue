@@ -132,13 +132,12 @@ const route = useRoute();
 const id = route.params.id;
 const { getLegalKnowledgeById, getLegalKnowledge } = useLegalKnowledge();
 
+import { getImageUrl } from "~/utils/config";
+
 let knowledge = ref<any>(null);
 const isLoading = ref(false);
 const error = ref("");
 const contentRef = ref<HTMLElement | null>(null);
-const getImageUrl = (image: string) => {
-  return `http://14.225.17.139:4000${image}`;
-};
 
 const relatedList = ref<any[]>([]);
 const relatedLoading = ref(false);

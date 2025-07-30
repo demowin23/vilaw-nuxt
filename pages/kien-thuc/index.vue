@@ -96,10 +96,9 @@ const sidebarStore = useSidebarStore();
 const route = useRoute();
 const { getLegalKnowledge } = useLegalKnowledge();
 
+import { getImageUrl } from "~/utils/config";
+
 const knowledgeList = ref<any[]>([]);
-const getImageUrl = (image: string) => {
-  return `http://14.225.17.139:4000${image}`;
-};
 const getStatusLabel = (status: string) => {
   const labels: Record<string, string> = {
     published: "Đã xuất bản",

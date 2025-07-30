@@ -290,8 +290,10 @@ const getStatusLabel = (item) => {
   }
 };
 
+import { getImageUrl as getImageUrlUtil } from "~/utils/config";
+
 const getImageUrl = (image) => {
-  return `http://14.225.17.139:4000${image}`;
+  return getImageUrlUtil(image);
 };
 const onImageChange = (e) => {
   const files = e.target.files;

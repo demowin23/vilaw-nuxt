@@ -302,7 +302,7 @@ const knowledgeList = ref<any[]>([]);
 const categories = ref<any[]>([]);
 const totalKnowledge = ref(0);
 const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const itemsPerPage = ref(100);
 
 const searchQuery = ref("");
 const categoryFilter = ref("");
@@ -320,11 +320,10 @@ const itemForm = ref({
   is_featured: false,
 });
 
+import { getImageUrl } from "~/utils/config";
+
 const imageFile = ref<File | null>(null);
 const imagePreview = ref<string>("");
-const getImageUrl = (image: string) => {
-  return `http://14.225.17.139:4000${image}`;
-};
 const onImageFileChange = (e: Event) => {
   const files = (e.target as HTMLInputElement).files;
   if (!files || !files[0]) return;
@@ -342,7 +341,6 @@ onMounted(() => {
 const loadKnowledge = async () => {
   try {
     const params: any = {
-      include_pending: true,
       isAdmin: true,
       limit: itemsPerPage.value,
       offset: (currentPage.value - 1) * itemsPerPage.value,

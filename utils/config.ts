@@ -1,8 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: process.env.NODE_ENV === 'production' 
-    ? 'http://14.225.17.139:4000/api/v1' 
-    : 'http://14.225.17.139:4000/api/v1',
+  BASE_URL: process.env.BASE_URL || 'http://localhost:4000/api/v1',
   
   ENDPOINTS: {
     AUTH: {
@@ -24,6 +22,19 @@ export const API_CONFIG = {
     }
   }
 }
+
+// Utility functions for URL handling
+export const getImageUrl = (image: string) => {
+  if (!image) return '';
+  if (image.startsWith('http')) return image;
+  return `${process.env.BASE_URL?.replace('/api/v1', '') || 'http://14.225.17.139:4000'}${image}`;
+};
+
+export const getVideoUrl = (video: string) => {
+  if (!video) return '';
+  if (video.startsWith('http')) return video;
+  return `${process.env.BASE_URL?.replace('/api/v1', '') || 'http://14.225.17.139:4000'}${video}`;
+};
 
 // App Configuration
 export const APP_CONFIG = {

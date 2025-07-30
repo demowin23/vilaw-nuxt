@@ -27,12 +27,11 @@
   </div>
 </template>
 <script setup lang="ts">
+import { getImageUrl } from "~/utils/config";
+
 const { KienThuc } = defineProps<{
   KienThuc: any[];
 }>();
-const getImageUrl = (image: string) => {
-  return `http://14.225.17.139:4000${image}`;
-};
 </script>
 <style scoped>
 .card-description {

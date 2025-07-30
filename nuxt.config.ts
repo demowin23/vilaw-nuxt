@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   // Runtime config for API
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE_URL || 'http://14.225.17.139:4000'
+      apiBase: process.env.BASE_URL?.replace('/api/v1', '') || 'http://14.225.17.139:4000'
     }
   },
   
@@ -19,7 +19,7 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       '/api': {
-        target: 'http://14.225.17.139:4000',
+        target: process.env.BASE_URL?.replace('/api/v1', '') || 'http://14.225.17.139:4000',
         changeOrigin: true,
         prependPath: true,
       }

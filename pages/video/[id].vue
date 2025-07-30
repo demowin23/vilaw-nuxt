@@ -358,12 +358,9 @@ const replyingTo = ref<number | null>(null);
 const currentPage = ref(1);
 const hasMoreComments = ref(true);
 
-let plyrInstance: any = null;
+import { getImageUrl, getVideoUrl } from "~/utils/config";
 
-const getVideoUrl = (src: string) =>
-  src?.startsWith("http") ? src : `http://14.225.17.139:4000${src}`;
-const getImageUrl = (img: string) =>
-  img?.startsWith("http") ? img : `http://14.225.17.139:4000${img}`;
+let plyrInstance: any = null;
 
 const formatDuration = (seconds: number) => {
   if (!seconds) return "";
