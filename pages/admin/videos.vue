@@ -106,7 +106,6 @@
             </td>
             <td class="title-cell">
               <div class="title">{{ item.title }}</div>
-              <div class="description">{{ item.description }}</div>
             </td>
             <td>
               <span class="type-badge">{{ item.type }}</span>
@@ -811,12 +810,10 @@ const closeModal = () => {
   font-weight: 500;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
-}
-
-.description {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .type-badge,

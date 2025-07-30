@@ -70,7 +70,6 @@
             <td>{{ item.id }}</td>
             <td class="title-cell">
               <div class="title">{{ item.title }}</div>
-              <div class="excerpt">{{ item.summary }}</div>
             </td>
             <td>
               <span :class="`category-badge category-${item.category}`">
@@ -649,6 +648,10 @@ const closeModal = () => {
   font-weight: 500;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .excerpt {

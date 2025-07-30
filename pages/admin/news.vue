@@ -52,8 +52,8 @@
         <tbody>
           <tr v-for="item in newsList" :key="item.id">
             <td>{{ item.id }}</td>
-            <td>{{ item.title }}</td>
-            <td>{{ item.description }}</td>
+            <td class="news-title">{{ item.title }}</td>
+            <td class="news-description">{{ item.description }}</td>
             <td>
               <img
                 v-if="item.image"
@@ -536,6 +536,17 @@ const closeModal = () => {
   font-weight: 500;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.news-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .news-excerpt {
