@@ -11,11 +11,7 @@
         <div
           class="hot-video-item"
           :style="{ backgroundImage: `url('${item.thumbnail}')` }"
-        >
-          <div class="hot-video-title">
-            {{ item.title }}
-          </div>
-        </div>
+        ></div>
       </SwiperSlide>
     </Swiper>
     <div class="hot-video-progress-bar">
