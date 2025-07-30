@@ -23,7 +23,7 @@ export const useNewsStore = defineStore('news', () => {
   // Getters
   const getImage = (image: string) => {
     if (!image) return '/images/bai-tap-luat.webp'
-    return `http://localhost:4000${image}`
+    return `http://14.225.17.139:4000${image}`
   }
 
   // Actions

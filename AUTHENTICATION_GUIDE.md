@@ -179,8 +179,8 @@ export default defineNuxtConfig({
 export const API_CONFIG = {
   BASE_URL:
     process.env.NODE_ENV === "production"
-      ? "https://your-production-api.com/api/v1"
-      : "http://localhost:4000/api/v1",
+      ? "http://14.225.17.139:4000/api/v1"
+      : "http://14.225.17.139:4000/api/v1",
 };
 ```
 

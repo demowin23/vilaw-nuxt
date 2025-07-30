@@ -361,9 +361,9 @@ const hasMoreComments = ref(true);
 let plyrInstance: any = null;
 
 const getVideoUrl = (src: string) =>
-  src?.startsWith("http") ? src : `http://localhost:4000${src}`;
+  src?.startsWith("http") ? src : `http://14.225.17.139:4000${src}`;
 const getImageUrl = (img: string) =>
-  img?.startsWith("http") ? img : `http://localhost:4000${img}`;
+  img?.startsWith("http") ? img : `http://14.225.17.139:4000${img}`;
 
 const formatDuration = (seconds: number) => {
   if (!seconds) return "";

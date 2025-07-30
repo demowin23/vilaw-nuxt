@@ -24,7 +24,7 @@ defineProps<{
   item: Object;
 }>();
 const getImageUrl = (image: string) => {
-  return `http://localhost:4000${image}`;
+  return `http://14.225.17.139:4000${image}`;
 };
 </script>
 

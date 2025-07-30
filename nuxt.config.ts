@@ -7,9 +7,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
   ],
   css: ['~/assets/css/global.css', '~/assets/css/responsive.css'],
-  nitro: {
-    preset: 'cloudflare-pages'
-  },
   vite: {
     server: {
       fs: {
