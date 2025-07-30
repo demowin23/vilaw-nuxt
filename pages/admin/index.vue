@@ -7,41 +7,59 @@
 
     <!-- Thống kê tổng quan -->
     <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon">👥</div>
-        <div class="stat-content">
-          <h3>{{ stats.users }}</h3>
-          <p>Tài khoản</p>
-        </div>
+      <!-- Loading state -->
+      <div v-if="loading" class="stats-loading">
+        <div class="loading-spinner"></div>
+        <p>Đang tải thống kê...</p>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon">📚</div>
-        <div class="stat-content">
-          <h3>{{ stats.knowledge }}</h3>
-          <p>Kiến thức pháp luật</p>
-        </div>
+
+      <!-- Error state -->
+      <div v-else-if="error" class="stats-error">
+        <div class="error-icon">⚠️</div>
+        <p>{{ error }}</p>
+        <button @click="statsStore.fetchOverallStats()" class="retry-btn">
+          Thử lại
+        </button>
       </div>
-      <div class="stat-card">
-        <div class="stat-icon">📄</div>
-        <div class="stat-content">
-          <h3>{{ stats.documents }}</h3>
-          <p>Văn bản pháp luật</p>
+
+      <!-- Stats cards -->
+      <template v-else>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-content">
+            <h3>{{ stats.users.toLocaleString() }}</h3>
+            <p>Tài khoản</p>
+          </div>
         </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">📰</div>
-        <div class="stat-content">
-          <h3>{{ stats.news }}</h3>
-          <p>Tin tức pháp luật</p>
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-content">
+            <h3>{{ stats.knowledge.toLocaleString() }}</h3>
+            <p>Kiến thức pháp luật</p>
+          </div>
         </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🎥</div>
-        <div class="stat-content">
-          <h3>{{ stats.videos }}</h3>
-          <p>Video pháp luật</p>
+        <div class="stat-card">
+          <div class="stat-icon">📄</div>
+          <div class="stat-content">
+            <h3>{{ stats.documents.toLocaleString() }}</h3>
+            <p>Văn bản pháp luật</p>
+          </div>
         </div>
-      </div>
+        <div class="stat-card">
+          <div class="stat-icon">📰</div>
+          <div class="stat-content">
+            <h3>{{ stats.news.toLocaleString() }}</h3>
+            <p>Tin tức pháp luật</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎥</div>
+          <div class="stat-content">
+            <h3>{{ stats.videos.toLocaleString() }}</h3>
+            <p>Video pháp luật</p>
+          </div>
+        </div>
+      </template>
     </div>
 
     <!-- Menu quản lý -->
@@ -92,18 +110,42 @@
 </template>
 
 <script setup>
+import { useStatsStore } from "~/stores/stats";
+
 definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
 
-// Mock data - trong thực tế sẽ lấy từ API
-const stats = ref({
-  users: 1250,
-  knowledge: 342,
-  documents: 156,
-  news: 89,
-  videos: 67,
+const statsStore = useStatsStore();
+
+// Computed properties for reactive data
+const stats = computed(() => statsStore.dashboardStats);
+const loading = computed(() => statsStore.loading);
+const error = computed(() => statsStore.error);
+
+// Fetch stats on mount
+onMounted(() => {
+  statsStore.fetchOverallStats();
+});
+
+// Auto refresh every 5 minutes
+let refreshInterval;
+
+onMounted(() => {
+  // Initial fetch
+  statsStore.fetchOverallStats();
+
+  // Refresh stats every 5 minutes
+  refreshInterval = setInterval(() => {
+    statsStore.refreshStats();
+  }, 5 * 60 * 1000);
+});
+
+onUnmounted(() => {
+  if (refreshInterval) {
+    clearInterval(refreshInterval);
+  }
 });
 </script>
 
@@ -151,6 +193,56 @@ const stats = ref({
 .stat-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading and Error States */
+.stats-loading,
+.stats-error {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.retry-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s;
+}
+
+.retry-btn:hover {
+  background: var(--primary-dark);
 }
 
 .stat-icon {
