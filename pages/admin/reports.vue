@@ -61,18 +61,9 @@
                 <th colspan="2">GÓI SAO ĐẸP (1000đ/ngày)</th>
                 <th colspan="2">GÓI SAO ĐẸP (2000đ/ngày)</th>
                 <th colspan="2">GÓI SAO ĐẸP (5000đ/ngày)</th>
-                <th colspan="2">GÓI EVA ĐẸP (1000đ/ngày)</th>
-                <th colspan="2">GÓI EVA ĐẸP (2000đ/ngày)</th>
-                <th colspan="2">GÓI EVA ĐẸP (5000đ/ngày)</th>
                 <th colspan="2">Tổng ngày</th>
               </tr>
               <tr>
-                <th>Số lượt</th>
-                <th>Doanh thu</th>
-                <th>Số lượt</th>
-                <th>Doanh thu</th>
-                <th>Số lượt</th>
-                <th>Doanh thu</th>
                 <th>Số lượt</th>
                 <th>Doanh thu</th>
                 <th>Số lượt</th>
@@ -92,12 +83,6 @@
                 <td>{{ formatCurrency(row.saoDep2000.revenue) }}</td>
                 <td>{{ formatNumber(row.saoDep5000.count) }}</td>
                 <td>{{ formatCurrency(row.saoDep5000.revenue) }}</td>
-                <td>{{ formatNumber(row.evaDep1000.count) }}</td>
-                <td>{{ formatCurrency(row.evaDep1000.revenue) }}</td>
-                <td>{{ formatNumber(row.evaDep2000.count) }}</td>
-                <td>{{ formatCurrency(row.evaDep2000.revenue) }}</td>
-                <td>{{ formatNumber(row.evaDep5000.count) }}</td>
-                <td>{{ formatCurrency(row.evaDep5000.revenue) }}</td>
                 <td>{{ formatNumber(row.dailyTotal.count) }}</td>
                 <td>{{ formatCurrency(row.dailyTotal.revenue) }}</td>
               </tr>
@@ -127,30 +112,6 @@
                 <td>
                   <strong>{{
                     formatCurrency(totals.saoDep5000.revenue)
-                  }}</strong>
-                </td>
-                <td>
-                  <strong>{{ formatNumber(totals.evaDep1000.count) }}</strong>
-                </td>
-                <td>
-                  <strong>{{
-                    formatCurrency(totals.evaDep1000.revenue)
-                  }}</strong>
-                </td>
-                <td>
-                  <strong>{{ formatNumber(totals.evaDep2000.count) }}</strong>
-                </td>
-                <td>
-                  <strong>{{
-                    formatCurrency(totals.evaDep2000.revenue)
-                  }}</strong>
-                </td>
-                <td>
-                  <strong>{{ formatNumber(totals.evaDep5000.count) }}</strong>
-                </td>
-                <td>
-                  <strong>{{
-                    formatCurrency(totals.evaDep5000.revenue)
                   }}</strong>
                 </td>
                 <td>
@@ -195,9 +156,6 @@ const revenueData = ref([
     saoDep1000: { count: 0, revenue: 0 },
     saoDep2000: { count: 0, revenue: 0 },
     saoDep5000: { count: 1099, revenue: 5495000 },
-    evaDep1000: { count: 0, revenue: 0 },
-    evaDep2000: { count: 0, revenue: 0 },
-    evaDep5000: { count: 1446, revenue: 7230000 },
     dailyTotal: { count: 2545, revenue: 12725000 },
   },
   {
@@ -205,9 +163,6 @@ const revenueData = ref([
     saoDep1000: { count: 133, revenue: 133000 },
     saoDep2000: { count: 132, revenue: 264000 },
     saoDep5000: { count: 1470, revenue: 7350000 },
-    evaDep1000: { count: 185, revenue: 185000 },
-    evaDep2000: { count: 225, revenue: 450000 },
-    evaDep5000: { count: 1982, revenue: 9910000 },
     dailyTotal: { count: 4127, revenue: 18292000 },
   },
   {
@@ -215,9 +170,6 @@ const revenueData = ref([
     saoDep1000: { count: 145, revenue: 145000 },
     saoDep2000: { count: 128, revenue: 256000 },
     saoDep5000: { count: 1389, revenue: 6945000 },
-    evaDep1000: { count: 167, revenue: 167000 },
-    evaDep2000: { count: 198, revenue: 396000 },
-    evaDep5000: { count: 1876, revenue: 9380000 },
     dailyTotal: { count: 3903, revenue: 17292000 },
   },
   {
@@ -225,9 +177,6 @@ const revenueData = ref([
     saoDep1000: { count: 156, revenue: 156000 },
     saoDep2000: { count: 142, revenue: 284000 },
     saoDep5000: { count: 1523, revenue: 7615000 },
-    evaDep1000: { count: 178, revenue: 178000 },
-    evaDep2000: { count: 203, revenue: 406000 },
-    evaDep5000: { count: 1956, revenue: 9780000 },
     dailyTotal: { count: 4158, revenue: 18423000 },
   },
   {
@@ -235,9 +184,6 @@ const revenueData = ref([
     saoDep1000: { count: 134, revenue: 134000 },
     saoDep2000: { count: 119, revenue: 238000 },
     saoDep5000: { count: 1412, revenue: 7060000 },
-    evaDep1000: { count: 189, revenue: 189000 },
-    evaDep2000: { count: 217, revenue: 434000 },
-    evaDep5000: { count: 1923, revenue: 9615000 },
     dailyTotal: { count: 3994, revenue: 17656000 },
   },
 ]);
@@ -247,9 +193,6 @@ const totals = computed(() => {
     saoDep1000: { count: 0, revenue: 0 },
     saoDep2000: { count: 0, revenue: 0 },
     saoDep5000: { count: 0, revenue: 0 },
-    evaDep1000: { count: 0, revenue: 0 },
-    evaDep2000: { count: 0, revenue: 0 },
-    evaDep5000: { count: 0, revenue: 0 },
     grandTotal: { count: 0, revenue: 0 },
   };
 
@@ -260,12 +203,6 @@ const totals = computed(() => {
     totals.saoDep2000.revenue += row.saoDep2000.revenue;
     totals.saoDep5000.count += row.saoDep5000.count;
     totals.saoDep5000.revenue += row.saoDep5000.revenue;
-    totals.evaDep1000.count += row.evaDep1000.count;
-    totals.evaDep1000.revenue += row.evaDep1000.revenue;
-    totals.evaDep2000.count += row.evaDep2000.count;
-    totals.evaDep2000.revenue += row.evaDep2000.revenue;
-    totals.evaDep5000.count += row.evaDep5000.count;
-    totals.evaDep5000.revenue += row.evaDep5000.revenue;
     totals.grandTotal.count += row.dailyTotal.count;
     totals.grandTotal.revenue += row.dailyTotal.revenue;
   });

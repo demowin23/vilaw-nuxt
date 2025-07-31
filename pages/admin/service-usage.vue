@@ -22,6 +22,7 @@
       >
         Lịch sử đăng ký/Huỷ
       </button>
+
       <button
         :class="['sub-nav-btn', { active: activeTab === 'usage-history' }]"
         @click="activeTab = 'usage-history'"
@@ -40,16 +41,10 @@
       >
         Danh sách thuê bao tham gia event
       </button>
-      <button
-        :class="['sub-nav-btn', { active: activeTab === 'topup-history' }]"
-        @click="activeTab = 'topup-history'"
-      >
-        Lịch sử nạp tiền
-      </button>
     </div>
 
-    <!-- Charge History Tab -->
-    <div v-if="activeTab === 'charge-history'" class="tab-content">
+    <!-- Tab Content -->
+    <div class="tab-content">
       <!-- Search and Filter Section -->
       <div class="filter-section">
         <div class="filter-row">
@@ -58,7 +53,7 @@
             <input
               type="text"
               id="subscriber-number"
-              v-model="searchSubscriber"
+              v-model="filterData.subscriberNumber"
               placeholder="0948252190"
               class="form-input"
             />
@@ -67,7 +62,7 @@
             <label for="service-package">Gói cước:</label>
             <select
               id="service-package"
-              v-model="selectedPackage"
+              v-model="filterData.selectedPackage"
               class="form-select"
             >
               <option value="">- Chọn gói cước -</option>
@@ -80,7 +75,7 @@
             <input
               type="date"
               id="start-time"
-              v-model="startTime"
+              v-model="filterData.startTime"
               class="form-input"
             />
           </div>
@@ -89,21 +84,21 @@
             <input
               type="date"
               id="end-time"
-              v-model="endTime"
+              v-model="filterData.endTime"
               class="form-input"
             />
           </div>
-          <button @click="searchChargeHistory" class="search-btn">
+          <button @click="searchData" class="search-btn">
             <span class="search-icon">🔍</span>
             Tra cứu
           </button>
         </div>
       </div>
 
-      <!-- Charge History Table -->
+      <!-- Table Section -->
       <div class="table-section">
         <div class="table-container">
-          <table class="charge-history-table">
+          <table class="data-table">
             <thead>
               <tr>
                 <th>Thời gian giao dịch</th>
@@ -118,7 +113,10 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in chargeHistoryData" :key="index">
+              <tr
+                v-for="(item, index) in store.tableData[activeTab]"
+                :key="index"
+              >
                 <td>{{ formatDateTime(item.transactionTime) }}</td>
                 <td>{{ item.transactionType }}</td>
                 <td>{{ item.servicePackage }}</td>
@@ -138,7 +136,9 @@
       <div class="summary-section">
         <div class="total-charge">
           <span class="total-label">Tổng cộng cước phí:</span>
-          <span class="total-value">{{ formatCurrency(totalChargeFee) }}</span>
+          <span class="total-value">{{
+            formatCurrency(store.summaryData[activeTab].total)
+          }}</span>
         </div>
         <div class="pagination">
           <button class="page-btn">&lt;</button>
@@ -148,569 +148,125 @@
         </div>
       </div>
     </div>
-
-    <!-- Other tabs placeholder -->
-    <div v-else class="tab-content">
-      <div class="placeholder-content">
-        <h3>{{ getTabTitle(activeTab) }}</h3>
-        <p>
-          Nội dung cho tab {{ getTabTitle(activeTab) }} sẽ được hiển thị ở đây
-        </p>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
+import { useServiceUsageStore } from "~/stores/serviceUsage";
+
 definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
 
+const store = useServiceUsageStore();
 const activeTab = ref("charge-history");
-const searchSubscriber = ref("0948252190");
-const selectedPackage = ref("");
-const startTime = ref("2021-08-01");
-const endTime = ref("2022-02-11");
-const chargeHistoryData = ref([]);
-const totalChargeFee = ref(104000);
 
-// Mock data based on the image
-const mockChargeHistory = [
-  {
-    transactionTime: new Date("2021-10-03T00:02:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:59:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:57:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:54:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:51:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:49:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:46:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:43:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:41:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:38:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:35:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:33:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:30:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:27:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:25:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:22:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:19:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:17:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:14:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:11:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:09:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:06:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:03:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T23:01:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:58:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:55:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:53:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:50:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:47:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:45:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:42:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:39:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:37:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:34:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:31:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:29:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:26:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:23:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:21:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:18:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:15:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:13:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:10:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:07:59"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:05:19"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:02:39"),
-    transactionType: "Gia hạn",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "SYSTEM",
-    application: "SYSTEM",
-    account: "",
-    userIP: "",
-    chargeFee: 5000,
-  },
-  {
-    transactionTime: new Date("2021-10-02T22:00:00"),
-    transactionType: "Đăng ký",
-    servicePackage: "SAODEP",
-    subscriberNumber: "84948252190",
-    channel: "USSD",
-    application: "SUBMAN_PORTAL",
-    account: "",
-    userIP: "",
-    chargeFee: 0,
-  },
-];
+// Local filter data that syncs with store
+const filterData = ref({
+  subscriberNumber: store.filterData.subscriberNumber,
+  selectedPackage: store.filterData.selectedPackage,
+  startTime: store.filterData.startTime,
+  endTime: store.filterData.endTime,
+});
 
-const searchChargeHistory = () => {
-  // Mock API call
-  chargeHistoryData.value = mockChargeHistory;
+// Watch for filter changes and update store
+watch(
+  filterData,
+  (newData) => {
+    store.updateFilterData(newData);
+  },
+  { deep: true }
+);
+
+// Mock data for different tabs
+const mockData = {
+  "charge-history": [
+    {
+      transactionTime: new Date("2021-10-03T00:02:39"),
+      transactionType: "Gia hạn",
+      servicePackage: "SAODEP",
+      subscriberNumber: "84948252190",
+      channel: "SYSTEM",
+      application: "SYSTEM",
+      account: "",
+      userIP: "",
+      chargeFee: 5000,
+    },
+    {
+      transactionTime: new Date("2021-10-02T23:59:59"),
+      transactionType: "Gia hạn",
+      servicePackage: "SAODEP",
+      subscriberNumber: "84948252190",
+      channel: "SYSTEM",
+      application: "SYSTEM",
+      account: "",
+      userIP: "",
+      chargeFee: 5000,
+    },
+  ],
+  "registration-history": [
+    {
+      transactionTime: new Date("2021-10-02T22:00:00"),
+      transactionType: "Đăng ký",
+      servicePackage: "SAODEP",
+      subscriberNumber: "84948252190",
+      channel: "USSD",
+      application: "SUBMAN_PORTAL",
+      account: "",
+      userIP: "",
+      chargeFee: 0,
+    },
+  ],
+  "usage-history": [
+    {
+      transactionTime: new Date("2021-10-03T10:15:30"),
+      transactionType: "Sử dụng dịch vụ",
+      servicePackage: "SAODEP",
+      subscriberNumber: "84948252190",
+      channel: "APP",
+      application: "MOBILE_APP",
+      account: "user123",
+      userIP: "10.0.0.1",
+      chargeFee: 1000,
+    },
+  ],
+  "mo-mt-history": [
+    {
+      transactionTime: new Date("2021-10-03T09:45:12"),
+      transactionType: "MO",
+      servicePackage: "SAODEP",
+      subscriberNumber: "84948252190",
+      channel: "SMS",
+      application: "SMS_GATEWAY",
+      account: "",
+      userIP: "",
+      chargeFee: 200,
+    },
+  ],
+  "event-subscribers": [
+    {
+      transactionTime: new Date("2021-10-03T11:20:00"),
+      transactionType: "Tham gia event",
+      servicePackage: "SAODEP",
+      subscriberNumber: "84948252190",
+      channel: "WEB",
+      application: "EVENT_PORTAL",
+      account: "event_user",
+      userIP: "172.16.0.50",
+      chargeFee: 0,
+    },
+  ],
 };
 
-const getTabTitle = (tab) => {
-  const titles = {
-    "charge-history": "Lịch sử trừ cước",
-    "registration-history": "Lịch sử đăng ký/Huỷ",
-    "usage-history": "Lịch sử sử dụng",
-    "mo-mt-history": "Lịch sử MO/MT",
-    "event-subscribers": "Danh sách thuê bao tham gia event",
-    "topup-history": "Lịch sử nạp tiền",
-  };
-  return titles[tab] || tab;
+const searchData = () => {
+  // Mock API call - in real app, this would call actual API
+  const data = mockData[activeTab.value] || [];
+  store.updateTableData(activeTab.value, data);
+
+  // Calculate total for summary
+  const total = data.reduce((sum, item) => sum + item.chargeFee, 0);
+  store.updateSummaryData(activeTab.value, { total });
 };
 
 const formatDateTime = (date) => {
@@ -730,7 +286,12 @@ const formatCurrency = (amount) => {
 
 // Load initial data
 onMounted(() => {
-  searchChargeHistory();
+  searchData();
+});
+
+// Watch for tab changes to load appropriate data
+watch(activeTab, () => {
+  searchData();
 });
 </script>
 
@@ -854,30 +415,30 @@ onMounted(() => {
   min-width: 1200px;
 }
 
-.charge-history-table {
+.data-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.875rem;
 }
 
-.charge-history-table th,
-.charge-history-table td {
+.data-table th,
+.data-table td {
   padding: 0.75rem;
   text-align: left;
   border: 1px solid var(--border-color);
 }
 
-.charge-history-table th {
+.data-table th {
   background: var(--bg-hover);
   font-weight: 600;
   color: var(--text-primary);
 }
 
-.charge-history-table td {
+.data-table td {
   color: var(--text-primary);
 }
 
-.charge-history-table tbody tr:hover {
+.data-table tbody tr:hover {
   background: var(--bg-hover);
 }
 
@@ -930,17 +491,6 @@ onMounted(() => {
   background: var(--primary-color);
   color: white;
   border-color: var(--primary-color);
-}
-
-.placeholder-content {
-  padding: 3rem;
-  text-align: center;
-  color: var(--text-secondary);
-}
-
-.placeholder-content h3 {
-  margin: 0 0 1rem 0;
-  color: var(--text-primary);
 }
 
 @media (max-width: 768px) {

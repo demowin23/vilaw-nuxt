@@ -146,17 +146,6 @@
             </NuxtLink>
 
             <NuxtLink
-              to="/admin/subscribers"
-              class="nav-item"
-              active-class="active"
-            >
-              <span class="nav-icon">📞</span>
-              <span v-if="!sidebarCollapsed" class="nav-text"
-                >Tra cứu thuê bao</span
-              >
-            </NuxtLink>
-
-            <NuxtLink
               to="/admin/service-info"
               class="nav-item"
               active-class="active"
