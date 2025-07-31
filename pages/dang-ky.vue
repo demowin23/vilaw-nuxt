@@ -1,428 +1,184 @@
 <template>
   <div
-    class="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+    class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8"
   >
-    <div class="w-full max-w-2xl space-y-8">
+    <div class="max-w-6xl mx-auto">
       <!-- Header -->
-      <div class="text-center">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white">
-          Đăng ký tài khoản
-        </h2>
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          Đăng Ký Dịch Vụ
+        </h1>
+        <p class="text-lg text-gray-600 dark:text-gray-400">
+          Chọn gói dịch vụ phù hợp với nhu cầu của bạn
+        </p>
       </div>
 
-      <!-- Registration Form -->
-      <form class="mt-8 space-y-6" @submit.prevent="handleRegister">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
-          <!-- Full Name and Email Row -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <!-- Full Name -->
-            <div>
-              <label
-                for="fullName"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Họ và tên
-              </label>
-              <input
-                id="fullName"
-                v-model="form.fullName"
-                type="text"
-                required
-                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#f58220] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
-                placeholder="Nhập họ và tên đầy đủ"
-              />
-            </div>
-
-            <!-- Email -->
-            <div>
-              <label
-                for="email"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                v-model="form.email"
-                type="email"
-                required
-                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#f58220] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
-                placeholder="example@email.com"
-              />
-            </div>
-          </div>
-
-          <!-- Phone Number -->
-          <div class="mb-6">
-            <label
-              for="phone"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
-              Số điện thoại
-            </label>
-            <div class="flex flex-col sm:flex-row gap-2">
-              <input
-                id="phone"
-                v-model="form.phone"
-                type="tel"
-                required
-                class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#f58220] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
-                placeholder="0123456789"
-              />
-              <button
-                type="button"
-                @click="handleSendOTP"
-                :disabled="!form.phone || isLoading"
-                class="px-4 py-3 bg-[#f58220] hover:bg-[#e06d00] disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors duration-300 whitespace-nowrap"
-              >
-                Gửi OTP
-              </button>
-            </div>
-          </div>
-
-          <!-- OTP Input -->
-          <div v-if="showOTPInput" class="mb-6">
-            <label
-              for="otp"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
-              Mã OTP
-            </label>
-            <div class="flex flex-col sm:flex-row gap-2">
-              <input
-                id="otp"
-                v-model="otp"
-                type="text"
-                maxlength="6"
-                required
-                class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#f58220] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
-                placeholder="Nhập mã OTP 6 số"
-              />
-              <button
-                type="button"
-                @click="handleResendOTP"
-                :disabled="countdown > 0 || isLoading"
-                class="px-4 py-3 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors duration-300 whitespace-nowrap"
-              >
-                {{ countdown > 0 ? `${countdown}s` : "Gửi lại" }}
-              </button>
-            </div>
-          </div>
-
-          <!-- Password and Confirm Password Row -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <!-- Password -->
-            <div>
-              <label
-                for="password"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Mật khẩu
-              </label>
-              <div class="relative">
-                <input
-                  id="password"
-                  v-model="form.password"
-                  :type="showPassword ? 'text' : 'password'"
-                  required
-                  class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#f58220] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
-                  placeholder="Tối thiểu 8 ký tự"
-                />
-                <button
-                  type="button"
-                  @click="showPassword = !showPassword"
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center"
-                >
-                  <svg
-                    v-if="showPassword"
-                    class="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
-                    />
-                  </svg>
-                  <svg
-                    v-else
-                    class="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <!-- Confirm Password -->
-            <div>
-              <label
-                for="confirmPassword"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Xác nhận mật khẩu
-              </label>
-              <div class="relative">
-                <input
-                  id="confirmPassword"
-                  v-model="form.confirmPassword"
-                  :type="showConfirmPassword ? 'text' : 'password'"
-                  required
-                  class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#f58220] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
-                  placeholder="Nhập lại mật khẩu"
-                />
-                <button
-                  type="button"
-                  @click="showConfirmPassword = !showConfirmPassword"
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center"
-                >
-                  <svg
-                    v-if="showConfirmPassword"
-                    class="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
-                    />
-                  </svg>
-                  <svg
-                    v-else
-                    class="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Terms and Conditions -->
-          <div class="mb-6">
-            <label class="flex items-center">
-              <input
-                v-model="form.acceptTerms"
-                type="checkbox"
-                required
-                class="h-4 w-4 text-[#f58220] focus:ring-[#f58220] border-gray-300 dark:border-gray-600 rounded"
-              />
-              <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
-                Tôi đồng ý với
-                <a
-                  href="#"
-                  class="text-[#f58220] hover:text-[#e06d00] font-medium"
-                >
-                  Điều khoản sử dụng
-                </a>
-                và
-                <a
-                  href="#"
-                  class="text-[#f58220] hover:text-[#e06d00] font-medium"
-                >
-                  Chính sách bảo mật
-                </a>
-              </span>
-            </label>
-          </div>
-
-          <!-- Submit Button -->
-          <button
-            type="submit"
-            :disabled="isLoading"
-            class="w-full bg-[#f58220] hover:bg-[#e06d00] disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center"
+      <!-- Logo Section -->
+      <div class="flex justify-center mb-8">
+        <div class="relative">
+          <div
+            class="bg-orange-500 text-white px-6 py-3 rounded-full font-bold text-2xl"
           >
-            <svg
-              v-if="isLoading"
-              class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
+            <span class="text-lg">vilaw.net.vn</span>
+          </div>
+          <div
+            class="absolute -top-1 -right-1 w-4 h-4 bg-orange-400 rounded-full"
+          ></div>
+          <div
+            class="absolute -bottom-1 -left-1 w-3 h-3 bg-orange-300 rounded-full"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Message -->
+      <div class="text-center mb-12">
+        <p
+          class="text-xl text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto"
+        >
+          Để xem nội dung này bạn cần đăng ký sử dụng gói dịch vụ của chúng tôi
+        </p>
+      </div>
+
+      <!-- Title -->
+      <h2
+        class="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-8 text-center"
+      >
+        Danh sách gói cước
+      </h2>
+
+      <!-- Packages Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <!-- Gói Mua Lẻ -->
+        <div
+          class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-shadow duration-300"
+        >
+          <div class="bg-orange-500 text-white px-6 py-4">
+            <h3 class="font-bold text-xl text-center">Gói Mua Lẻ</h3>
+          </div>
+          <div class="p-6">
+            <p
+              class="text-gray-700 dark:text-gray-300 text-base leading-relaxed mb-6 min-h-[100px]"
             >
-              <circle
-                class="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                stroke-width="4"
-              ></circle>
-              <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            {{ isLoading ? "Đang đăng ký..." : "Đăng ký" }}
-          </button>
+              Bạn được xem miễn phí nội dung Vụ án: Trả thù - PHẦN 2: GIẢI MÃ
+              LỜI THỀ trong 24h kể từ thời điểm mua thành công.
+            </p>
+            <div class="text-center mb-6">
+              <span class="text-orange-500 font-bold text-2xl"
+                >3.000₫/24h/nội dung</span
+              >
+            </div>
+            <button
+              @click="handlePackageClick('individual')"
+              class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 text-lg"
+            >
+              Đăng ký
+            </button>
+          </div>
         </div>
 
-        <!-- Login Link -->
-        <div class="text-center">
-          <p class="text-sm text-gray-600 dark:text-gray-400">
-            Đã có tài khoản?
-            <NuxtLink
-              to="/dang-nhap"
-              class="font-medium text-[#f58220] hover:text-[#e06d00] transition-colors duration-300"
+        <!-- Gói Pháp luật đời sống Ngày -->
+        <div
+          class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-shadow duration-300"
+        >
+          <div class="bg-orange-500 text-white px-6 py-4">
+            <h3 class="font-bold text-xl text-center">
+              Gói Pháp luật đời sống Ngày
+            </h3>
+          </div>
+          <div class="p-6">
+            <p
+              class="text-gray-700 dark:text-gray-300 text-base leading-relaxed mb-6 min-h-[100px]"
             >
-              Đăng nhập ngay
-            </NuxtLink>
-          </p>
+              Bạn được miễn cước 3G/4G/5G và xem không giới hạn kho nội dung
+              Pháp luật đời sống trong 1 ngày kể từ thời điểm đăng ký thành
+              công.
+            </p>
+            <div class="text-center mb-6">
+              <span class="text-orange-500 font-bold text-2xl"
+                >3.000đ/1 ngày</span
+              >
+            </div>
+            <button
+              @click="handlePackageClick('daily')"
+              class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 text-lg"
+            >
+              Đăng ký
+            </button>
+          </div>
         </div>
-      </form>
+
+        <!-- Gói PLV8 -->
+        <div
+          class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-2xl transition-shadow duration-300"
+        >
+          <div class="bg-orange-500 text-white px-6 py-4">
+            <h3 class="font-bold text-xl text-center">Gói PLV8</h3>
+          </div>
+          <div class="p-6">
+            <p
+              class="text-gray-700 dark:text-gray-300 text-base leading-relaxed mb-6 min-h-[100px]"
+            >
+              Bạn có 2G tốc độ cao truy cập gói Pháp luật đời sống trong 1 ngày
+              kể từ thời điểm đăng ký thành công.
+            </p>
+            <div class="text-center mb-6">
+              <span class="text-orange-500 font-bold text-2xl"
+                >8.000đ/1 ngày</span
+              >
+            </div>
+            <button
+              @click="handlePackageClick('plv8')"
+              class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 text-lg"
+            >
+              Đăng ký
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="text-center">
+        <p class="text-gray-600 dark:text-gray-400 text-sm italic">
+          (Chỉ áp dụng với thuê bao mạng VinaPhone mua gói Ngày/Tuần, miễn phí
+          hoàn toàn cước 3G/4G/5G)
+        </p>
+      </div>
+
+      <!-- Back to Login -->
+      <div class="text-center mt-12">
+        <NuxtLink
+          to="/dang-nhap"
+          class="inline-flex items-center text-[#f58220] hover:text-[#e06d00] font-medium transition-colors duration-300"
+        >
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            ></path>
+          </svg>
+          Quay lại đăng nhập
+        </NuxtLink>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  title: "Đăng ký - VILAW",
-  description:
-    "Đăng ký tài khoản VILAW để truy cập đầy đủ tính năng tư vấn pháp lý",
-});
+import { useNotification } from "~/composables/useNotification";
 
-const { register, sendRegistrationOTP, isLoading } = useAuth();
-const { handleApiError, handleApiSuccess } = useNotification();
+const { handleApiSuccess, handleApiError } = useNotification();
 
-const form = ref({
-  fullName: "",
-  email: "",
-  phone: "",
-  password: "",
-  confirmPassword: "",
-  acceptTerms: false,
-});
-
-const showPassword = ref(false);
-const showConfirmPassword = ref(false);
-const showOTPInput = ref(false);
-const otp = ref("");
-const countdown = ref(0);
-
-// Countdown timer for OTP resend
-const startCountdown = () => {
-  countdown.value = 60;
-  const timer = setInterval(() => {
-    countdown.value--;
-    if (countdown.value <= 0) {
-      clearInterval(timer);
-    }
-  }, 1000);
-};
-
-// Send OTP for registration
-const handleSendOTP = async () => {
-  if (!form.value.phone) {
-    handleApiError("Vui lòng nhập số điện thoại!");
-    return;
-  }
-
-  try {
-    const response = await sendRegistrationOTP(form.value.phone);
-    if (response.success) {
-      showOTPInput.value = true;
-      startCountdown();
-      handleApiSuccess(response, "OTP đã được gửi đến số điện thoại của bạn!");
-    } else {
-      handleApiError(response.error || "Có lỗi xảy ra khi gửi OTP!");
-    }
-  } catch (error) {
-    console.error("Send OTP error:", error);
-    handleApiError(error, "Có lỗi xảy ra khi gửi OTP. Vui lòng thử lại!");
-  }
-};
-
-// Resend OTP
-const handleResendOTP = async () => {
-  if (countdown.value > 0) return;
-
-  try {
-    const response = await sendRegistrationOTP(form.value.phone);
-    if (response.success) {
-      startCountdown();
-      handleApiSuccess(response, "OTP đã được gửi lại!");
-    } else {
-      handleApiError(response.error || "Có lỗi xảy ra khi gửi OTP!");
-    }
-  } catch (error) {
-    console.error("Resend OTP error:", error);
-    handleApiError(error, "Có lỗi xảy ra khi gửi OTP. Vui lòng thử lại!");
-  }
-};
-
-const handleRegister = async () => {
-  if (form.value.password !== form.value.confirmPassword) {
-    handleApiError("Mật khẩu xác nhận không khớp!");
-    return;
-  }
-
-  if (form.value.password.length < 8) {
-    handleApiError("Mật khẩu phải có ít nhất 8 ký tự!");
-    return;
-  }
-
-  if (!form.value.acceptTerms) {
-    handleApiError("Vui lòng đồng ý với điều khoản sử dụng!");
-    return;
-  }
-
-  if (!showOTPInput.value || !otp.value) {
-    handleApiError("Vui lòng nhập OTP để xác thực!");
-    return;
-  }
-
-  try {
-    const response = await register({
-      phone: form.value.phone,
-      otp: otp.value,
-      fullName: form.value.fullName,
-      email: form.value.email,
-      password: form.value.password,
-    });
-
-    if (response.success) {
-      handleApiSuccess(response, "Đăng ký thành công!");
-      await navigateTo("/");
-    } else {
-      handleApiError(response.message || "Có lỗi xảy ra khi đăng ký!");
-    }
-  } catch (error) {
-    console.error("Registration error:", error);
-    handleApiError(error, "Có lỗi xảy ra khi đăng ký. Vui lòng thử lại!");
-  }
+const handlePackageClick = (packageId: string) => {
+  console.log("Package clicked:", packageId);
+  handleApiSuccess({
+    message: `Đã chọn gói ${packageId}. Vui lòng liên hệ để hoàn tất đăng ký!`,
+  });
 };
 </script>

@@ -11,8 +11,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
   // Kiểm tra nếu đang truy cập trang admin
   if (to.path.startsWith('/admin')) {
     if (!token || !user) {
-      // Chưa đăng nhập -> chuyển về trang đăng nhập
-      return navigateTo('/dang-nhap')
+      // Chưa đăng nhập -> chuyển về trang đăng nhập admin
+      return navigateTo('/admin/dang-nhap')
     }
     
     try {
@@ -34,10 +34,10 @@ export default defineNuxtRouteMiddleware((to, from) => {
         return navigateTo('/')
       }
     } catch (error) {
-      // Token không hợp lệ -> chuyển về trang đăng nhập
+      // Token không hợp lệ -> chuyển về trang đăng nhập admin
       localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN)
       localStorage.removeItem(STORAGE_KEYS.AUTH_USER)
-      return navigateTo('/dang-nhap')
+      return navigateTo('/admin/dang-nhap')
     }
   }
 }) 

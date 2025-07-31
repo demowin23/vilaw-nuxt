@@ -223,9 +223,19 @@ const userName = computed(() => {
       return "Admin";
   }
 });
-const logout = () => {
-  // Xử lý đăng xuất
-  navigateTo("/dang-nhap");
+const logout = async () => {
+  try {
+    // Gọi API đăng xuất
+    const { logout: logoutApi } = useAuth();
+    await logoutApi();
+
+    // Chuyển đến trang đăng nhập admin
+    await navigateTo("/admin/dang-nhap");
+  } catch (error) {
+    console.error("Logout error:", error);
+    // Vẫn chuyển đến trang đăng nhập ngay cả khi API lỗi
+    await navigateTo("/admin/dang-nhap");
+  }
 };
 
 // Collapsible sections

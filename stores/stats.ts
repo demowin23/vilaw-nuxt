@@ -122,7 +122,7 @@ export const useStatsStore = defineStore('stats', {
           throw new Error('Không có token xác thực')
         }
 
-        const response = await api.get('/api/v1/stats/overall') as ApiResponse
+        const response = await api.get('/stats/overall') as ApiResponse
 
         // Check if API call was successful
         if (!response.success) {

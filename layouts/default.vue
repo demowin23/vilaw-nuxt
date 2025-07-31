@@ -220,6 +220,7 @@
       </div>
     </div>
     <ChatPopup />
+    <ServiceModal />
   </div>
 </template>
 
@@ -258,6 +259,7 @@ import { useSidebarStore } from "~/stores/sidebar";
 import { useThemeStore } from "~/stores/theme";
 import { storeToRefs } from "pinia";
 import ChatPopup from "~/components/ChatPopup.vue";
+import ServiceModal from "~/components/ServiceModal.vue";
 import { useRoute } from "vue-router";
 import { ref, computed, onMounted } from "vue";
 import { useAuth } from "~/composables/useAuth";
