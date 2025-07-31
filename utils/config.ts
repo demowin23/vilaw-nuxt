@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: process.env.BASE_URL || 'http://localhost:4000/api/v1',
+  BASE_URL: process.env.BASE_URL || 'http://14.225.17.139:4000/api/v1',
   
   ENDPOINTS: {
     AUTH: {

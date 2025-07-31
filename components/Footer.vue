@@ -76,10 +76,10 @@
           <div
             class="text-lg text-gray-700 dark:text-gray-300 space-y-1 transition-colors duration-300"
           >
-            <div>Ngõ 603 Lạc Long Quân,</div>
-            <div>Xuân La, Tây Hồ, Hà Nội</div>
-            <div>0925555875</div>
-            <div>hanhngheluat198@gmail.com</div>
+            <div>ĐC</div>
+            <div>Hà Nội</div>
+            <div>0912345678</div>
+            <div>vilaw@gmail.com</div>
           </div>
         </div>
         <!-- KHO TÀI LIỆU -->
