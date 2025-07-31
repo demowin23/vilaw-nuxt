@@ -1,5 +1,5 @@
 import { ref, readonly } from 'vue'
-import { API_CONFIG } from '~/utils/config'
+import { getApiConfig } from '~/utils/config'
 
 // Types
 interface LegalKnowledge {
@@ -87,7 +87,7 @@ const createHeaders = (includeAuth = true, isFormData = false) => {
 // Helper function để handle API calls
 const apiCall = async <T>(url: string, options: RequestInit = {}, isFormData = false, isAdmin = false): Promise<T> => {
   const headers = createHeaders(isAdmin, isFormData);
-  const response = await fetch(`${API_CONFIG.BASE_URL}${url}`, {
+  const response = await fetch(`${getApiConfig().BASE_URL}${url}`, {
     ...options,
     headers,
   });

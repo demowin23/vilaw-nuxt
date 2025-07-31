@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { API_CONFIG } from '~/utils/config'
+import { getApiConfig } from '~/utils/config'
 
 interface Document {
   id: number
@@ -58,7 +58,7 @@ export const useDocuments = () => {
   // Helper function để handle API calls
   const apiCall = async <T>(url: string, options: RequestInit = {}, isFormData = false, isAdmin = false): Promise<T> => {
     const headers = createHeaders(true, isFormData) // Always include auth for all API calls
-    const response = await fetch(`${API_CONFIG.BASE_URL}${url}`, {
+    const response = await fetch(`${getApiConfig().BASE_URL}${url}`, {
       ...options,
       headers,
     })
@@ -238,7 +238,7 @@ export const useDocuments = () => {
   const downloadWordFile = async (id: number, filename: string) => {
     try {
       const headers = createHeaders(true)
-      const response = await fetch(`${API_CONFIG.BASE_URL}/legal-documents/${id}/download`, {
+      const response = await fetch(`${getApiConfig().BASE_URL}/legal-documents/${id}/download`, {
         method: 'GET',
         headers
       })
@@ -354,7 +354,7 @@ export const useDocuments = () => {
     try {
       // Fetch the Word file
       const headers = createHeaders(true)
-      const response = await fetch(`${API_CONFIG.BASE_URL}${fileUrl}`, {
+      const response = await fetch(`${getApiConfig().BASE_URL}${fileUrl}`, {
         method: 'GET',
         headers
       })

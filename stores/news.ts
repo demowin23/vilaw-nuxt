@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { API_CONFIG, getImageUrl } from '~/utils/config'
+import { getApiConfig, getImageUrl } from '~/utils/config'
 
 interface NewsParams {
   page?: number
@@ -42,7 +42,8 @@ export const useNewsStore = defineStore('news', () => {
       if (params.sortBy) queryParams.append('sortBy', params.sortBy)
       if (params.sortOrder) queryParams.append('sortOrder', params.sortOrder)
 
-      const response = await fetch(`${API_CONFIG.BASE_URL}/legal-news?${queryParams}`)
+      const config = getApiConfig()
+      const response = await fetch(`${config.BASE_URL}/legal-news?${queryParams}`)
       const data = await response.json()
       
       if (data.data) {
@@ -72,7 +73,8 @@ export const useNewsStore = defineStore('news', () => {
       loading.value = true
       error.value = null
       
-      const response = await fetch(`${API_CONFIG.BASE_URL}/legal-news/popular?limit=${limit}`)
+      const config = getApiConfig()
+      const response = await fetch(`${config.BASE_URL}/legal-news/popular?limit=${limit}`)
       const data = await response.json()
       
       if (data.data) {
@@ -97,7 +99,8 @@ export const useNewsStore = defineStore('news', () => {
       loading.value = true
       error.value = null
       
-      const response = await fetch(`${API_CONFIG.BASE_URL}/legal-news/${id}`)
+      const config = getApiConfig()
+      const response = await fetch(`${config.BASE_URL}/legal-news/${id}`)
       const data = await response.json()
       
       if (data.data) {
@@ -128,7 +131,8 @@ export const useNewsStore = defineStore('news', () => {
         category: category || 'phap-luat'
       })
 
-      const response = await fetch(`${API_CONFIG.BASE_URL}/legal-news?${queryParams}`)
+      const config = getApiConfig()
+      const response = await fetch(`${config.BASE_URL}/legal-news?${queryParams}`)
       const data = await response.json()
       
       if (data.data) {
@@ -161,7 +165,8 @@ export const useNewsStore = defineStore('news', () => {
         search: query
       })
 
-      const response = await fetch(`${API_CONFIG.BASE_URL}/legal-news/search?${queryParams}`)
+      const config = getApiConfig()
+      const response = await fetch(`${config.BASE_URL}/legal-news/search?${queryParams}`)
       const data = await response.json()
       
       if (data.data) {

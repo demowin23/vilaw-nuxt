@@ -47,10 +47,7 @@ const isLoading = ref(false)
 const isAuthenticated = computed(() => !!token.value && !!user.value)
 const isAdmin = computed(() => user.value?.role === 'admin')
 
-import { API_CONFIG, STORAGE_KEYS } from '~/utils/config'
-
-// API Base URL
-const API_BASE_URL = API_CONFIG.BASE_URL
+import { getApiConfig, STORAGE_KEYS } from '~/utils/config'
 
 // Helper function để tạo headers
 const createHeaders = (includeAuth = true) => {
@@ -67,7 +64,8 @@ const createHeaders = (includeAuth = true) => {
 
 // Helper function để handle API calls
 const apiCall = async <T>(url: string, options: RequestInit = {}): Promise<T> => {
-  const response = await fetch(`${API_BASE_URL}${url}`, {
+  const config = getApiConfig()
+  const response = await fetch(`${config.BASE_URL}${url}`, {
     ...options,
     headers: createHeaders(options.method !== 'POST' || url.includes('/auth/')),
   })
@@ -288,6 +286,7 @@ export const useAuth = () => {
     isAdmin,
     
     // Methods
+    initializeAuth,
     sendRegistrationOTP,
     register,
     sendLoginOTP,

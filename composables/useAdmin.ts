@@ -1,5 +1,5 @@
 import { ref, readonly } from 'vue'
-import { API_CONFIG } from '~/utils/config'
+import { getApiConfig } from '~/utils/config'
 
 // Types
 interface AdminUser {
@@ -78,7 +78,7 @@ const createAdminHeaders = () => {
 
 // Helper function để handle API calls
 const adminApiCall = async <T>(url: string, options: RequestInit = {}): Promise<T> => {
-  const response = await fetch(`${API_CONFIG.BASE_URL}${url}`, {
+  const response = await fetch(`${getApiConfig().BASE_URL}${url}`, {
     ...options,
     headers: createAdminHeaders(),
   })

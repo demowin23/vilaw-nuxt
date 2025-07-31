@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { API_CONFIG } from '~/utils/config'
+import { getApiConfig } from '~/utils/config'
 
 interface Message {
   id: number
@@ -67,7 +67,7 @@ export const useChat = () => {
   // Helper function để handle API calls
   const apiCall = async <T>(url: string, options: RequestInit = {}, isFormData = false): Promise<T> => {
     const headers = createHeaders(true, isFormData)
-    const response = await fetch(`${API_CONFIG.BASE_URL}${url}`, {
+    const response = await fetch(`${getApiConfig().BASE_URL}${url}`, {
       ...options,
       headers,
     })

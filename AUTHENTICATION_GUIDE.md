@@ -174,16 +174,6 @@ export default defineNuxtConfig({
 
 ### 3. Cấu hình API URL
 
-```typescript
-// Trong utils/config.ts
-export const API_CONFIG = {
-  BASE_URL:
-    process.env.NODE_ENV === "production"
-      ? "http://14.225.17.139:4000/api/v1"
-      : "http://14.225.17.139:4000/api/v1",
-};
-```
-
 ## Luồng hoạt động
 
 ### Đăng ký
@@ -209,11 +199,7 @@ export const API_CONFIG = {
 
 ## Lưu ý quan trọng
 
-1. **API URL**: Cần cập nhật `API_CONFIG.BASE_URL` trong `utils/config.ts` theo backend thực tế
-2. **CORS**: Backend cần cấu hình CORS để cho phép frontend gọi API
-3. **HTTPS**: Trong production, nên sử dụng HTTPS cho bảo mật
-4. **Token Storage**: Token được lưu trong localStorage, có thể cân nhắc sử dụng httpOnly cookies cho bảo mật cao hơn
-5. **Error Handling**: Hệ thống đã có xử lý lỗi cơ bản, có thể mở rộng thêm
+ts` theo backend thực tế 2. **CORS**: Backend cần cấu hình CORS để cho phép frontend gọi API 3. **HTTPS**: Trong production, nên sử dụng HTTPS cho bảo mật 4. **Token Storage**: Token được lưu trong localStorage, có thể cân nhắc sử dụng httpOnly cookies cho bảo mật cao hơn 5. **Error Handling**: Hệ thống đã có xử lý lỗi cơ bản, có thể mở rộng thêm
 
 ## Troubleshooting
 

@@ -1,5 +1,5 @@
 import { ref, readonly } from 'vue';
-import { API_CONFIG } from '~/utils/config';
+import { getApiConfig } from '~/utils/config';
 
 // Types
 interface NewsItem {
@@ -38,7 +38,7 @@ const createHeaders = (isFormData = false, isAdmin = false) => {
 
 const apiCall = async <T>(url: string, options: RequestInit = {}, isFormData = false, isAdmin = false): Promise<T> => {
   const headers = createHeaders(isFormData, isAdmin);
-  const response = await fetch(`${API_CONFIG.BASE_URL}${url}`, {
+  const response = await fetch(`${getApiConfig().BASE_URL}${url}`, {
     ...options,
     headers,
   });

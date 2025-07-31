@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { API_CONFIG } from '~/utils/config'
+import { getApiConfig } from '~/utils/config'
 
 interface VideoLifeLaw {
   id: number
@@ -48,7 +48,8 @@ export const useVideoStore = defineStore('video', () => {
   const getImageUrl = (imagePath: string) => {
     if (!imagePath) return '/images/n.png'
     if (imagePath.startsWith('http')) return imagePath
-    return `${API_CONFIG.BASE_URL.replace('/api/v1', '')}${imagePath}`
+    const config = getApiConfig()
+    return `${config.BASE_URL.replace('/api/v1', '')}${imagePath}`
   }
 
   // Actions
@@ -57,7 +58,8 @@ export const useVideoStore = defineStore('video', () => {
       loading.value = true
       error.value = null
       
-      const response = await fetch(`${API_CONFIG.BASE_URL}/video-life-law/most-viewed?limit=${limit}`)
+      const config = getApiConfig()
+      const response = await fetch(`${config.BASE_URL}/video-life-law/most-viewed?limit=${limit}`)
       const data = await response.json()
       
       if (data.success && data.data) {
@@ -82,7 +84,8 @@ export const useVideoStore = defineStore('video', () => {
       loading.value = true
       error.value = null
       
-      const response = await fetch(`${API_CONFIG.BASE_URL}/video-life-law?type=${type}&limit=${limit}&sort_by=ts_create&sort_order=desc`)
+      const config = getApiConfig()
+      const response = await fetch(`${config.BASE_URL}/video-life-law?type=${type}&limit=${limit}&sort_by=ts_create&sort_order=desc`)
       const data = await response.json()
       
       if (data.success && data.data) {
@@ -119,7 +122,8 @@ export const useVideoStore = defineStore('video', () => {
       if (params.search) queryParams.append('search', params.search)
       if (params.is_featured !== undefined) queryParams.append('is_featured', params.is_featured.toString())
 
-      const url = `${API_CONFIG.BASE_URL}/video-life-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
+      const config = getApiConfig()
+      const url = `${config.BASE_URL}/video-life-law${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
       const response = await fetch(url)
       const data = await response.json()
       
@@ -145,7 +149,8 @@ export const useVideoStore = defineStore('video', () => {
       loading.value = true
       error.value = null
       
-      const response = await fetch(`${API_CONFIG.BASE_URL}/video-life-law/${id}`)
+      const config = getApiConfig()
+      const response = await fetch(`${config.BASE_URL}/video-life-law/${id}`)
       const data = await response.json()
       
       if (data.success && data.data) {

@@ -20,6 +20,7 @@
     "@pinia/nuxt": "^0.11.1",
     "@vueup/vue-quill": "^1.2.0",
     "aos": "^2.3.4",
+    "dotenv": "^17.2.1",
     "mammoth": "^1.9.1",
     "nuxt": "^3.17.7",
     "pinia": "^3.0.3",

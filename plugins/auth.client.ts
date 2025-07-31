@@ -1,5 +1,4 @@
 export default defineNuxtPlugin(() => {
   // Khởi tạo auth state khi ứng dụng khởi động
-  // useAuth() sẽ tự động khởi tạo khi được gọi
-  useAuth()
+  // Auth sẽ được khởi tạo tự động khi useAuth() được gọi lần đầu
 }) 

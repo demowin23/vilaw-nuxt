@@ -126,7 +126,7 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useVideoLifeLaw } from "~/composables/useVideoLifeLaw";
-import { API_CONFIG } from "~/utils/config";
+import { getApiConfig } from "~/utils/config";
 
 const { getVideoLifeLaw, isLoading } = useVideoLifeLaw();
 const videos = ref([]);
@@ -139,7 +139,7 @@ const otherVideos = computed(() => videos.value.slice(2, 5));
 const getImageUrl = (imagePath) => {
   if (!imagePath) return "/images/n.png";
   if (imagePath.startsWith("http")) return imagePath;
-  return `${API_CONFIG.BASE_URL.replace("/api/v1", "")}${imagePath}`;
+  return `${getApiConfig().BASE_URL.replace("/api/v1", "")}${imagePath}`;
 };
 
 // Fetch videos on component mount

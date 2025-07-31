@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { API_CONFIG } from '~/utils/config'
+import { getApiConfig } from '~/utils/config'
 
 interface LegalField {
   id: number
@@ -38,7 +38,7 @@ export const useLegalFields = () => {
   // Helper function để handle API calls
   const apiCall = async <T>(url: string, options: RequestInit = {}): Promise<T> => {
     const headers = createHeaders(true) // Luôn gửi token cho tất cả requests
-    const response = await fetch(`${API_CONFIG.BASE_URL}${url}`, {
+    const response = await fetch(`${getApiConfig().BASE_URL}${url}`, {
       ...options,
       headers,
     })

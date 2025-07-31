@@ -1,24 +1,27 @@
 // API Configuration
-export const API_CONFIG = {
-  BASE_URL: process.env.BASE_URL || 'http://14.225.17.139:4000/api/v1',
-  
-  ENDPOINTS: {
-    AUTH: {
-      SEND_REGISTRATION_OTP: '/auth/send-registration-otp',
-      REGISTER: '/auth/register',
-      SEND_LOGIN_OTP: '/auth/send-login-otp',
-      LOGIN_OTP: '/auth/login-otp',
-      LOGIN_PASSWORD: '/auth/login',
-      ME: '/auth/me',
-      UPDATE_PROFILE: '/auth/update-profile',
-      LOGOUT: '/auth/logout',
-    },
-    CHAT: {
-      CONVERSATIONS: '/chat/conversations',
-      MESSAGES: '/chat/conversations/:id/messages',
-      LAWYERS: '/chat/lawyers',
-      ONLINE_STATUS: '/chat/online-status',
-      STATS: '/chat/stats',
+export const getApiConfig = () => {
+  const config = useRuntimeConfig()
+  return {
+    BASE_URL: config.public.apiBase,
+    
+    ENDPOINTS: {
+      AUTH: {
+        SEND_REGISTRATION_OTP: '/auth/send-registration-otp',
+        REGISTER: '/auth/register',
+        SEND_LOGIN_OTP: '/auth/send-login-otp',
+        LOGIN_OTP: '/auth/login-otp',
+        LOGIN_PASSWORD: '/auth/login',
+        ME: '/auth/me',
+        UPDATE_PROFILE: '/auth/update-profile',
+        LOGOUT: '/auth/logout',
+      },
+      CHAT: {
+        CONVERSATIONS: '/chat/conversations',
+        MESSAGES: '/chat/conversations/:id/messages',
+        LAWYERS: '/chat/lawyers',
+        ONLINE_STATUS: '/chat/online-status',
+        STATS: '/chat/stats',
+      }
     }
   }
 }
@@ -27,13 +30,15 @@ export const API_CONFIG = {
 export const getImageUrl = (image: string) => {
   if (!image) return '';
   if (image.startsWith('http')) return image;
-  return `${process.env.BASE_URL?.replace('/api/v1', '') || 'http://14.225.17.139:4000'}${image}`;
+  const config = useRuntimeConfig()
+  return `${config.public.apiBase?.replace('/api/v1', '') || 'http://vilaw.net.vn'}${image}`;
 };
 
 export const getVideoUrl = (video: string) => {
   if (!video) return '';
   if (video.startsWith('http')) return video;
-  return `${process.env.BASE_URL?.replace('/api/v1', '') || 'http://14.225.17.139:4000'}${video}`;
+  const config = useRuntimeConfig()
+  return `${config.public.apiBase?.replace('/api/v1', '') || 'http://vilaw.net.vn'}${video}`;
 };
 
 // App Configuration
