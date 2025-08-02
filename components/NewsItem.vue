@@ -117,7 +117,6 @@ function formatDate(dateString: string): string {
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 8px;
-  line-height: 1.4;
   min-height: 3.2em;
   display: -webkit-box;
   -webkit-line-clamp: 2;

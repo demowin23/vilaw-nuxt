@@ -20,7 +20,6 @@
         Thống kê đăng ký/Hủy
       </button>
     </div>
-
     <!-- Revenue Statistics Tab -->
     <div v-if="activeTab === 'revenue'" class="tab-content">
       <!-- Date Range Filters -->
@@ -131,9 +130,102 @@
 
     <!-- Registration Statistics Tab -->
     <div v-if="activeTab === 'registration'" class="tab-content">
-      <div class="placeholder-content">
-        <h3>Thống kê đăng ký/Hủy</h3>
-        <p>Nội dung thống kê đăng ký/hủy sẽ được hiển thị ở đây</p>
+      <!-- Date Range Filters -->
+      <div class="filter-section">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="reg-start-date">Thời gian bắt đầu:</label>
+            <input
+              type="date"
+              id="reg-start-date"
+              v-model="regStartDate"
+              class="form-input"
+            />
+          </div>
+          <div class="filter-group">
+            <label for="reg-end-date">Thời gian kết thúc:</label>
+            <input
+              type="date"
+              id="reg-end-date"
+              v-model="regEndDate"
+              class="form-input"
+            />
+          </div>
+          <button @click="searchRegistration" class="search-btn">
+            <span class="search-icon">🔍</span>
+            Tra cứu
+          </button>
+        </div>
+      </div>
+
+      <!-- Registration Statistics Table -->
+      <div class="table-section">
+        <div class="table-container">
+          <table class="registration-table">
+            <thead>
+              <tr>
+                <th rowspan="2">Thời gian</th>
+                <th colspan="2">GÓI SAO ĐẸP</th>
+                <th colspan="2">GÓI EVA ĐẸP</th>
+                <th colspan="2">Tổng cộng</th>
+              </tr>
+              <tr>
+                <th>Đăng ký</th>
+                <th>Hủy</th>
+                <th>Đăng ký</th>
+                <th>Hủy</th>
+                <th>Đăng ký</th>
+                <th>Hủy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, index) in registrationData" :key="index">
+                <td>{{ formatDate(row.date) }}</td>
+                <td>{{ formatNumber(row.saoDep.registration) }}</td>
+                <td>{{ formatNumber(row.saoDep.cancellation) }}</td>
+                <td>{{ formatNumber(row.evaDep.registration) }}</td>
+                <td>{{ formatNumber(row.evaDep.cancellation) }}</td>
+                <td>{{ formatNumber(row.dailyTotal.registration) }}</td>
+                <td>{{ formatNumber(row.dailyTotal.cancellation) }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="total-row">
+                <td><strong>Tổng cộng</strong></td>
+                <td>
+                  <strong>{{
+                    formatNumber(regTotals.saoDep.registration)
+                  }}</strong>
+                </td>
+                <td>
+                  <strong>{{
+                    formatNumber(regTotals.saoDep.cancellation)
+                  }}</strong>
+                </td>
+                <td>
+                  <strong>{{
+                    formatNumber(regTotals.evaDep.registration)
+                  }}</strong>
+                </td>
+                <td>
+                  <strong>{{
+                    formatNumber(regTotals.evaDep.cancellation)
+                  }}</strong>
+                </td>
+                <td>
+                  <strong>{{
+                    formatNumber(regTotals.grandTotal.registration)
+                  }}</strong>
+                </td>
+                <td>
+                  <strong>{{
+                    formatNumber(regTotals.grandTotal.cancellation)
+                  }}</strong>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -148,6 +240,8 @@ definePageMeta({
 const activeTab = ref("revenue");
 const startDate = ref("2021-10-01");
 const endDate = ref("2021-10-12");
+const regStartDate = ref("2021-10-01");
+const regEndDate = ref("2021-10-12");
 
 // Mock revenue data based on the image
 const revenueData = ref([
@@ -188,6 +282,40 @@ const revenueData = ref([
   },
 ]);
 
+// Mock registration data
+const registrationData = ref([
+  {
+    date: new Date("2021-10-11"),
+    saoDep: { registration: 245, cancellation: 12 },
+    evaDep: { registration: 156, cancellation: 8 },
+    dailyTotal: { registration: 401, cancellation: 20 },
+  },
+  {
+    date: new Date("2021-10-10"),
+    saoDep: { registration: 312, cancellation: 15 },
+    evaDep: { registration: 198, cancellation: 10 },
+    dailyTotal: { registration: 510, cancellation: 25 },
+  },
+  {
+    date: new Date("2021-10-09"),
+    saoDep: { registration: 289, cancellation: 18 },
+    evaDep: { registration: 167, cancellation: 9 },
+    dailyTotal: { registration: 456, cancellation: 27 },
+  },
+  {
+    date: new Date("2021-10-08"),
+    saoDep: { registration: 334, cancellation: 22 },
+    evaDep: { registration: 223, cancellation: 14 },
+    dailyTotal: { registration: 557, cancellation: 36 },
+  },
+  {
+    date: new Date("2021-10-07"),
+    saoDep: { registration: 276, cancellation: 16 },
+    evaDep: { registration: 189, cancellation: 11 },
+    dailyTotal: { registration: 465, cancellation: 27 },
+  },
+]);
+
 const totals = computed(() => {
   const totals = {
     saoDep1000: { count: 0, revenue: 0 },
@@ -210,6 +338,25 @@ const totals = computed(() => {
   return totals;
 });
 
+const regTotals = computed(() => {
+  const totals = {
+    saoDep: { registration: 0, cancellation: 0 },
+    evaDep: { registration: 0, cancellation: 0 },
+    grandTotal: { registration: 0, cancellation: 0 },
+  };
+
+  registrationData.value.forEach((row) => {
+    totals.saoDep.registration += row.saoDep.registration;
+    totals.saoDep.cancellation += row.saoDep.cancellation;
+    totals.evaDep.registration += row.evaDep.registration;
+    totals.evaDep.cancellation += row.evaDep.cancellation;
+    totals.grandTotal.registration += row.dailyTotal.registration;
+    totals.grandTotal.cancellation += row.dailyTotal.cancellation;
+  });
+
+  return totals;
+});
+
 const searchRevenue = () => {
   // Mock API call to fetch revenue data
   console.log(
@@ -217,6 +364,16 @@ const searchRevenue = () => {
     startDate.value,
     "to",
     endDate.value
+  );
+};
+
+const searchRegistration = () => {
+  // Mock API call to fetch registration data
+  console.log(
+    "Searching registration data for:",
+    regStartDate.value,
+    "to",
+    regEndDate.value
   );
 };
 
@@ -376,6 +533,38 @@ const formatNumber = (number) => {
 }
 
 .revenue-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.registration-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.registration-table th,
+.registration-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border: 1px solid var(--border-color);
+}
+
+.registration-table th {
+  background: var(--bg-hover);
+  font-weight: 600;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.registration-table th[rowspan] {
+  vertical-align: middle;
+}
+
+.registration-table td {
+  color: var(--text-primary);
+}
+
+.registration-table tbody tr:hover {
   background: var(--bg-hover);
 }
 

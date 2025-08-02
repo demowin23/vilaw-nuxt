@@ -26,7 +26,7 @@
         <h1 class="news-title">{{ newsStore.currentNews.title }}</h1>
         <div class="news-meta">
           <span class="news-date">{{
-            formatDate(newsStore.currentNews.created_at)
+            formatDate(newsStore.currentNews.ts_update)
           }}</span>
           <span class="news-views"
             >{{ newsStore.currentNews.view_count || 0 }} lượt đọc</span
@@ -69,7 +69,7 @@
             <div class="related-content">
               <h4>{{ related.title }}</h4>
               <span class="related-date">{{
-                formatDate(related.created_at)
+                formatDate(related.ts_update)
               }}</span>
             </div>
           </div>
@@ -182,7 +182,7 @@ onMounted(() => {
 }
 
 .news-detail {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -211,6 +211,7 @@ onMounted(() => {
   color: #181818;
   margin-bottom: 16px;
   transition: color 0.3s ease;
+  text-align: justify;
 }
 
 .dark .news-title {

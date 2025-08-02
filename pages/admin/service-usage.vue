@@ -101,15 +101,94 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>Thời gian giao dịch</th>
-                <th>Loại giao dịch</th>
-                <th>Gói cước</th>
-                <th>Số thuê bao</th>
-                <th>Kênh</th>
-                <th>Ứng dụng/Sự kiện</th>
-                <th>Tài khoản/CT</th>
-                <th>User IP</th>
-                <th>Cước phí</th>
+                <th v-if="activeTab === 'mo-mt-history'">
+                  Thời gian hệ thống nhận MO
+                </th>
+                <th v-if="activeTab === 'mo-mt-history'">Nội dung MO</th>
+                <th v-if="activeTab === 'mo-mt-history'">Trạng thái</th>
+                <th v-if="activeTab === 'mo-mt-history'">Cước phí MO</th>
+                <th v-if="activeTab === 'mo-mt-history'">Đầu số nhận MO</th>
+                <th v-if="activeTab === 'mo-mt-history'">Thời gian gửi MT</th>
+                <th v-if="activeTab === 'mo-mt-history'">Nội dung MT</th>
+                <th v-if="activeTab === 'mo-mt-history'">Gói cước</th>
+                <th v-if="activeTab === 'mo-mt-history'">Trạng thái</th>
+                <th v-if="activeTab === 'mo-mt-history'">Cước phí MT</th>
+                <th v-if="activeTab === 'mo-mt-history'">Đầu số gửi MT</th>
+                <th v-if="activeTab === 'charge-history'">
+                  Thời gian giao dịch
+                </th>
+                <th v-if="activeTab === 'charge-history'">Loại giao dịch</th>
+                <th v-if="activeTab === 'charge-history'">Gói cước</th>
+                <th v-if="activeTab === 'charge-history'">Số thuê bao</th>
+                <th v-if="activeTab === 'charge-history'">Kênh</th>
+                <th v-if="activeTab === 'charge-history'">Ứng dụng/Sự kiện</th>
+                <th v-if="activeTab === 'charge-history'">Tài khoản/CT</th>
+                <th v-if="activeTab === 'charge-history'">User IP</th>
+                <th v-if="activeTab === 'charge-history'">Cước phí</th>
+                <th
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  Thời gian giao dịch
+                </th>
+                <th
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  Loại giao dịch
+                </th>
+                <th
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  Gói cước
+                </th>
+                <th
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  Tình trạng
+                </th>
+                <th
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  Kênh
+                </th>
+                <th
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  Ứng dụng/Sự kiện
+                </th>
+                <th
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  Tài khoản/CT
+                </th>
+                <th
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  User IP
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -117,15 +196,130 @@
                 v-for="(item, index) in store.tableData[activeTab]"
                 :key="index"
               >
-                <td>{{ formatDateTime(item.transactionTime) }}</td>
-                <td>{{ item.transactionType }}</td>
-                <td>{{ item.servicePackage }}</td>
-                <td>{{ item.subscriberNumber }}</td>
-                <td>{{ item.channel }}</td>
-                <td>{{ item.application }}</td>
-                <td>{{ item.account || "-" }}</td>
-                <td>{{ item.userIP || "-" }}</td>
-                <td>{{ formatCurrency(item.chargeFee) }}</td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ item.moReceiveTime || "-" }}
+                </td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ item.moContent || "-" }}
+                </td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ item.moStatus || "-" }}
+                </td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ item.moChargeFee || "-" }}
+                </td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ item.moRecipientNumber || "-" }}
+                </td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ formatDateTime(item.mtSendTime) }}
+                </td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ item.mtContent }}
+                </td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ item.servicePackage }}
+                </td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ item.mtStatus }}
+                </td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ item.mtChargeFee }}
+                </td>
+                <td v-if="activeTab === 'mo-mt-history'">
+                  {{ item.mtSenderNumber }}
+                </td>
+                <td v-if="activeTab === 'charge-history'">
+                  {{ formatDateTime(item.transactionTime) }}
+                </td>
+                <td v-if="activeTab === 'charge-history'">
+                  {{ item.transactionType }}
+                </td>
+                <td v-if="activeTab === 'charge-history'">
+                  {{ item.servicePackage }}
+                </td>
+                <td v-if="activeTab === 'charge-history'">
+                  {{ item.subscriberNumber }}
+                </td>
+                <td v-if="activeTab === 'charge-history'">
+                  {{ item.channel }}
+                </td>
+                <td v-if="activeTab === 'charge-history'">
+                  {{ item.application }}
+                </td>
+                <td v-if="activeTab === 'charge-history'">
+                  {{ item.account || "-" }}
+                </td>
+                <td v-if="activeTab === 'charge-history'">
+                  {{ item.userIP || "-" }}
+                </td>
+                <td v-if="activeTab === 'charge-history'">
+                  {{ formatCurrency(item.chargeFee) }}
+                </td>
+                <td
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  {{ formatDateTime(item.transactionTime) }}
+                </td>
+                <td
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  {{ item.transactionType }}
+                </td>
+                <td
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  {{ item.servicePackage }}
+                </td>
+                <td
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  {{ item.status }}
+                </td>
+                <td
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  {{ item.channel }}
+                </td>
+                <td
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  {{ item.application || "-" }}
+                </td>
+                <td
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  {{ item.account || "-" }}
+                </td>
+                <td
+                  v-if="
+                    activeTab !== 'mo-mt-history' &&
+                    activeTab !== 'charge-history'
+                  "
+                >
+                  {{ item.userIP || "-" }}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -204,10 +398,41 @@ const mockData = {
       userIP: "",
       chargeFee: 5000,
     },
-  ],
-  "registration-history": [
     {
-      transactionTime: new Date("2021-10-02T22:00:00"),
+      transactionTime: new Date("2021-09-18T09:26:45"),
+      transactionType: "Gia hạn",
+      servicePackage: "SAODEP",
+      subscriberNumber: "84948252190",
+      channel: "SYSTEM",
+      application: "SYSTEM",
+      account: "",
+      userIP: "",
+      chargeFee: 1000,
+    },
+    {
+      transactionTime: new Date("2021-08-28T15:30:12"),
+      transactionType: "Gia hạn",
+      servicePackage: "SAODEP",
+      subscriberNumber: "84948252190",
+      channel: "SYSTEM",
+      application: "SYSTEM",
+      account: "",
+      userIP: "",
+      chargeFee: 1000,
+    },
+    {
+      transactionTime: new Date("2021-08-27T12:15:30"),
+      transactionType: "Gia hạn",
+      servicePackage: "SAODEP",
+      subscriberNumber: "84948252190",
+      channel: "SYSTEM",
+      application: "SYSTEM",
+      account: "",
+      userIP: "",
+      chargeFee: 2000,
+    },
+    {
+      transactionTime: new Date("2021-08-11T19:45:03"),
       transactionType: "Đăng ký",
       servicePackage: "SAODEP",
       subscriberNumber: "84948252190",
@@ -216,6 +441,28 @@ const mockData = {
       account: "",
       userIP: "",
       chargeFee: 0,
+    },
+  ],
+  "registration-history": [
+    {
+      transactionTime: new Date("2022-01-28T22:08:48"),
+      transactionType: "Hủy",
+      servicePackage: "SAODEP",
+      status: "Thành công",
+      channel: "CSKH",
+      application: "",
+      account: "",
+      userIP: "",
+    },
+    {
+      transactionTime: new Date("2021-08-11T19:45:06"),
+      transactionType: "Đăng ký",
+      servicePackage: "SAODEP",
+      status: "Thành công",
+      channel: "USSD",
+      application: "",
+      account: "",
+      userIP: "",
     },
   ],
   "usage-history": [
@@ -233,15 +480,18 @@ const mockData = {
   ],
   "mo-mt-history": [
     {
-      transactionTime: new Date("2021-10-03T09:45:12"),
-      transactionType: "MO",
+      moReceiveTime: "",
+      moContent: "",
+      moStatus: "",
+      moChargeFee: "",
+      moRecipientNumber: "",
+      mtSendTime: new Date("2021-08-11T19:45:06"),
+      mtContent:
+        "Mật khẩu dịch vụ EVA DEP của Quý Khách là: n7gsxq. Truy cập http://evadep.net.vn để sử dụng. Để lấy lại mật khẩu soạn MK gửi 1911. Chi tiết LH 02433502098 (cuộc gọi cố định). Trân trọng cảm ơn.",
       servicePackage: "SAODEP",
-      subscriberNumber: "84948252190",
-      channel: "SMS",
-      application: "SMS_GATEWAY",
-      account: "",
-      userIP: "",
-      chargeFee: 200,
+      mtStatus: "Đã gửi",
+      mtChargeFee: "0",
+      mtSenderNumber: "1911",
     },
   ],
   "event-subscribers": [
@@ -264,9 +514,13 @@ const searchData = () => {
   const data = mockData[activeTab.value] || [];
   store.updateTableData(activeTab.value, data);
 
-  // Calculate total for summary
-  const total = data.reduce((sum, item) => sum + item.chargeFee, 0);
-  store.updateSummaryData(activeTab.value, { total });
+  // Calculate total for summary (only for charge-history tab)
+  if (activeTab.value === "charge-history") {
+    const total = data.reduce((sum, item) => sum + (item.chargeFee || 0), 0);
+    store.updateSummaryData(activeTab.value, { total });
+  } else {
+    store.updateSummaryData(activeTab.value, { total: 0 });
+  }
 };
 
 const formatDateTime = (date) => {

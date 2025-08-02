@@ -53,7 +53,7 @@ export const useNewsStore = defineStore('news', () => {
           title: item.title,
           excerpt: item.description,
           category: item.category || 'Pháp luật',
-          date: item.created_at,
+          date: item.ts_update,
           views: item.view_count || 0,
         }))
       }
