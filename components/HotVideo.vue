@@ -2,7 +2,6 @@
   <div class="hot-video-list">
     <Swiper
       :slides-per-view="getSlidesPerView"
-      :space-between="12"
       class="hot-video-swiper"
       @swiper="onSwiper"
       @slideChange="onSlideChange"
@@ -52,13 +51,27 @@ const totalSlides = computed(() => props.videos.length);
 const getSlidesPerView = computed(() => {
   // Check if we're on client side
   if (process.client) {
-    if (windowWidth.value <= 768) return isOpenSidebar.value ? 3 : 4;
-    if (windowWidth.value <= 1028) return isOpenSidebar.value ? 5 : 6;
+    // Mobile Small (375px - 480px): 3 items
+    if (windowWidth.value <= 480) return 3;
+    // Mobile Medium (481px - 600px): 3 items  
+    if (windowWidth.value <= 600) return 3;
+    // Mobile Large (601px - 768px): 4 items
+    if (windowWidth.value <= 768) return 4;
+    // Tablet Small (769px - 900px): 4 items
+    if (windowWidth.value <= 900) return 4;
+    // Tablet Medium (901px - 1024px): 5 items
+    if (windowWidth.value <= 1024) return 5;
+    // Tablet Large (1025px - 1250px): 5-6 items
     if (windowWidth.value <= 1250) return isOpenSidebar.value ? 5 : 6;
+    // Desktop Small (1251px - 1500px): 6-7 items
+    if (windowWidth.value <= 1500) return isOpenSidebar.value ? 6 : 7;
+    // Desktop Medium (1501px - 1800px): 7-8 items
+    if (windowWidth.value <= 1800) return isOpenSidebar.value ? 6 : 7;
+    // Desktop Large (1801px+): 8-9 items
     return isOpenSidebar.value ? 6 : 7;
   }
   // Fallback for SSR
-  return 4;
+  return 3;
 });
 
 const updateWindowWidth = () => {
@@ -128,54 +141,158 @@ const progressWidth = computed(() => {
 }
 .hot-video-item {
   position: relative;
-  width: 100px;
-  height: 150px;
+  width: 90px;
+  height: 135px;
   background-size: cover;
   background-position: center;
-  border-radius: 16px;
+  border-radius: 14px;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  min-width: 100px;
-  min-height: 150px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-width: 90px;
+  min-height: 135px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
 }
 .hot-video-title {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 10px 6px 0 6px;
+  padding: 8px 4px 0 4px;
   color: #fff;
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   font-weight: bold;
   text-align: center;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   z-index: 2;
   pointer-events: none;
 }
-@media (min-width: 769px) {
+
+/* Mobile Small (375px - 480px) */
+@media (min-width: 375px) {
+  .hot-video-item {
+    width: 95px;
+    height: 143px;
+    min-width: 95px;
+    min-height: 143px;
+    border-radius: 16px;
+  }
+  .hot-video-title {
+    font-size: 0.9rem;
+    padding: 10px 6px 0 6px;
+  }
+}
+
+/* Mobile Medium (481px - 600px) */
+@media (min-width: 481px) {
+  .hot-video-item {
+    width: 100px;
+    height: 150px;
+    min-width: 100px;
+    min-height: 150px;
+  }
+  .hot-video-title {
+    font-size: 0.95rem;
+    padding: 10px 6px 0 6px;
+  }
+}
+
+/* Mobile Large (601px - 768px) */
+@media (min-width: 601px) {
   .hot-video-item {
     width: 120px;
     height: 180px;
     min-width: 120px;
     min-height: 180px;
   }
+  .hot-video-title {
+    font-size: 1rem;
+    padding: 12px 8px 0 8px;
+  }
 }
-@media (min-width: 1025px) {
+
+/* Tablet Small (769px - 900px) */
+@media (min-width: 769px) {
+  .hot-video-item {
+    width: 130px;
+    height: 195px;
+    min-width: 130px;
+    min-height: 195px;
+    border-radius: 18px;
+  }
+  .hot-video-title {
+    font-size: 1.05rem;
+    padding: 12px 8px 0 8px;
+  }
+}
+
+/* Tablet Medium (901px - 1024px) */
+@media (min-width: 901px) {
   .hot-video-item {
     width: 150px;
     height: 225px;
     min-width: 150px;
     min-height: 225px;
   }
+  .hot-video-title {
+    font-size: 1.1rem;
+    padding: 14px 10px 0 10px;
+  }
 }
-@media (min-width: 1201px) {
+
+/* Tablet Large (1025px - 1250px) */
+@media (min-width: 1025px) {
   .hot-video-item {
-    width: 179px;
+    width: 165px;
+    height: 248px;
+    min-width: 165px;
+    min-height: 248px;
+  }
+  .hot-video-title {
+    font-size: 1.15rem;
+    padding: 14px 10px 0 10px;
+  }
+}
+
+/* Desktop Small (1251px - 1500px) */
+@media (min-width: 1251px) {
+  .hot-video-item {
+    width: 180px;
     height: 270px;
-    min-width: 179px;
+    min-width: 180px;
     min-height: 270px;
+  }
+  .hot-video-title {
+    font-size: 1.2rem;
+    padding: 16px 12px 0 12px;
+  }
+}
+
+/* Desktop Medium (1501px - 1800px) */
+@media (min-width: 1501px) {
+  .hot-video-item {
+    width: 200px;
+    height: 300px;
+    min-width: 200px;
+    min-height: 300px;
+  }
+  .hot-video-title {
+    font-size: 1.25rem;
+    padding: 18px 14px 0 14px;
+  }
+}
+
+/* Desktop Large (1801px+) */
+@media (min-width: 1801px) {
+  .hot-video-item {
+    width: 220px;
+    height: 330px;
+    min-width: 220px;
+    min-height: 330px;
+  }
+  .hot-video-title {
+    font-size: 1.3rem;
+    padding: 20px 16px 0 16px;
   }
 }
 </style>

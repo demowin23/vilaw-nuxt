@@ -1,42 +1,41 @@
 <template>
-  <div class="container mx-auto py-8">
-    <h1 class="text-2xl font-bold text-[#f58220] mb-4">Văn bản pháp luật</h1>
-
-    <div class="grid grid-cols-3 gap-6">
+  <div class="container mx-auto px-4 py-4 sm:py-6 lg:py-8">
+    <h1 class="text-xl sm:text-2xl font-bold text-[#f58220] mb-4">Văn bản pháp luật</h1>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
       <!-- Cột trái - chiếm 2/3 -->
-      <div class="col-span-2">
+      <div class="lg:col-span-2">
         <div
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 transition-colors duration-300"
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6 transition-colors duration-300"
         >
           <p
-            class="text-gray-700 dark:text-gray-300 mb-4 transition-colors duration-300"
+            class="text-gray-700 dark:text-gray-300 mb-4 text-sm sm:text-base transition-colors duration-300"
           >
             Công cụ hỗ trợ doanh nghiệp tra cứu, tìm kiếm và download miễn phí
             các văn bản pháp luật Việt Nam mới ban hành, văn bản pháp luật từ
             trung ương đến địa phương đầy đủ và chính xác nhất.
           </p>
 
-          <hr class="border-red-500 mb-6" />
+          <hr class="border-red-500 mb-4 sm:mb-6" />
 
           <div
-            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 p-6 transition-colors duration-300"
+            class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 p-4 sm:p-6 transition-colors duration-300"
           >
-            <h2 class="text-xl font-semibold text-[#f58220] mb-4">
+            <h2 class="text-lg sm:text-xl font-semibold text-[#f58220] mb-4">
               Tra cứu văn bản/ hồ sơ mẫu
             </h2>
 
-            <div class="flex gap-3 mb-4">
+            <div class="flex flex-col sm:flex-row gap-3 mb-4">
               <input
                 v-model="searchQuery"
                 type="text"
                 placeholder="Nội dung cần tìm kiếm..."
                 @keyup.enter="performSearch"
-                class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
+                class="flex-1 px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300 text-sm sm:text-base"
               />
               <button
                 @click="performSearch"
                 :disabled="isSearching"
-                class="bg-[#f58220] text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-[#e06d00] transition-colors duration-300 disabled:opacity-50"
+                class="bg-[#f58220] text-white px-4 sm:px-6 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#e06d00] transition-colors duration-300 disabled:opacity-50 text-sm sm:text-base"
               >
                 <svg
                   v-if="!isSearching"
@@ -56,18 +55,19 @@
                   v-else
                   class="w-4 h-4 animate-spin rounded-full border-2 border-white border-t-transparent"
                 ></div>
-                {{ isSearching ? "Đang tìm..." : "Tìm kiếm" }}
+                <span class="hidden sm:inline">{{ isSearching ? "Đang tìm..." : "Tìm kiếm" }}</span>
+                <span class="sm:hidden">{{ isSearching ? "..." : "Tìm" }}</span>
               </button>
             </div>
 
-            <div class="flex justify-between w-[60%]">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:w-[60%] gap-2">
               <p
-                class="text-sm text-gray-600 dark:text-gray-400 mb-2 transition-colors duration-300"
+                class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 transition-colors duration-300"
               >
                 Từ khóa tối thiểu 3 ký tự:
               </p>
               <div
-                class="flex gap-4 text-sm text-gray-700 dark:text-gray-300 transition-colors duration-300"
+                class="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-700 dark:text-gray-300 transition-colors duration-300"
               >
                 <span>*Tiêu đề</span>
                 <span>*Số hiệu</span>
@@ -77,7 +77,7 @@
           </div>
         </div>
 
-        <div v-if="searchResults.length > 0" class="mb-6">
+        <div v-if="searchResults.length > 0" class="mb-4 sm:mb-6">
           <div class="header-row">
             <h2 class="section-title">KẾT QUẢ TÌM KIẾM</h2>
             <button
@@ -85,25 +85,25 @@
                 searchResults = [];
                 searchQuery = '';
               "
-              class="text-sm text-gray-500 hover:text-[#f58220]"
+              class="text-xs sm:text-sm text-gray-500 hover:text-[#f58220]"
             >
               Xóa kết quả
             </button>
           </div>
           <div
-            class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6 transition-colors duration-300"
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 sm:p-4 md:p-6 transition-colors duration-300"
           >
-            <div class="space-y-4">
+            <div class="space-y-3 sm:space-y-4">
               <div
                 v-for="(document, index) in searchResults"
                 :key="document.id || index"
-                class="border-b border-gray-200 dark:border-gray-600 pb-4 last:border-b-0 transition-colors duration-300"
+                class="border-b border-gray-200 dark:border-gray-600 pb-3 sm:pb-4 last:border-b-0 transition-colors duration-300"
               >
-                <div class="flex flex-col lg:flex-row lg:justify-between gap-4">
-                  <div class="flex-1 grid grid-cols-2 gap-4">
+                <div class="flex flex-col lg:flex-row lg:justify-between gap-3 sm:gap-4">
+                  <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
                       <h3
-                        class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300"
+                        class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300 text-sm sm:text-base"
                       >
                         {{ document.title }}
                       </h3>
@@ -141,14 +141,14 @@
                     </div>
                   </div>
                   <div
-                    class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-24"
+                    class="flex flex-row sm:flex-col lg:flex-col gap-2 lg:w-24"
                   >
                     <button
                       @click="handleViewDocument(document)"
-                      class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
+                      class="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-1 sm:gap-2 hover:bg-red-700 transition-colors duration-300"
                     >
                       <svg
-                        class="w-4 h-4"
+                        class="w-3 h-3 sm:w-4 sm:h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -166,15 +166,16 @@
                           d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                         ></path>
                       </svg>
-                      Xem
+                      <span class="hidden sm:inline">Xem</span>
+                      <span class="sm:hidden">Xem</span>
                     </button>
                     <button
                       v-if="document.file_url"
                       @click="handleDownload(document)"
-                      class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
+                      class="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-1 sm:gap-2 hover:bg-red-700 transition-colors duration-300"
                     >
                       <svg
-                        class="w-4 h-4"
+                        class="w-3 h-3 sm:w-4 sm:h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -186,7 +187,8 @@
                           d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                         ></path>
                       </svg>
-                      Tải về
+                      <span class="hidden sm:inline">Tải về</span>
+                      <span class="sm:hidden">Tải</span>
                     </button>
                   </div>
                 </div>
@@ -201,26 +203,26 @@
             <h2 class="section-title">VĂN BẢN PHÁP LUẬT</h2>
           </div>
           <div
-            class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 md:p-6 transition-colors duration-300"
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 sm:p-4 md:p-6 transition-colors duration-300"
           >
             <!-- Loading state -->
-            <div v-if="loading" class="text-center py-8">
+            <div v-if="loading" class="text-center py-6 sm:py-8">
               <div
-                class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#f58220]"
+                class="inline-block animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-[#f58220]"
               ></div>
-              <p class="mt-2 text-gray-600 dark:text-gray-400">
+              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm sm:text-base">
                 Đang tải văn bản...
               </p>
             </div>
 
             <!-- Error state -->
-            <div v-else-if="error" class="text-center py-8">
-              <p class="text-red-600 dark:text-red-400">
+            <div v-else-if="error" class="text-center py-6 sm:py-8">
+              <p class="text-red-600 dark:text-red-400 text-sm sm:text-base">
                 Có lỗi xảy ra khi tải dữ liệu
               </p>
               <button
                 @click="getDocuments()"
-                class="mt-2 text-[#f58220] hover:underline"
+                class="mt-2 text-[#f58220] hover:underline text-sm sm:text-base"
               >
                 Thử lại
               </button>
@@ -229,20 +231,20 @@
             <!-- Danh sách văn bản -->
             <div
               v-else-if="legalDocuments && legalDocuments.length > 0"
-              class="space-y-4"
+              class="space-y-3 sm:space-y-4"
             >
               <div
                 v-for="(document, index) in legalDocuments"
                 :key="document.id || index"
-                class="border-b border-gray-200 dark:border-gray-600 pb-4 last:border-b-0 transition-colors duration-300"
+                class="border-b border-gray-200 dark:border-gray-600 pb-3 sm:pb-4 last:border-b-0 transition-colors duration-300"
               >
-                <div class="flex flex-col lg:flex-row lg:justify-between gap-4">
+                <div class="flex flex-col lg:flex-row lg:justify-between gap-3 sm:gap-4">
                   <!-- Thông tin văn bản -->
-                  <div class="flex-1 grid grid-cols-2 gap-4">
+                  <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <!-- Cột 1: Title và Description -->
                     <div>
                       <h3
-                        class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300"
+                        class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300 text-sm sm:text-base"
                       >
                         {{ document.title }}
                       </h3>
@@ -283,14 +285,14 @@
 
                   <!-- Nút hành động -->
                   <div
-                    class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-24"
+                    class="flex flex-row sm:flex-col lg:flex-col gap-2 lg:w-24"
                   >
                     <button
                       @click="handleViewDocument(document)"
-                      class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
+                      class="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-1 sm:gap-2 hover:bg-red-700 transition-colors duration-300"
                     >
                       <svg
-                        class="w-4 h-4"
+                        class="w-3 h-3 sm:w-4 sm:h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -308,15 +310,16 @@
                           d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                         ></path>
                       </svg>
-                      Xem
+                      <span class="hidden sm:inline">Xem</span>
+                      <span class="sm:hidden">Xem</span>
                     </button>
                     <button
                       v-if="document.wordFile"
                       @click="handleDownload(document)"
-                      class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
+                      class="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-1 sm:gap-2 hover:bg-red-700 transition-colors duration-300"
                     >
                       <svg
-                        class="w-4 h-4"
+                        class="w-3 h-3 sm:w-4 sm:h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -328,7 +331,8 @@
                           d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                         ></path>
                       </svg>
-                      Tải về
+                      <span class="hidden sm:inline">Tải về</span>
+                      <span class="sm:hidden">Tải</span>
                     </button>
                   </div>
                 </div>
