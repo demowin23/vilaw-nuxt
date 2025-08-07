@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Static Pages -->
+  <url>
+    <loc>https://vilaw.net.vn/</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/kien-thuc</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/phap-luat-doi-song</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/van-ban</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/tin-tuc</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/chat-luat-su</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/mua-goi</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/lien-he</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/dang-nhap</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/dang-ky</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/quen-mat-khau</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/gioi-thieu</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/sitemap</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <!-- Knowledge Categories -->
+  <url>
+    <loc>https://vilaw.net.vn/kien-thuc/dan-su</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/kien-thuc/hinh-su</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/kien-thuc/kinh-te</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/kien-thuc/lao-dong</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/kien-thuc/dat-dai</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/kien-thuc/thua-ke</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/kien-thuc/hon-nhan</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/kien-thuc/the_loai_khac</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

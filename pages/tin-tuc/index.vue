@@ -109,6 +109,7 @@
 import { onMounted } from "vue";
 import NewsList from "~/components/NewsList.vue";
 import { useNewsStore } from "~/stores/news";
+import { slugify } from "~/utils/slugify";
 
 // Use news store
 const newsStore = useNewsStore();
@@ -151,7 +152,7 @@ function formatDate(dateString: string): string {
 }
 
 function handleNewsClick(news: any) {
-  navigateTo(`/tin-tuc/${news.id}`);
+  navigateTo(`/tin-tuc/${news.id}-${slugify(news.title)}`);
 }
 
 // Load data on mount

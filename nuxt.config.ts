@@ -18,10 +18,10 @@ export default defineNuxtConfig({
   // Nitro config for proxy
   nitro: {
     devProxy: {
-      '/api': {
+      '/api/v1': {
         target: process.env.BASE_URL || 'http://vilaw.net.vn/api/v1',
         changeOrigin: true,
-        prependPath: true,
+        prependPath: false,
       }
     }
   },
@@ -54,4 +54,6 @@ export default defineNuxtConfig({
       ]
     }
   },
+  
+
 });

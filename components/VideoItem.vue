@@ -1,6 +1,6 @@
 <template>
   <div class="video-item">
-    <NuxtLink :to="`/video/${item.id}`">
+    <NuxtLink :to="`/video/${item.id}-${slugify(item.title)}`">
       <div class="thumbnail-wrapper">
         <img
           :src="getImageUrl(item.thumbnail)"
@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import { getImageUrl } from "~/utils/config";
+import { slugify } from "~/utils/slugify";
 
 defineProps<{
   item: Object;

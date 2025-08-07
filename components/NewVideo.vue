@@ -34,7 +34,7 @@
           v-for="video in featuredVideos"
           :key="video.id"
           class="bg-white rounded-xl shadow p-0 overflow-hidden flex flex-col cursor-pointer hover:shadow-lg transition-shadow"
-          @click="navigateToVideo(video.id)"
+          @click="navigateToVideo(video.id, video.title)"
         >
           <img
             :src="getImageUrl(video.thumbnail)"
@@ -80,7 +80,7 @@
           v-for="video in otherVideos"
           :key="video.id"
           class="bg-white rounded-xl shadow p-0 overflow-hidden flex flex-col cursor-pointer hover:shadow-lg transition-shadow"
-          @click="navigateToVideo(video.id)"
+          @click="navigateToVideo(video.id, video.title)"
         >
           <img
             :src="getImageUrl(video.thumbnail)"
@@ -127,6 +127,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useVideoLifeLaw } from "~/composables/useVideoLifeLaw";
 import { getApiConfig } from "~/utils/config";
+import { slugify } from "~/utils/slugify";
 
 const { getVideoLifeLaw, isLoading } = useVideoLifeLaw();
 const videos = ref([]);
@@ -157,8 +158,8 @@ onMounted(async () => {
 });
 
 // Navigate to video detail page
-const navigateToVideo = (videoId) => {
-  navigateTo(`/video/${videoId}`);
+const navigateToVideo = (videoId, title) => {
+  navigateTo(`/video/${videoId}-${slugify(title)}`);
 };
 
 // Format time ago

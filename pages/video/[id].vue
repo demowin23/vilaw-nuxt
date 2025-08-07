@@ -291,7 +291,7 @@
           v-for="video in relatedVideos"
           :key="video.id"
           class="flex gap-3 bg-white rounded-xl shadow p-3 hover:shadow-md transition-shadow cursor-pointer"
-          @click="router.push(`/video/${video.id}`)"
+          @click="router.push(`/video/${video.id}-${slugify(video.title)}`)"
         >
           <div class="relative w-40 h-24 flex-shrink-0">
             <img
@@ -331,6 +331,7 @@ import { useVideoLifeLaw } from "~/composables/useVideoLifeLaw";
 import { useAuth } from "~/composables/useAuth";
 import { useNotification } from "~/composables/useNotification";
 import VideoList from "~/components/VideoList.vue";
+import { slugify } from "~/utils/slugify";
 
 const route = useRoute();
 const router = useRouter();
@@ -637,7 +638,9 @@ const searchByHashtag = (hashtag: string) => {
 
 onMounted(() => {
   if (typeof window === "undefined") return;
-  const id = Number(route.params.id);
+  const idParam = route.params.id as string;
+  // Extract ID from URL like "123-title-slug" -> "123"
+  const id = Number(idParam?.split('-')[0]);
   fetchVideo(id);
   fetchRelatedVideos(id);
   fetchComments(id);
@@ -647,7 +650,9 @@ watch(
   () => route.params.id,
   (newId) => {
     if (typeof window === "undefined") return;
-    const id = Number(newId);
+    const idParam = newId as string;
+    // Extract ID from URL like "123-title-slug" -> "123"
+    const id = Number(idParam?.split('-')[0]);
     fetchVideo(id);
     fetchRelatedVideos(id);
     fetchComments(id);

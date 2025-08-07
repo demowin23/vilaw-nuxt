@@ -52,10 +52,10 @@
               >
             </li>
             <li>
-              <a
-                href="#"
+              <NuxtLink
+                to="/sitemap"
                 class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
-                >Sơ đồ trang web <span class="align-super text-xs">↗</span></a
+                >Sơ đồ trang web <span class="align-super text-xs">↗</span></NuxtLink
               >
             </li>
           </ul>

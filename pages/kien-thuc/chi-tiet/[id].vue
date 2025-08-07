@@ -93,7 +93,7 @@
           <ul v-else class="related-list">
             <li v-for="item in relatedList" :key="item.id" class="related-item">
               <NuxtLink
-                :to="`/kien-thuc/chi-tiet/${item.id}`"
+                :to="`/kien-thuc/chi-tiet/${item.id}-${slugify(item.title)}`"
                 class="related-link"
               >
                 <img
@@ -126,10 +126,13 @@ import {
   faEye,
   faList,
 } from "@fortawesome/free-solid-svg-icons";
+import { slugify } from "~/utils/slugify";
 library.add(faCalendar, faUser, faEye, faList);
 
 const route = useRoute();
-const id = route.params.id;
+const idParam = route.params.id as string;
+// Extract ID from URL like "123-title-slug" -> "123"
+const id = idParam?.split('-')[0];
 const { getLegalKnowledgeById, getLegalKnowledge } = useLegalKnowledge();
 
 import { getImageUrl } from "~/utils/config";

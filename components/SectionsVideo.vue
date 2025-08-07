@@ -44,11 +44,13 @@
   </div>
 </template>
 <script setup lang="ts">
+import { slugify } from "~/utils/slugify";
+
 const props = defineProps<{
   topViews: any[];
   title: string;
 }>();
 const handleClick = () => {
-  router.push(`/video/${item.id}`);
+  router.push(`/video/${item.id}-${slugify(item.title)}`);
 };
 </script>

@@ -73,6 +73,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from "vue";
 import NewsItem from "./NewsItem.vue";
+import { slugify } from "~/utils/slugify";
 
 interface NewsItemType {
   thumbnail: string;
@@ -148,7 +149,7 @@ const visiblePages = computed(() => {
 
 function handleNewsClick(news: NewsItemType) {
   // Navigate to news detail page
-  navigateTo(`/tin-tuc/${news.id}`);
+  navigateTo(`/tin-tuc/${news.id}-${slugify(news.title)}`);
 }
 
 // Reset to first page when filters change

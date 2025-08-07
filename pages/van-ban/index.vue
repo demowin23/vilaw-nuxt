@@ -604,7 +604,7 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <a :href="`/van-ban/${doc.id}`" class="text-sm hover:underline">
+              <a :href="`/van-ban/${doc.id}-${slugify(doc.title)}`" class="text-sm hover:underline">
                 {{ doc.title }}
               </a>
             </div>
@@ -623,6 +623,7 @@ import { ref, computed, watch, onMounted } from "vue";
 import { useThemeStore } from "~/stores/theme";
 import { useDocuments } from "~/composables/useDocuments";
 import { useLegalFields } from "~/composables/useLegalFields";
+import { slugify } from "~/utils/slugify";
 
 const themeStore = useThemeStore();
 
@@ -843,7 +844,7 @@ const handleDownload = async (document: any) => {
 // View document function
 const handleViewDocument = (document: any) => {
   // Navigate to document detail page
-  navigateTo(`/van-ban/${document.id}`);
+  navigateTo(`/van-ban/${document.id}-${slugify(document.title)}`);
 };
 // Reset về trang 1 và load documents khi chọn lĩnh vực khác
 watch(selectedField, async (newField) => {

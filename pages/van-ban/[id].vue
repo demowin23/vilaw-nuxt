@@ -403,7 +403,7 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <a :href="`/van-ban/${doc.id}`" class="text-sm hover:underline">
+              <a :href="`/van-ban/${doc.id}-${slugify(doc.title)}`" class="text-sm hover:underline">
                 {{ doc.title }}
               </a>
             </div>
@@ -423,6 +423,7 @@
 import { ref, onMounted, nextTick } from "vue";
 import { useThemeStore } from "~/stores/theme";
 import { useDocuments } from "~/composables/useDocuments";
+import { slugify } from "~/utils/slugify";
 
 const themeStore = useThemeStore();
 const { getDocumentById, downloadWordFile, getPopularDocuments, getDocuments } =
@@ -430,7 +431,9 @@ const { getDocumentById, downloadWordFile, getPopularDocuments, getDocuments } =
 
 // Get the ID from the route
 const route = useRoute();
-const id = route.params.id;
+const idParam = route.params.id as string;
+// Extract ID from URL like "123-title-slug" -> "123"
+const id = idParam?.split('-')[0];
 
 // Reactive data
 const document = ref<any>(null);
@@ -469,7 +472,7 @@ const performSearch = async () => {
 // View document function
 const handleViewDocument = (document: any) => {
   // Navigate to document detail page
-  navigateTo(`/van-ban/${document.id}`);
+  navigateTo(`/van-ban/${document.id}-${slugify(document.title)}`);
 };
 
 // Function to scroll to heading

@@ -60,7 +60,7 @@
             v-for="related in newsStore.relatedNews"
             :key="related.id"
             class="related-item"
-            @click="navigateTo(`/tin-tuc/${related.id}`)"
+            @click="navigateTo(`/tin-tuc/${related.id}-${slugify(related.title)}`)"
           >
             <img
               :src="newsStore.getImage(related.image)"
@@ -101,10 +101,12 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useNewsStore } from "~/stores/news";
+import { slugify } from "~/utils/slugify";
 
 // Get the ID from the route
 const route = useRoute();
-const id = route.params.id;
+const idParam = route.params.id as string;
+const id = idParam?.split('-')[0];
 
 // Use news store
 const newsStore = useNewsStore();

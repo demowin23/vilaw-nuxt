@@ -57,7 +57,7 @@
               </p>
 
               <a
-                :href="`/kien-thuc/chi-tiet/${featuredArticles[0].id}`"
+                :href="`/kien-thuc/chi-tiet/${featuredArticles[0].id}-${slugify(featuredArticles[0].title)}`"
                 class="text-[#FF6600] font-semibold hover:underline flex items-center mt-auto"
               >
                 Xem chi tiết
@@ -231,6 +231,7 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useSidebarStore } from "~/stores/sidebar";
 import { useLegalKnowledge } from "~/composables/useLegalKnowledge";
+import { slugify } from "~/utils/slugify";
 
 const sidebarStore = useSidebarStore();
 const route = useRoute();
@@ -261,7 +262,7 @@ const routeTitles: Record<string, string> = {
 };
 
 onMounted(async () => {
-  const routeId = route.params.id;
+  const routeId = route.params.id as string;
   if (routeTitles[routeId]) {
     sidebarStore.setTitle(routeTitles[routeId]);
   }

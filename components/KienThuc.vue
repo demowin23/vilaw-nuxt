@@ -15,7 +15,7 @@
             <p class="card-description line-clamp-2">{{ item.summary }}</p>
           </div>
           <a
-            :href="`/kien-thuc/chi-tiet/${item.id}`"
+            :href="`/kien-thuc/chi-tiet/${item.id}-${slugify(item.title)}`"
             class="text-[#FF6600] font-semibold hover:underline flex items-center absolute bottom-3 right-3"
           >
             Xem chi tiết
@@ -28,6 +28,7 @@
 </template>
 <script setup lang="ts">
 import { getImageUrl } from "~/utils/config";
+import { slugify } from "~/utils/slugify";
 
 const { KienThuc } = defineProps<{
   KienThuc: any[];
