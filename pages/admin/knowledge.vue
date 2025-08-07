@@ -56,6 +56,7 @@
           <tr>
             <th>ID</th>
             <th>Tiêu đề</th>
+            <th>Copy URL</th>
             <th>Danh mục</th>
             <th>Tác giả</th>
             <th>Nổi bật</th>
@@ -70,6 +71,15 @@
             <td>{{ item.id }}</td>
             <td class="title-cell">
               <div class="title">{{ item.title }}</div>
+            </td>
+            <td class="copy-cell">
+              <button
+                @click="copyUrl(`https://vilaw.net.vn/kien-thuc/chi-tiet/${item.id}-${slugify(item.title)}`)"
+                class="copy-btn"
+                title="Copy URL"
+              >
+                📋
+              </button>
             </td>
             <td>
               <span :class="`category-badge category-${item.category}`">
@@ -321,6 +331,7 @@ const itemForm = ref({
 });
 
 import { getImageUrl } from "~/utils/config";
+import { slugify } from "~/utils/slugify";
 
 const imageFile = ref<File | null>(null);
 const imagePreview = ref<string>("");
@@ -412,6 +423,22 @@ const getStatusLabel = (status: boolean) => {
 
 const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString("vi-VN");
+};
+
+const copyUrl = async (url: string) => {
+  try {
+    await navigator.clipboard.writeText(url);
+    handleApiSuccess({ message: "Đã copy URL thành công!" });
+  } catch (error) {
+    // Fallback for older browsers
+    const textArea = document.createElement("textarea");
+    textArea.value = url;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    handleApiSuccess({ message: "Đã copy URL thành công!" });
+  }
 };
 
 const viewItem = (item: any) => {
@@ -975,6 +1002,31 @@ const closeModal = () => {
   margin-top: 0.5rem;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.copy-cell {
+  text-align: center;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  color: #666;
+}
+
+.copy-btn:hover {
+  background: #f0f0f0;
+  color: #ff6600;
+  transform: scale(1.1);
+}
+
+.copy-btn:active {
+  transform: scale(0.95);
 }
 
 @media (max-width: 768px) {

@@ -61,6 +61,7 @@
           <tr>
             <th>ID</th>
             <th>Thông tin văn bản</th>
+            <th>Copy URL</th>
             <th>Loại văn bản</th>
             <th>Ngày ban hành</th>
             <th>Ngày có hiệu lực</th>
@@ -91,6 +92,15 @@
                   +{{ getTagsArray(doc.tags).length - 3 }}
                 </span>
               </div>
+            </td>
+            <td class="copy-cell">
+              <button
+                @click="copyUrl(`https://vilaw.net.vn/van-ban/${doc.id}-${slugify(doc.title)}`)"
+                class="copy-btn"
+                title="Copy URL"
+              >
+                📋
+              </button>
             </td>
             <td>
               <span :class="`type-badge type-${doc.type}`">
@@ -385,6 +395,7 @@ import { useDocuments } from "~/composables/useDocuments";
 import { useLegalFields } from "~/composables/useLegalFields";
 import { useNotification } from "~/composables/useNotification";
 import { useAuth } from "~/composables/useAuth";
+import { slugify } from "~/utils/slugify";
 
 definePageMeta({
   layout: "admin",
@@ -504,6 +515,22 @@ const getStatusLabel = (doc) => {
 
 const formatDate = (date) => {
   return new Date(date).toLocaleDateString("vi-VN");
+};
+
+const copyUrl = async (url) => {
+  try {
+    await navigator.clipboard.writeText(url);
+    handleApiSuccess({ message: "Đã copy URL thành công!" });
+  } catch (error) {
+    // Fallback for older browsers
+    const textArea = document.createElement("textarea");
+    textArea.value = url;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    handleApiSuccess({ message: "Đã copy URL thành công!" });
+  }
 };
 
 const getTagsArray = (tags) => {
@@ -1359,6 +1386,31 @@ const closeModal = () => {
   font-size: 0.8rem;
   font-weight: 500;
   border: 1px solid var(--primary-color);
+}
+
+.copy-cell {
+  text-align: center;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  color: #666;
+}
+
+.copy-btn:hover {
+  background: #f0f0f0;
+  color: #ff6600;
+  transform: scale(1.1);
+}
+
+.copy-btn:active {
+  transform: scale(0.95);
 }
 
 @media (max-width: 768px) {

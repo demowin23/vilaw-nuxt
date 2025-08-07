@@ -42,6 +42,7 @@
           <tr>
             <th>ID</th>
             <th>Tiêu đề</th>
+            <th>Copy URL</th>
             <th>Mô tả</th>
             <th>Ảnh</th>
             <th>Trạng thái</th>
@@ -53,6 +54,15 @@
           <tr v-for="item in newsList" :key="item.id">
             <td>{{ item.id }}</td>
             <td class="news-title">{{ item.title }}</td>
+            <td class="copy-cell">
+              <button
+                @click="copyUrl(`https://vilaw.net.vn/tin-tuc/${item.id}-${slugify(item.title)}`)"
+                class="copy-btn"
+                title="Copy URL"
+              >
+                📋
+              </button>
+            </td>
             <td class="news-description">{{ item.description }}</td>
             <td>
               <img
@@ -290,7 +300,24 @@ const getStatusLabel = (item) => {
   }
 };
 
+const copyUrl = async (url) => {
+  try {
+    await navigator.clipboard.writeText(url);
+    handleApiSuccess({ message: "Đã copy URL thành công!" });
+  } catch (error) {
+    // Fallback for older browsers
+    const textArea = document.createElement("textarea");
+    textArea.value = url;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    handleApiSuccess({ message: "Đã copy URL thành công!" });
+  }
+};
+
 import { getImageUrl as getImageUrlUtil } from "~/utils/config";
+import { slugify } from "~/utils/slugify";
 
 const getImageUrl = (image) => {
   return getImageUrlUtil(image);
@@ -959,5 +986,30 @@ const closeModal = () => {
   margin-top: 0.5rem;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.copy-cell {
+  text-align: center;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+  color: #666;
+}
+
+.copy-btn:hover {
+  background: #f0f0f0;
+  color: #ff6600;
+  transform: scale(1.1);
+}
+
+.copy-btn:active {
+  transform: scale(0.95);
 }
 </style>
