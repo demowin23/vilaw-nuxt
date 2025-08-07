@@ -21,10 +21,10 @@ interface LegalKnowledge {
 }
 
 interface Category {
-  id: number
-  name: string
-  slug: string
-  description?: string
+  id: number;
+  value: string;
+  label: string;
+  description?: string;
 }
 
 interface LegalKnowledgeResponse {

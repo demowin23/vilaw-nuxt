@@ -36,6 +36,11 @@ export default defineNuxtConfig({
       noExternal: ['@vueup/vue-quill']
     }
   },
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => tag === 'RouterLink'
+    }
+  },
   tailwindcss: {
     config: {
       darkMode: 'class',

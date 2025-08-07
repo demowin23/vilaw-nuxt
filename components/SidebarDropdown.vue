@@ -41,17 +41,16 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { useRoute } from "vue-router";
 const props = defineProps<{ label: string; activePaths?: string[] }>();
 const open = ref(false);
 const route = useRoute();
 const isActive = computed(() => {
-  if (!props.activePaths) return false;
-  return props.activePaths.some((path) => route.path.startsWith(path));
+  if (!props.activePaths || !route) return false;
+  return props.activePaths.some((path) => route.path?.startsWith(path));
 });
 
 const handleClick = () => {
-  if (route.path !== "/kien-thuc") {
+  if (route?.path !== "/kien-thuc") {
     navigateTo("/kien-thuc");
   }
 };

@@ -1,145 +1,57 @@
 <template>
   <div class="accounting-knowledge-page">
-    <div class="header-section">
-      <div class="title-container">
-        <div class="title-accent"></div>
-        <h1 class="main-title">Dân sự - Thừa kế - Hôn nhân và gia đình</h1>
+    <div 
+      v-for="category in categories" 
+      :key="category.value" 
+    >
+      <div class="header-section">
+        <div class="title-container">
+          <div class="title-accent"></div>
+          <h1 class="main-title">{{ category.label }}</h1>
+        </div>
+        <p class="description">
+ 
+          {{ category.description }}
+        </p>
       </div>
-      <p class="description">
-        Qua nội dung này, bạn có thể tìm câu trả lời cho tất cả các thắc mắc về
-        dân sự, thừa kế, hôn nhân và gia đình...
-      </p>
+      <KienThuc :KienThuc="categoryKnowledge[category.value] || []" />
     </div>
-    <KienThuc :KienThuc="KienThucDanSu" />
-
-    <div class="header-section">
-      <div class="title-container">
-        <div class="title-accent"></div>
-        <h1 class="main-title">Hình sự</h1>
-      </div>
-      <p class="description">
-        Qua nội dung này, bạn có thể tìm câu trả lời cho tất cả các thắc mắc về
-        hình sự...
-      </p>
-    </div>
-    <KienThuc :KienThuc="KienThucHinhSu" />
-
-    <div class="header-section">
-      <div class="title-container">
-        <div class="title-accent"></div>
-        <h1 class="main-title">Giải quyết tranh chấp</h1>
-      </div>
-      <p class="description">
-        Qua nội dung này, bạn có thể tìm câu trả lời cho tất cả các thắc mắc về
-        giải quyết tranh chấp...
-      </p>
-    </div>
-    <KienThuc :KienThuc="KienThucTranhChap" />
-
-    <div class="header-section">
-      <div class="title-container">
-        <div class="title-accent"></div>
-        <h1 class="main-title">Kinh doanh thương mại</h1>
-      </div>
-      <p class="description">
-        Qua nội dung này, bạn có thể tìm câu trả lời cho tất cả các thắc mắc về
-        kinh doanh thương mại...
-      </p>
-    </div>
-    <KienThuc :KienThuc="KienThucThuongMai" />
-
-    <div class="header-section">
-      <div class="title-container">
-        <div class="title-accent"></div>
-        <h1 class="main-title">Lao động</h1>
-      </div>
-      <p class="description">
-        Qua nội dung này, bạn có thể tìm câu trả lời cho tất cả các thắc mắc về
-        lao động...
-      </p>
-    </div>
-    <KienThuc :KienThuc="KienThucLaoDong" />
-
-    <div class="header-section">
-      <div class="title-container">
-        <div class="title-accent"></div>
-        <h1 class="main-title">Đất đai</h1>
-      </div>
-      <p class="description">
-        Qua nội dung này, bạn có thể tìm câu trả lời cho tất cả các thắc mắc về
-        đất đai...
-      </p>
-    </div>
-    <KienThuc :KienThuc="KienThucDatDai" />
-
-    <div class="header-section">
-      <div class="title-container">
-        <div class="title-accent"></div>
-        <h1 class="main-title">Thể loại khác</h1>
-      </div>
-      <p class="description">
-        Qua nội dung này, bạn có thể tìm câu trả lời cho tất cả các thắc mắc về
-        thể loại khác...
-      </p>
-    </div>
-    <KienThuc :KienThuc="KienThucKhac" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { useSidebarStore } from "~/stores/sidebar";
 import { useLegalKnowledge } from "~/composables/useLegalKnowledge";
 import KienThuc from "~/components/KienThuc.vue";
-const sidebarStore = useSidebarStore();
-const route = useRoute();
-const { getLegalKnowledge } = useLegalKnowledge();
+const { getLegalKnowledge, getCategories } = useLegalKnowledge();
+const categories = ref<any[]>([]);
+const categoryKnowledge = ref<Record<string, any[]>>({});
 
-import { getImageUrl } from "~/utils/config";
 
-const knowledgeList = ref<any[]>([]);
-const getStatusLabel = (status: string) => {
-  const labels: Record<string, string> = {
-    published: "Đã xuất bản",
-    draft: "Bản nháp",
-    archived: "Đã lưu trữ",
-  };
-  return labels[status] || status;
-};
-
-const KienThucHinhSu = ref([]);
-const KienThucDanSu = ref([]);
-const KienThucTranhChap = ref([]);
-const KienThucThuongMai = ref([]);
-const KienThucLaoDong = ref([]);
-const KienThucDatDai = ref([]);
-const KienThucKhac = ref([]);
 onMounted(async () => {
-  const [
-    resDanSu,
-    resHinhSu,
-    resTranhChap,
-    resThuongMai,
-    resLaoDong,
-    resDatDai,
-    resKhac,
-  ] = await Promise.all([
-    getLegalKnowledge({ category: "dan_su_thua_ke_hon_nhan_va_gia_dinh" }),
-    getLegalKnowledge({ category: "hinh_su" }),
-    getLegalKnowledge({ category: "giai_quyet_tranh_chap" }),
-    getLegalKnowledge({ category: "kinh_doanh_thuong_mai" }),
-    getLegalKnowledge({ category: "lao_dong" }),
-    getLegalKnowledge({ category: "dat_dai" }),
-    getLegalKnowledge({ category: "the_loai_khac" }),
-  ]);
-  KienThucDanSu.value = resDanSu.data;
-  KienThucHinhSu.value = resHinhSu.data;
-  KienThucTranhChap.value = resTranhChap.data;
-  KienThucThuongMai.value = resThuongMai.data;
-  KienThucLaoDong.value = resLaoDong.data;
-  KienThucDatDai.value = resDatDai.data;
-  KienThucKhac.value = resKhac.data;
+  try {
+    const categoriesResponse = await getCategories();
+    categories.value = categoriesResponse.data.slice().sort((a, b) => {
+      if (a.value === 'the_loai_khac') return 1;
+      if (b.value === 'the_loai_khac') return -1;
+      return a.id - b.id;
+    });
+
+    // Fetch knowledge for each category
+    const knowledgePromises = categories.value.map(async (category) => {
+      const response = await getLegalKnowledge({ category: category.value,limit: 8,offset: 0 });
+      return { value: category.value, data: response.data };
+    });
+
+    const knowledgeResults = await Promise.all(knowledgePromises);
+    
+    // Organize knowledge by category value
+    knowledgeResults.forEach(({ value, data }) => {
+      categoryKnowledge.value[value] = data;
+    });
+  } catch (error) {
+    console.error('Error loading categories and knowledge:', error);
+  }
 });
 </script>
 
@@ -298,3 +210,4 @@ onMounted(async () => {
   }
 }
 </style>
+
