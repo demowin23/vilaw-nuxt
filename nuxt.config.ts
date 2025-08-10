@@ -11,7 +11,13 @@ export default defineNuxtConfig({
   // Runtime config for API
   runtimeConfig: {
     public: {
-      apiBase: process.env.BASE_URL || 'http://vilaw.net.vn/api/v1'
+      apiBase: process.env.BASE_URL || 'https://vilaw.net.vn/api/v1'
+    },
+    // SSL configuration
+    ssl: {
+      key: process.env.SSL_KEY_PATH || '/etc/ssl/private/vilaw.key',
+      cert: process.env.SSL_CERT_PATH || '/etc/ssl/certs/vilaw.crt',
+      ca: process.env.SSL_CA_PATH || null
     }
   },
   
@@ -19,13 +25,13 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       '/api/v1': {
-        target: process.env.BASE_URL || 'http://vilaw.net.vn/api/v1',
+        target: process.env.BASE_URL || 'https://vilaw.net.vn/api/v1',
         changeOrigin: true,
         prependPath: false,
       }
     }
   },
-  
+
   vite: {
     server: {
       fs: {
@@ -53,7 +59,5 @@ export default defineNuxtConfig({
         './app.vue'
       ]
     }
-  },
-  
-
+  }
 });

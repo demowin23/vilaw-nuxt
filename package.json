@@ -8,7 +8,15 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "start": "node .output/server/index.mjs"
+    "start": "node .output/server/index.mjs",
+    "start:ssl": "node server.js",
+    "pm2:start": "pm2 start ecosystem.config.js --env production",
+    "pm2:stop": "pm2 stop vilaw-nuxt",
+    "pm2:restart": "pm2 restart vilaw-nuxt",
+    "pm2:logs": "pm2 logs vilaw-nuxt",
+    "pm2:status": "pm2 status",
+    "ssl:setup": "sudo bash scripts/setup-ssl.sh",
+    "ssl:check": "bash scripts/check-ssl.sh"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
