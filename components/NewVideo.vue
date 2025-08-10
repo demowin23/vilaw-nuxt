@@ -38,7 +38,7 @@
         >
           <img
             :src="getImageUrl(video.thumbnail)"
-            class="w-full h-52 object-cover"
+            class="w-full h-52 object-cover object-bottom"
             :alt="video.title"
           />
           <div class="p-4 flex-1 flex flex-col">
@@ -84,7 +84,7 @@
         >
           <img
             :src="getImageUrl(video.thumbnail)"
-            class="w-full h-48 object-cover"
+            class="w-full h-48 object-cover object-bottom"
             :alt="video.title"
           />
           <div class="p-4 flex-1 flex flex-col">

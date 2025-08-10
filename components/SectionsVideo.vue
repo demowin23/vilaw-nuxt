@@ -19,7 +19,11 @@
             'w-16 h-16 relative',
           ]"
         >
-          <img :src="item.thumbnail" class="w-16 h-16 mx-auto" alt="icon" />
+          <img
+            :src="item.thumbnail"
+            class="w-16 h-16 mx-auto object-cover object-bottom"
+            alt="icon"
+          />
           <span
             class="absolute -top-2 -left-2 w-7 h-7 flex items-center justify-center rounded-full font-bold text-white text-base shadow-lg"
             :class="item.badgeBg"
