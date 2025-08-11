@@ -74,16 +74,20 @@
             v-if="featuredArticles.length > 1"
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
+            <NuxtLink
+              :to="`/kien-thuc/chi-tiet/${featuredArticles[1].id}-${slugify(featuredArticles[1].title)}`"
+            >
             <img
               :src="getImageUrl(featuredArticles[1].image)"
-              :alt="featuredArticles[1].title"
-              class="w-full h-32 object-cover rounded-t-xl"
-            />
+                :alt="featuredArticles[1].title"
+                class="w-full h-32 object-cover rounded-t-xl"
+              />
             <div class="p-4 flex-1 flex flex-col">
               <h4 class="font-bold text-gray-800 text-sm">
                 {{ featuredArticles[1].title }}
               </h4>
             </div>
+            </NuxtLink>
           </div>
 
           <!-- Card 2: Third featured article (Top Right) -->
@@ -91,6 +95,9 @@
             v-if="featuredArticles.length > 2"
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
+            <NuxtLink
+              :to="`/kien-thuc/chi-tiet/${featuredArticles[2].id}-${slugify(featuredArticles[2].title)}`"
+            >
             <img
               :src="getImageUrl(featuredArticles[2].image)"
               :alt="featuredArticles[2].title"
@@ -101,6 +108,7 @@
                 {{ featuredArticles[2].title }}
               </h4>
             </div>
+            </NuxtLink>
           </div>
 
           <!-- Card 3: Fourth featured article (Bottom Left) -->
@@ -108,6 +116,9 @@
             v-if="featuredArticles.length > 3"
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
+            <NuxtLink
+              :to="`/kien-thuc/chi-tiet/${featuredArticles[3].id}-${slugify(featuredArticles[3].title)}`"
+            >
             <img
               :src="getImageUrl(featuredArticles[3].image)"
               :alt="featuredArticles[3].title"
@@ -118,6 +129,7 @@
                 {{ featuredArticles[3].title }}
               </h4>
             </div>
+            </NuxtLink>
           </div>
 
           <!-- Card 4: Fifth featured article (Bottom Right) -->
@@ -125,6 +137,9 @@
             v-if="featuredArticles.length > 4"
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
+            <NuxtLink
+              :to="`/kien-thuc/chi-tiet/${featuredArticles[4].id}-${slugify(featuredArticles[4].title)}`"
+            >
             <img
               :src="getImageUrl(featuredArticles[4].image)"
               :alt="featuredArticles[4].title"
@@ -135,6 +150,7 @@
                 {{ featuredArticles[4].title }}
               </h4>
             </div>
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -154,6 +170,9 @@
           :key="index"
           class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
         >
+          <NuxtLink
+            :to="`/kien-thuc/chi-tiet/${article.id}-${slugify(article.title)}`"
+          >
           <div class="flex p-2">
             <!-- Image -->
             <div class="w-28 h-24 flex-shrink-0">
@@ -173,8 +192,9 @@
               <p class="text-gray-600 text-sm leading-relaxed line-clamp-2">
                 {{ article.summary }}
               </p>
+              </div>
             </div>
-          </div>
+          </NuxtLink>
         </div>
       </div>
     </div>

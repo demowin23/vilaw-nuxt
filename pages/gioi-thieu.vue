@@ -438,7 +438,7 @@
       </div>
       <div class="w-full mt-8">
         <img
-          :src="about.servicesImage || '/public/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp'"
+          src="/public/images/dich-vu-cua-chung-toi.BYo7SAj4_Z1tJAQ9.webp"
           alt="Dịch vụ của chúng tôi"
           class="w-full max-h-64 object-cover rounded-2xl shadow"
         />
