@@ -9,12 +9,12 @@
       <div class="absolute inset-0 bg-black opacity-20"></div>
       <div class="relative container mx-auto px-4 py-20">
         <div class="text-center text-white">
-          <h1 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
-            Liên Hệ
-          </h1>
-          <p class="text-xl md:text-2xl opacity-95 font-light">
-            CÔNG TY LUẬT TNHH THÀNH ĐÔ VIỆT NAM
-          </p>
+              <h1 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+                {{ info.heroTitle || 'Liên Hệ' }}
+              </h1>
+            <p class="text-xl md:text-2xl opacity-95 font-light">
+              {{ info.heroSubtitle }}
+            </p>
           <div class="mt-8 flex justify-center">
             <div class="bg-white/20 backdrop-blur-sm rounded-full px-8 py-3">
               <span class="text-white font-medium"
@@ -60,7 +60,7 @@
                   Thông Tin Công Ty
                 </h2>
                 <p class="text-gray-600 dark:text-gray-300 mt-1">
-                  Thông tin pháp lý chính thức
+                  {{ Array.isArray(info.companyInfo) && info.companyInfo[0]?.value ? info.companyInfo[0].value : 'Thông tin pháp lý chính thức' }}
                 </p>
               </div>
             </div>
@@ -91,7 +91,7 @@
                     Giấy CNĐKHĐ
                   </p>
                   <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    01021343/TP/ĐKHĐ cấp ngày 18/08/2017 tại Sở Tư pháp Hà Nội
+                    {{ Array.isArray(info.companyInfo) && info.companyInfo[0]?.value }}
                   </p>
                 </div>
               </div>
@@ -121,8 +121,7 @@
                     Mã số thuế
                   </p>
                   <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    0107979476 cấp ngày 22/02/2018 tại Chi Cục Thuế Quận Cầu
-                    Giấy
+                    {{ Array.isArray(info.companyInfo) && info.companyInfo[1]?.value }}
                   </p>
                 </div>
               </div>
@@ -196,8 +195,7 @@
                     Địa chỉ
                   </p>
                   <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    Tầng 6, Tòa tháp Ngôi sao, Dương Đình Nghệ, P. Yên Hòa, Q.
-                    Cầu Giấy, Hà Nội
+                    {{ info.address }}
                   </p>
                 </div>
               </div>
@@ -231,7 +229,7 @@
                     href="tel:0919089888"
                     class="text-2xl font-bold bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent hover:from-red-600 hover:to-pink-700 transition-all duration-300"
                   >
-                    0919 089 888
+                    {{ info.hotline }}
                   </a>
                   <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
                     (Tư vấn miễn phí 24/7)
@@ -268,7 +266,7 @@
                     href="mailto:luatsu@luatthanhdo.com.vn"
                     class="text-lg font-semibold bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent hover:from-emerald-600 hover:to-teal-700 transition-all duration-300"
                   >
-                    luatsu@luatthanhdo.com.vn
+                    {{ info.email }}
                   </a>
                 </div>
               </div>
@@ -310,35 +308,11 @@
             </div>
 
             <div class="space-y-4">
-              <div
+              <div v-for="(bh, idx) in info.businessHours" :key="idx"
                 class="flex justify-between items-center p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-100 dark:border-amber-800/30"
               >
-                <span class="text-gray-700 dark:text-gray-200 font-medium"
-                  >Thứ 2 - Thứ 6</span
-                >
-                <span class="font-bold text-amber-600 dark:text-amber-400"
-                  >8:00 - 17:30</span
-                >
-              </div>
-              <div
-                class="flex justify-between items-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30"
-              >
-                <span class="text-gray-700 dark:text-gray-200 font-medium"
-                  >Thứ 7</span
-                >
-                <span class="font-bold text-blue-600 dark:text-blue-400"
-                  >8:00 - 12:00</span
-                >
-              </div>
-              <div
-                class="flex justify-between items-center p-4 bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/50 dark:to-slate-800/50 rounded-xl border border-gray-100 dark:border-gray-700/50"
-              >
-                <span class="text-gray-700 dark:text-gray-200 font-medium"
-                  >Chủ nhật</span
-                >
-                <span class="font-bold text-gray-600 dark:text-gray-400"
-                  >Nghỉ</span
-                >
+                <span class="text-gray-700 dark:text-gray-200 font-medium">{{ bh.label }}</span>
+                <span class="font-bold text-amber-600 dark:text-amber-400">{{ bh.value }}</span>
               </div>
             </div>
           </div>
@@ -523,7 +497,7 @@
             class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-2xl h-80 md:h-96 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600"
           >
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d658.3658409649598!2d105.78764914013858!3d21.021495463205078!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab539381cdf9%3A0xb7015760fb64e2b8!2zUC4gRMawxqFuZyDEkMOsbmggTmdo4buHLCBIw6AgTuG7mWksIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1752811885907!5m2!1svi!2s"
+              :src="info.mapEmbedSrc"
               width="100%"
               height="100%"
               style="border: 0; border-radius: 1rem"
@@ -539,7 +513,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useSiteContent } from "~/composables/useSiteContent";
+import { normalizeContactFromApi } from "~/utils/siteContentMapper";
+
+const { getContact } = useSiteContent();
+
+const info = ref({
+  heroTitle: "",
+  heroSubtitle: "",
+  companyInfo: [],
+  address: "",
+  hotline: "",
+  email: "",
+  businessHours: [],
+  mapEmbedSrc: ""
+} as any);
+
+onMounted(async () => {
+  try {
+    const res: any = await getContact();
+    const data = res?.data || res;
+    info.value = normalizeContactFromApi(data.content || data);
+  } catch {}
+});
 
 const form = ref({
   name: "",

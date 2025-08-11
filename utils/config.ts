@@ -5,6 +5,11 @@ export const getApiConfig = () => {
     BASE_URL: config.public.apiBase,
     
     ENDPOINTS: {
+      SITE_CONTENT: {
+        ROOT: '/site-content',
+        ABOUT: '/site-content/about',
+        CONTACT: '/site-content/contact',
+      },
       AUTH: {
         SEND_REGISTRATION_OTP: '/auth/send-registration-otp',
         REGISTER: '/auth/register',

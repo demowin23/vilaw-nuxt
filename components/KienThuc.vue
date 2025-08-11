@@ -1,6 +1,7 @@
 <template>
   <div class="cards-grid">
     <div class="card" v-for="item in KienThuc" :key="item.id">
+      <NuxtLink :to="`/kien-thuc/chi-tiet/${item.id}-${slugify(item.title)}`">
       <div class="card-content">
         <div class="card-illustration">
           <img
@@ -23,6 +24,7 @@
           >
         </div>
       </div>
+      </NuxtLink>
     </div>
   </div>
 </template>

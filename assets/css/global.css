@@ -4,6 +4,8 @@
   --primary-color: #f58220;
   --primary-dark: #ea580c;
   --primary-light: #fef3c7;
+  /* Layout */
+  --header-height: 93px;
 
   /* Text colors */
   --text-primary: #1f2937;
@@ -242,4 +244,24 @@ select {
 
 .dark .ql-picker-label:hover {
   color: var(--primary-color);
+}
+
+/* Disable outer (window) scroll */
+html,
+body {
+  height: 100%;
+  /* Allow page scroll; specific containers will manage their own scroll */
+  overflow: auto;
+  overscroll-behavior: none;
+}
+
+/* Utility: hide scrollbars but keep scroll functionality */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  display: none; /* Chrome, Safari */
 }

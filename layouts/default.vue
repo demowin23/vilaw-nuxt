@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex flex-col bg-gray-100 dark:bg-gray-900 overflow-hidden transition-colors duration-300"
+    class="flex flex-col bg-gray-100 dark:bg-gray-900 overflow-hidden transition-colors duration-300 min-h-screen"
   >
     <Header />
-    <div class="flex flex-1 layout-main">
+    <div class="flex layout-main">
       <aside
         :class="[
           isOpenSidebar ? 'w-64' : 'w-16',
@@ -25,15 +25,7 @@
                 Trang chủ
               </NuxtLink>
             </li>
-            <li>
-              <NuxtLink to="/gioi-thieu" class="sidebar-link">
-                <font-awesome-icon
-                  :icon="['fas', 'circle-info']"
-                  class="sidebar-icon"
-                />
-                Giới thiệu
-              </NuxtLink>
-            </li>
+            
             <li>
               <NuxtLink to="/phap-luat-doi-song" class="sidebar-link">
                 <font-awesome-icon
@@ -152,6 +144,15 @@
                 Liên hệ
               </NuxtLink>
             </li>
+            <li>
+              <NuxtLink to="/gioi-thieu" class="sidebar-link">
+                <font-awesome-icon
+                  :icon="['fas', 'circle-info']"
+                  class="sidebar-icon"
+                />
+                Giới thiệu
+              </NuxtLink>
+            </li>
           </ul>
           <div class="mt-10 flex justify-center">
             <ThemeToggle />
@@ -211,8 +212,7 @@
       <!-- Main content -->
       <div class="main-content flex-1 flex flex-col w-full h-full min-h-0">
         <main
-          class="flex-1 container mx-auto px-2 md:px-4 py-4 overflow-y-auto min-h-0 max-w-screen-2xl flex flex-col bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
-          style="height: 100%"
+          class="flex-1 container mx-auto px-2 md:px-4 py-4 overflow-y-auto no-scrollbar min-h-0 max-w-screen-2xl flex flex-col bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
         >
           <slot />
           <Footer v-if="!isChatPage" />
@@ -470,7 +470,7 @@ onMounted(() => {
 .layout-main {
   display: flex;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - var(--header-height));
 }
 .sidebar-absolute {
   flex-shrink: 0;
@@ -493,7 +493,7 @@ onMounted(() => {
 @media (max-width: 1028px) {
   .sidebar-absolute {
     position: absolute !important;
-    top: 93px;
+    top: var(--header-height);
     left: 0;
     height: 100vh;
     width: 260px !important;

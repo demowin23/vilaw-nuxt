@@ -12,7 +12,7 @@
         </button>
       </div>
 
-      <nav class="sidebar-nav">
+      <nav class="sidebar-nav no-scrollbar">
         <!-- 1. Quản lý website -->
         <div class="menu-section">
           <div class="section-header" @click="toggleWebsiteSection">
@@ -78,6 +78,16 @@
               <span v-if="!sidebarCollapsed" class="nav-text"
                 >Video pháp luật</span
               >
+            </NuxtLink>
+
+            <NuxtLink to="/admin/gioi-thieu" class="nav-item" active-class="active">
+              <span class="nav-icon">ℹ️</span>
+              <span v-if="!sidebarCollapsed" class="nav-text">Trang Giới thiệu</span>
+            </NuxtLink>
+
+            <NuxtLink to="/admin/lien-he" class="nav-item" active-class="active">
+              <span class="nav-icon">☎️</span>
+              <span v-if="!sidebarCollapsed" class="nav-text">Trang Liên hệ</span>
             </NuxtLink>
 
             <NuxtLink
@@ -251,6 +261,8 @@ watch(
       "/admin/documents": "Quản lý văn bản pháp luật",
       "/admin/news": "Quản lý tin tức pháp luật",
       "/admin/videos": "Quản lý video pháp luật",
+          "/admin/gioi-thieu": "Quản trị trang Giới thiệu",
+          "/admin/lien-he": "Quản trị trang Liên hệ",
       "/admin/chat": "Chat hỗ trợ",
       "/admin/service-usage": "Tra cứu sử dụng dịch vụ",
       "/admin/service-history": "Lịch sử sử dụng",

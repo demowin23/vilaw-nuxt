@@ -39,23 +39,16 @@
             </li>
             <li>
               <a
-                href="#"
+                href="/lien-he"
                 class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
                 >Liên hệ <span class="align-super text-xs">↗</span></a
               >
             </li>
             <li>
               <a
-                href="#"
+                href="/gioi-thieu"
                 class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
                 >Giới thiệu <span class="align-super text-xs">↗</span></a
-              >
-            </li>
-            <li>
-              <NuxtLink
-                to="/sitemap"
-                class="hover:text-orange-500 transition text-gray-700 dark:text-gray-300"
-                >Sơ đồ trang web <span class="align-super text-xs">↗</span></NuxtLink
               >
             </li>
           </ul>
