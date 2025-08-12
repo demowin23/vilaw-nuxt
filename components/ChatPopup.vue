@@ -2,7 +2,7 @@
   <div v-if="!isChatPage">
     <button
       class="fixed bottom-6 right-6 z-50 bg-[#f58220] text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl hover:bg-[#e06d00] transition"
-      @click="open = true"
+      @click="openChat"
       aria-label="Chat với luật sư"
     >
       <font-awesome-icon :icon="['fas', 'comments']" />
@@ -35,55 +35,75 @@
         >
           <div
             v-for="(msg, idx) in messages"
-            :key="idx"
+            :key="msg.id || idx"
             class="flex flex-col"
-            :class="msg.isUser ? 'items-end' : 'items-start'"
+            :class="msg.senderRole === 'user' ? 'items-end' : 'items-start'"
           >
             <div
               class="inline-block px-3 py-1.5 rounded-lg mb-1 mx-1"
               :class="
-                msg.isUser
+                msg.senderRole === 'user'
                   ? 'bg-[#f58220] text-white'
+                  : msg.senderRole === 'lawyer'
+                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
               "
             >
-              <template v-if="msg.type === 'text'">
+              <div v-if="msg.senderRole !== 'user'" class="text-[11px] font-semibold mb-0.5">
+                {{ msg.senderName }}
+              </div>
+
+              <template v-if="msg.messageType === 'text'">
                 {{ msg.content }}
               </template>
-              <template v-else-if="msg.type === 'image'">
+              <template v-else-if="msg.messageType === 'image'">
                 <img
-                  :src="msg.content"
-                  class="max-w-[120px] max-h-24 rounded-lg"
+                  :src="msg.fileUrl ? getImageUrl(msg.fileUrl) : msg.content"
+                  class="max-w-[140px] max-h-28 rounded-lg"
                 />
               </template>
-              <template v-else-if="msg.type === 'file'">
-                <a
-                  :href="msg.content"
-                  target="_blank"
-                  class="underline text-blue-600 dark:text-blue-400"
-                  >Tải file</a
-                >
+              <template v-else-if="msg.messageType === 'file'">
+                <template v-if="isImageFile(msg.fileUrl || msg.fileName)">
+                  <img
+                    :src="msg.fileUrl ? getImageUrl(msg.fileUrl) : ''"
+                    class="max-w-[140px] max-h-28 rounded-lg"
+                  />
+                </template>
+                <template v-else>
+                  <a
+                    href="#"
+                    @click.prevent="downloadFile(msg)"
+                    class="underline text-blue-600 dark:text-blue-400"
+                  >
+                    📎 {{ msg.fileName || (msg.fileUrl ? msg.fileUrl.split('/').pop() : 'Tải file') }}
+                  </a>
+                </template>
               </template>
+
+              <div class="text-[10px] opacity-70 mt-0.5">
+                {{ formatTime(msg.createdAt) }}
+              </div>
             </div>
           </div>
         </div>
         <!-- Nhập tin nhắn và gửi -->
         <form
           class="flex gap-1 items-end mt-1 p-2 bg-white dark:bg-gray-800 rounded-b-xl"
-          @submit.prevent="sendMessage"
+          @submit.prevent="handleSendMessage"
         >
           <input
             v-model="input"
             type="text"
             placeholder="Nhập tin nhắn..."
             class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#f58220] bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 text-sm"
-            @keydown.enter.exact.prevent="sendMessage"
+            @keydown.enter.exact.prevent="handleSendMessage"
           />
           <input
             ref="fileInput"
             type="file"
             class="hidden"
             @change="handleFileChange"
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt"
           />
           <button
             type="button"
@@ -108,92 +128,117 @@
           <button
             type="submit"
             class="bg-[#f58220] text-white font-bold rounded-lg px-3 py-1 hover:bg-[#e06d00] transition-colors duration-300 text-sm"
+            :disabled="!input.trim() && !selectedFile"
           >
             Gửi
           </button>
         </form>
+        <div v-if="selectedFile" class="px-2 pb-2 -mt-1">
+          <div class="flex items-center gap-2 p-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-xs">
+            <span>📎 {{ selectedFile.name }}</span>
+            <button @click="selectedFile = null" class="text-red-500 hover:text-red-700">✕</button>
+          </div>
+        </div>
       </div>
     </transition>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from "vue";
+import { ref, computed, nextTick, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faComments, faTimes } from "@fortawesome/free-solid-svg-icons";
 library.add(faComments, faTimes);
+import { useChat } from "~/composables/useChat";
+import { useAuth } from "~/composables/useAuth";
+import { getApiConfig, getImageUrl } from "~/utils/config";
 
 const open = ref(false);
 const route = useRoute();
 const isChatPage = computed(() => route.path === "/chat-luat-su");
+const isClient = ref(false);
 
 interface Message {
-  type: "text" | "image" | "file";
+  id: number;
   content: string;
-  isUser: boolean;
+  messageType: "text" | "image" | "file";
+  senderId: number;
+  senderName: string;
+  senderRole: "user" | "lawyer" | "admin";
+  fileUrl?: string;
+  fileName?: string;
+  createdAt: string;
+  isRead: boolean;
 }
 
-const messages = ref<Message[]>([
-  {
-    type: "text",
-    content: "Xin chào Luật sư! Tôi muốn hỏi về thủ tục ly hôn.",
-    isUser: true,
-  },
-  {
-    type: "text",
-    content:
-      "Chào bạn! Tôi rất vui được hỗ trợ bạn. Bạn vui lòng cung cấp thêm thông tin về trường hợp của mình?",
-    isUser: false,
-  },
-  {
-    type: "text",
-    content:
-      "Tôi và chồng đã ly thân 2 năm, có 1 con chung 5 tuổi. Chúng tôi đã thống nhất về việc nuôi con.",
-    isUser: true,
-  },
-  {
-    type: "text",
-    content:
-      "Cảm ơn bạn đã chia sẻ. Để tiến hành ly hôn, bạn cần chuẩn bị: giấy đăng ký kết hôn, giấy khai sinh của con, sổ hộ khẩu và các giấy tờ tài sản chung nếu có.",
-    isUser: false,
-  },
-  {
-    type: "text",
-    content: "Vậy thủ tục sẽ mất bao lâu và chi phí như thế nào ạ?",
-    isUser: true,
-  },
-  {
-    type: "text",
-    content:
-      "Thủ tục ly hôn thuận tình thường mất 1-2 tháng. Chi phí bao gồm: lệ phí tòa án khoảng 300.000đ, phí công chứng hợp đồng ly hôn khoảng 200.000đ. Bạn có muốn tôi hỗ trợ soạn đơn không?",
-    isUser: false,
-  },
-]);
+const { user, token } = useAuth();
+const {
+  conversations,
+  loading,
+  error,
+  getConversations,
+  createConversation,
+  getMessages,
+  sendUserMessage,
+} = useChat();
+
+const messages = ref<Message[]>([]);
 const input = ref("");
 const fileInput = ref<HTMLInputElement | null>(null);
 const messagesEnd = ref<HTMLElement | null>(null);
+const selectedFile = ref<File | null>(null);
+const currentConversationId = ref<number | null>(null);
+let refreshInterval: NodeJS.Timeout;
 
 function closeChat() {
   open.value = false;
+  if (refreshInterval) clearInterval(refreshInterval);
 }
 
-function sendMessage() {
-  if (input.value.trim() !== "") {
-    messages.value.push({ type: "text", content: input.value, isUser: true });
-    input.value = "";
-    scrollToBottom();
-    // Giả lập phản hồi luật sư (demo)
-    setTimeout(() => {
-      messages.value.push({
-        type: "text",
-        content: "Luật sư đã nhận được tin nhắn của bạn.",
-        isUser: false,
-      });
-      scrollToBottom();
-    }, 800);
+async function openChat() {
+  open.value = true;
+  await loadInitialData();
+  if (refreshInterval) clearInterval(refreshInterval);
+  refreshInterval = setInterval(async () => {
+    if (currentConversationId.value && !loading.value) {
+      try {
+        const list = await getMessages(currentConversationId.value);
+        if (list.length !== messages.value.length) {
+          messages.value = list;
+          scrollToBottom();
+        }
+      } catch (err) {
+        console.error("Error refreshing messages:", err);
+      }
+    }
+  }, 3000);
+}
+
+async function loadInitialData() {
+  try {
+    await getConversations();
+    if (conversations.value.length > 0) {
+      await selectConversation(conversations.value[0]);
+    } else {
+      const response = await createConversation(
+        `Tư vấn pháp luật - ${new Date().toLocaleDateString("vi-VN")}`
+      );
+      await getConversations();
+      const newConv = conversations.value.find((c) => c.id === response.data.id);
+      if (newConv) await selectConversation(newConv);
+    }
+  } catch (err) {
+    console.error("Error initializing chat:", err);
   }
+}
+
+async function selectConversation(conversation: any) {
+  currentConversationId.value = conversation.id;
+  const list = await getMessages(conversation.id);
+  messages.value = list;
+  scrollToBottom();
 }
 
 function triggerFileInput() {
@@ -204,24 +249,12 @@ function handleFileChange(e: Event) {
   const files = (e.target as HTMLInputElement).files;
   if (!files || files.length === 0) return;
   const file = files[0];
-  if (file.type.startsWith("image/")) {
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      messages.value.push({
-        type: "image",
-        content: ev.target?.result as string,
-        isUser: true,
-      });
-      scrollToBottom();
-    };
-    reader.readAsDataURL(file);
-  } else {
-    // File khác (pdf, doc, ...)
-    const url = URL.createObjectURL(file);
-    messages.value.push({ type: "file", content: url, isUser: true });
-    scrollToBottom();
+  if (file.size > 10 * 1024 * 1024) {
+    alert("File quá lớn. Vui lòng chọn file nhỏ hơn 10MB.");
+    (e.target as HTMLInputElement).value = "";
+    return;
   }
-  // Reset input để có thể upload lại cùng file
+  selectedFile.value = file;
   (e.target as HTMLInputElement).value = "";
 }
 
@@ -232,6 +265,111 @@ function scrollToBottom() {
     }
   });
 }
+
+function isImageFile(pathOrName?: string) {
+  if (!pathOrName) return false;
+  const lower = pathOrName.toLowerCase();
+  return (
+    lower.endsWith(".png") ||
+    lower.endsWith(".jpg") ||
+    lower.endsWith(".jpeg") ||
+    lower.endsWith(".gif") ||
+    lower.endsWith(".webp") ||
+    lower.endsWith(".bmp") ||
+    lower.endsWith(".jfif") ||
+    lower.endsWith(".svg")
+  );
+}
+
+async function handleSendMessage() {
+  if ((!input.value.trim() && !selectedFile.value) || !currentConversationId.value) return;
+
+  const messageContent = input.value;
+  const messageFile = selectedFile.value;
+  const isImage = messageFile && messageFile.type && messageFile.type.startsWith("image/");
+
+  input.value = "";
+  selectedFile.value = null;
+
+  const newMessage: Message = {
+    id: Date.now(),
+    content: messageFile ? (isImage ? URL.createObjectURL(messageFile) : messageContent) : messageContent,
+    messageType: messageFile ? (isImage ? "image" : "file") : "text",
+    senderId: user.value?.id || 0,
+    senderName: user.value?.fullName || "Người dùng",
+    senderRole: "user",
+    fileUrl: messageFile && !isImage ? URL.createObjectURL(messageFile) : undefined,
+    fileName: messageFile?.name,
+    createdAt: new Date().toISOString(),
+    isRead: false,
+  };
+
+  messages.value.push(newMessage);
+  scrollToBottom();
+
+  try {
+    await sendUserMessage(currentConversationId.value, messageContent, messageFile || undefined);
+    const list = await getMessages(currentConversationId.value);
+    messages.value = list;
+    scrollToBottom();
+  } catch (err) {
+    console.error("Error sending message:", err);
+    messages.value = messages.value.filter((m) => m.id !== newMessage.id);
+    input.value = messageContent;
+    selectedFile.value = messageFile;
+  }
+}
+
+async function downloadFile(msg: Message) {
+  try {
+    const fileName = msg.fileName || (msg.fileUrl ? msg.fileUrl.split('/').pop() || '' : '');
+    if (!fileName) return;
+
+    if (!token.value) {
+      alert("Bạn cần đăng nhập để tải tệp tin.");
+      return;
+    }
+
+    const { BASE_URL } = getApiConfig();
+    const response = await fetch(`${BASE_URL}/chat/download/${encodeURIComponent(fileName)}`,
+      { method: 'GET', headers: { Authorization: `Bearer ${token.value}` } });
+    if (!response.ok) throw new Error('Failed to download file');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error('Download error:', err);
+    alert('Tải file thất bại. Vui lòng thử lại.');
+  }
+}
+
+const formatTime = (date: string) => {
+  if (!date) return "";
+  const dt = new Date(date);
+  const now = new Date();
+  const sameDay =
+    dt.getFullYear() === now.getFullYear() &&
+    dt.getMonth() === now.getMonth() &&
+    dt.getDate() === now.getDate();
+  const timePart = dt.toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' });
+  if (sameDay) return timePart;
+  const datePart = dt.toLocaleDateString("vi-VN", { day: '2-digit', month: '2-digit', year: 'numeric' });
+  return `${timePart} ${datePart}`;
+};
+
+onMounted(() => {
+  isClient.value = true;
+});
+
+onUnmounted(() => {
+  if (refreshInterval) clearInterval(refreshInterval);
+});
 </script>
 
 <style scoped>

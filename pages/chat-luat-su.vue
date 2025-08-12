@@ -118,17 +118,26 @@
                   </template>
                   <template v-else-if="msg.messageType === 'image'">
                     <img
-                      :src="msg.content"
+                      :src="msg.fileUrl ? getImageUrl(msg.fileUrl) : msg.content"
                       class="max-w-xs max-h-48 rounded-lg"
                     />
                   </template>
                   <template v-else-if="msg.messageType === 'file'">
-                    <a
-                      :href="msg.fileUrl"
-                      :download="msg.fileName || ''"
-                      class="underline text-blue-600 dark:text-blue-400"
-                      >📎 {{ msg.fileName || "Tải file" }}</a
-                    >
+                    <template v-if="isImageFile(msg.fileUrl || msg.fileName)">
+                      <img
+                        :src="msg.fileUrl ? getImageUrl(msg.fileUrl) : ''"
+                        class="max-w-xs max-h-48 rounded-lg"
+                      />
+                    </template>
+                    <template v-else>
+                      <a
+                        href="#"
+                        @click.prevent="downloadFile(msg)"
+                        class="underline text-blue-600 dark:text-blue-400"
+                      >
+                        📎 {{ msg.fileName || (msg.fileUrl ? msg.fileUrl.split('/').pop() : 'Tải file') }}
+                      </a>
+                    </template>
                   </template>
 
                   <!-- Message Time -->
@@ -157,7 +166,7 @@
                 type="file"
                 class="hidden"
                 @change="handleFileChange"
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt"
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt"
                 v-if="isClient"
               />
               <button
@@ -216,12 +225,13 @@ import { ref, nextTick, onMounted, onUnmounted } from "vue";
 import { useThemeStore } from "~/stores/theme";
 import { useChat } from "~/composables/useChat";
 import { useAuth } from "~/composables/useAuth";
+import { getApiConfig, getImageUrl } from "~/utils/config";
 
 // Ensure we're on the client side
 const isClient = ref(false);
 
 const themeStore = useThemeStore();
-const { user } = useAuth();
+const { user, token } = useAuth();
 const {
   conversations,
   loading,
@@ -388,6 +398,21 @@ function handleFileChange(e: Event) {
   target.value = "";
 }
 
+function isImageFile(pathOrName?: string) {
+  if (!pathOrName) return false;
+  const lower = pathOrName.toLowerCase();
+  return (
+    lower.endsWith('.png') ||
+    lower.endsWith('.jpg') ||
+    lower.endsWith('.jpeg') ||
+    lower.endsWith('.gif') ||
+    lower.endsWith('.webp') ||
+    lower.endsWith('.bmp') ||
+    lower.endsWith('.jfif') ||
+    lower.endsWith('.svg')
+  );
+}
+
 function handleCall() {
   if (!currentConversationId.value) {
     alert("Vui lòng bắt đầu cuộc trò chuyện trước.");
@@ -435,18 +460,63 @@ function scrollToBottom() {
   });
 }
 
+// Download file via authorized API call
+async function downloadFile(msg: Message) {
+  try {
+    const fileName = msg.fileName || (msg.fileUrl ? msg.fileUrl.split('/').pop() || '' : '');
+    if (!fileName) return;
+
+    if (!token.value) {
+      alert("Bạn cần đăng nhập để tải tệp tin.");
+      return;
+    }
+
+    const { BASE_URL } = getApiConfig();
+    const response = await fetch(`${BASE_URL}/chat/download/${encodeURIComponent(fileName)}`,
+      { method: "GET", headers: { Authorization: `Bearer ${token.value}` } });
+
+    if (!response.ok) {
+      throw new Error("Failed to download file");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("Download error:", err);
+    alert("Tải file thất bại. Vui lòng thử lại.");
+  }
+}
+
 const formatTime = (date: string) => {
   if (!date) return "";
+  const dt = new Date(date);
   const now = new Date();
-  const diff = now.getTime() - new Date(date).getTime();
-  const minutes = Math.floor(diff / (1000 * 60));
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  if (minutes < 1) return "Vừa xong";
-  if (minutes < 60) return `${minutes} phút trước`;
-  if (hours < 24) return `${hours} giờ trước`;
-  return `${days} ngày trước`;
+  const sameDay =
+    dt.getFullYear() === now.getFullYear() &&
+    dt.getMonth() === now.getMonth() &&
+    dt.getDate() === now.getDate();
+
+  const timePart = dt.toLocaleTimeString("vi-VN", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  if (sameDay) return timePart;
+
+  const datePart = dt.toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+  return `${timePart} ${datePart}`;
 };
 
 // Auto refresh messages every 5 seconds (more frequent)

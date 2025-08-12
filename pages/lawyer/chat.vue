@@ -119,17 +119,28 @@
                       <template v-if="message.messageType === 'text'">
                         {{ message.content }}
                       </template>
-                      <template v-else-if="message.messageType === 'file'">
-                        <a
-                          :href="message.fileUrl"
-                          target="_blank"
-                          class="file-link"
-                        >
-                          📎 {{ message.fileName || "Tải file" }}
-                        </a>
-                      </template>
                       <template v-else-if="message.messageType === 'image'">
-                        <img :src="message.content" class="message-image" />
+                        <img
+                          :src="message.content || (message.fileUrl ? getImageUrl(message.fileUrl) : '')"
+                          class="message-image"
+                        />
+                      </template>
+                      <template v-else-if="message.messageType === 'file'">
+                        <template v-if="isImageFile(message.fileUrl || message.fileName)">
+                          <img
+                            :src="message.fileUrl ? getImageUrl(message.fileUrl) : ''"
+                            class="message-image"
+                          />
+                        </template>
+                        <template v-else>
+                          <a
+                            href="#"
+                            @click.prevent="downloadFile(message)"
+                            class="file-link"
+                          >
+                            📎 {{ message.fileName || (message.fileUrl ? message.fileUrl.split('/').pop() : 'Tải file') }}
+                          </a>
+                        </template>
                       </template>
                     </div>
                   </div>
@@ -167,7 +178,7 @@
                   type="file"
                   class="hidden"
                   @change="handleFileChange"
-                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt"
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp,.txt"
                 />
                 <div v-if="selectedFile" class="selected-file">
                   📎 {{ selectedFile.name }}
@@ -213,13 +224,14 @@
 <script setup>
 import { useChat } from "~/composables/useChat";
 import { useAuth } from "~/composables/useAuth";
+import { getApiConfig, getImageUrl } from "~/utils/config";
 
 definePageMeta({
   layout: "default",
   middleware: "auth",
 });
 
-const { user } = useAuth();
+const { user, token } = useAuth();
 const {
   conversations,
   selectedConversation,
@@ -331,7 +343,62 @@ const triggerFileInput = () => {
 
 const handleFileChange = (event) => {
   if (process.client && event.target.files?.[0]) {
-    selectedFile.value = event.target.files[0];
+    const file = event.target.files[0];
+    if (file.size > 10 * 1024 * 1024) {
+      alert("File quá lớn. Vui lòng chọn file nhỏ hơn 10MB.");
+      event.target.value = "";
+      return;
+    }
+    selectedFile.value = file;
+    event.target.value = "";
+  }
+};
+
+const isImageFile = (pathOrName) => {
+  if (!pathOrName) return false;
+  const lower = String(pathOrName).toLowerCase();
+  return (
+    lower.endsWith(".png") ||
+    lower.endsWith(".jpg") ||
+    lower.endsWith(".jpeg") ||
+    lower.endsWith(".gif") ||
+    lower.endsWith(".webp") ||
+    lower.endsWith(".bmp") ||
+    lower.endsWith(".jfif") ||
+    lower.endsWith(".svg")
+  );
+};
+
+const downloadFile = async (message) => {
+  try {
+    const fileName = message.fileName || (message.fileUrl ? message.fileUrl.split("/").pop() || "" : "");
+    if (!fileName) return;
+
+    if (!token.value) {
+      alert("Bạn cần đăng nhập để tải tệp tin.");
+      return;
+    }
+
+    const { BASE_URL } = getApiConfig();
+    const response = await fetch(`${BASE_URL}/chat/download/${encodeURIComponent(fileName)}`,
+      { method: "GET", headers: { Authorization: `Bearer ${token.value}` } });
+
+    if (!response.ok) {
+      throw new Error("Failed to download file");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("Download error:", err);
+    alert("Tải file thất bại. Vui lòng thử lại.");
   }
 };
 
@@ -345,16 +412,27 @@ const scrollToBottom = () => {
 
 const formatTime = (date) => {
   if (!date) return "";
+  const dt = new Date(date);
   const now = new Date();
-  const diff = now - new Date(date);
-  const minutes = Math.floor(diff / (1000 * 60));
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  if (minutes < 1) return "Vừa xong";
-  if (minutes < 60) return `${minutes} phút trước`;
-  if (hours < 24) return `${hours} giờ trước`;
-  return `${days} ngày trước`;
+  const sameDay =
+    dt.getFullYear() === now.getFullYear() &&
+    dt.getMonth() === now.getMonth() &&
+    dt.getDate() === now.getDate();
+
+  const timePart = dt.toLocaleTimeString("vi-VN", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  if (sameDay) return timePart;
+
+  const datePart = dt.toLocaleDateString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+  return `${timePart} ${datePart}`;
 };
 
 const getStatusText = (status) => {
