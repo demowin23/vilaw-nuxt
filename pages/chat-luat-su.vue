@@ -125,7 +125,7 @@
                   <template v-else-if="msg.messageType === 'file'">
                     <a
                       :href="msg.fileUrl"
-                      target="_blank"
+                      :download="msg.fileName || ''"
                       class="underline text-blue-600 dark:text-blue-400"
                       >📎 {{ msg.fileName || "Tải file" }}</a
                     >
@@ -320,6 +320,7 @@ async function handleSendMessage() {
 
   const messageContent = input.value;
   const messageFile = selectedFile.value;
+  const isImage = messageFile && messageFile.type && messageFile.type.startsWith("image/");
 
   // Clear input immediately for better UX
   input.value = "";
@@ -328,12 +329,12 @@ async function handleSendMessage() {
   // Add message to UI immediately (optimistic update)
   const newMessage: Message = {
     id: Date.now(), // Temporary ID
-    content: messageContent,
-    messageType: messageFile ? "file" : "text",
+    content: messageFile ? (isImage ? URL.createObjectURL(messageFile) : messageContent) : messageContent,
+    messageType: messageFile ? (isImage ? "image" : "file") : "text",
     senderId: user.value?.id || 0,
-    senderName: user.value?.name || "Người dùng",
+    senderName: user.value?.fullName || "Người dùng",
     senderRole: "user",
-    fileUrl: messageFile ? URL.createObjectURL(messageFile) : undefined,
+    fileUrl: messageFile && !isImage ? URL.createObjectURL(messageFile) : undefined,
     fileName: messageFile?.name,
     createdAt: new Date().toISOString(),
     isRead: false,
@@ -399,7 +400,7 @@ function handleCall() {
     content: "Tôi muốn gọi điện thoại với luật sư",
     messageType: "text",
     senderId: user.value?.id || 0,
-    senderName: user.value?.name || "Người dùng",
+    senderName: user.value?.fullName || "Người dùng",
     senderRole: "user",
     createdAt: new Date().toISOString(),
     isRead: false,

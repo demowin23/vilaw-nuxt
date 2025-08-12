@@ -117,12 +117,6 @@ export default defineEventHandler(async (event) => {
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>${baseUrl}/quen-mat-khau</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
   
   <url>
     <loc>${baseUrl}/gioi-thieu</loc>

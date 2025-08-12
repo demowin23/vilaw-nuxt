@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+    class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
   >
     <div class="w-full max-w-2xl space-y-8">
       <!-- Header -->
@@ -13,45 +13,7 @@
       <!-- Login Form -->
       <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 sm:p-8">
-          <!-- Login Method Toggle -->
-          <div class="mb-6">
-            <div
-              class="flex flex-col sm:flex-row bg-gray-100 dark:bg-gray-700 rounded-lg p-1"
-            >
-              <button
-                type="button"
-                @click="
-                  loginMethod = 'password';
-                  showOTPInput = false;
-                "
-                :class="[
-                  'flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-300 mb-1 sm:mb-0',
-                  loginMethod === 'password'
-                    ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white',
-                ]"
-              >
-                Đăng nhập bằng mật khẩu
-              </button>
-              <button
-                type="button"
-                @click="
-                  loginMethod = 'otp';
-                  showOTPInput = false;
-                "
-                :class="[
-                  'flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-300',
-                  loginMethod === 'otp'
-                    ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white',
-                ]"
-              >
-                Đăng nhập bằng OTP
-              </button>
-            </div>
-          </div>
 
-          <!-- Phone Number -->
           <div class="mb-6">
             <label
               for="phone"
@@ -68,49 +30,14 @@
                 class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#f58220] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
                 placeholder="Nhập số điện thoại"
               />
-              <button
-                v-if="loginMethod === 'otp'"
-                type="button"
-                @click="handleSendOTP"
-                :disabled="!form.phone || isLoading"
-                class="px-4 py-3 bg-[#f58220] hover:bg-[#e06d00] disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors duration-300 whitespace-nowrap"
-              >
-                Gửi OTP
-              </button>
+            
             </div>
           </div>
 
           <!-- OTP Input -->
-          <div v-if="loginMethod === 'otp' && showOTPInput" class="mb-6">
-            <label
-              for="otp"
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
-              Mã OTP
-            </label>
-            <div class="flex flex-col sm:flex-row gap-2">
-              <input
-                id="otp"
-                v-model="otp"
-                type="text"
-                maxlength="6"
-                required
-                class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#f58220] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
-                placeholder="Nhập mã OTP 6 số"
-              />
-              <button
-                type="button"
-                @click="handleResendOTP"
-                :disabled="countdown > 0 || isLoading"
-                class="px-4 py-3 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors duration-300 whitespace-nowrap"
-              >
-                {{ countdown > 0 ? `${countdown}s` : "Gửi lại" }}
-              </button>
-            </div>
-          </div>
 
           <!-- Password -->
-          <div v-if="loginMethod === 'password'" class="mb-6">
+          <div  class="mb-6">
             <label
               for="password"
               class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
@@ -169,28 +96,7 @@
             </div>
           </div>
 
-          <!-- Remember Me & Forgot Password -->
-          <div
-            v-if="loginMethod === 'password'"
-            class="flex items-center justify-between mb-6"
-          >
-            <label class="flex items-center">
-              <input
-                v-model="form.rememberMe"
-                type="checkbox"
-                class="h-4 w-4 text-[#f58220] focus:ring-[#f58220] border-gray-300 dark:border-gray-600 rounded"
-              />
-              <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
-                Ghi nhớ đăng nhập
-              </span>
-            </label>
-            <NuxtLink
-              to="/quen-mat-khau"
-              class="text-sm text-[#f58220] hover:text-[#e06d00] font-medium transition-colors duration-300"
-            >
-              Quên mật khẩu?
-            </NuxtLink>
-          </div>
+
 
           <!-- Submit Button -->
           <button
@@ -264,7 +170,6 @@ const form = ref({
 });
 
 const showPassword = ref(false);
-const loginMethod = ref<"password" | "otp">("password");
 const otp = ref("");
 const showOTPInput = ref(false);
 const countdown = ref(0);
@@ -326,7 +231,6 @@ const handleLogin = async () => {
     return;
   }
 
-  if (loginMethod.value === "password") {
     if (!form.value.password) {
       handleApiError("Vui lòng nhập mật khẩu!");
       return;
@@ -352,24 +256,6 @@ const handleLogin = async () => {
         "Số điện thoại hoặc mật khẩu không đúng. Vui lòng thử lại!"
       );
     }
-  } else {
-    if (!otp.value) {
-      handleApiError("Vui lòng nhập mã OTP!");
-      return;
-    }
-
-    try {
-      const response = await loginWithOTP(form.value.phone, otp.value);
-      if (response.success) {
-        handleApiSuccess(response, "Đăng nhập thành công!");
-        await navigateTo("/");
-      } else {
-        handleApiError(response.message || "Mã OTP không đúng!");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      handleApiError(error, "Mã OTP không đúng. Vui lòng thử lại!");
-    }
-  }
+  
 };
 </script>

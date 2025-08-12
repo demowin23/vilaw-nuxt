@@ -215,7 +215,7 @@
           class="flex-1 container mx-auto px-2 md:px-4 py-4 overflow-y-auto no-scrollbar min-h-0 max-w-screen-2xl flex flex-col bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
         >
           <slot />
-          <Footer v-if="!isChatPage" />
+          <Footer v-if="!isChatPage && !route.path.startsWith('/dang-ky') && !route.path.startsWith('/dang-nhap')" />
         </main>
       </div>
     </div>

@@ -132,7 +132,6 @@ export const useSitemap = () => {
         links: [
           { title: 'Đăng nhập', url: '/dang-nhap' },
           { title: 'Đăng ký', url: '/dang-ky' },
-          { title: 'Quên mật khẩu', url: '/quen-mat-khau' }
         ]
       },
       info: {
