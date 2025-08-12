@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isChatPage">
+  <div v-if="!isChatPage && isUser">
     <button
       class="fixed bottom-6 right-6 z-50 bg-[#f58220] text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl hover:bg-[#e06d00] transition"
       @click="openChat"
@@ -157,8 +157,9 @@ import { getApiConfig, getImageUrl } from "~/utils/config";
 
 const open = ref(false);
 const route = useRoute();
-const isChatPage = computed(() => route.path === "/chat-luat-su");
+const isChatPage = computed(() => route.path === "/chat-luat-su" || route.path === "/chat-luat-su/");
 const isClient = ref(false);
+const isUser = computed(() => user.value?.role === "user");
 
 interface Message {
   id: number;
