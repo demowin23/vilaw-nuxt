@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isChatPage && isUser">
+  <div v-if="!isChatPage && (isUser || !user)">
     <button
       class="fixed bottom-6 right-6 z-50 bg-[#f58220] text-white rounded-full shadow-lg w-16 h-16 flex items-center justify-center text-3xl hover:bg-[#e06d00] transition"
       @click="openChat"
@@ -9,7 +9,7 @@
     </button>
     <transition name="fade">
       <div
-        v-if="open"
+        v-if="open && isUser && user"
         class="fixed bottom-24 right-6 z-50 bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-[350px] max-w-[95vw] p-0 flex flex-col animate-fade-in"
         style="height: 480px; max-height: 80vh"
       >
@@ -137,6 +137,22 @@
           <div class="flex items-center gap-2 p-1.5 bg-gray-100 dark:bg-gray-700 rounded-lg text-xs">
             <span>📎 {{ selectedFile.name }}</span>
             <button @click="selectedFile = null" class="text-red-500 hover:text-red-700">✕</button>
+          </div>
+        </div>
+      </div>
+      <div v-else-if="open && !user">
+        <div class="fixed bottom-24 right-6 z-50 bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-[350px] max-w-[95vw] p-0 flex flex-col animate-fade-in">
+          <div class="flex items-center justify-center border-b border-gray-200 dark:border-gray-600 min-h-[40px] relative bg-white dark:bg-gray-800 rounded-t-xl">
+            <h2 class="text-base font-bold text-[#f58220] text-center m-0">
+              Vui lòng đăng nhập để chat với luật sư
+            </h2>
+            <button
+              class="absolute top-2 right-2 text-gray-400 hover:text-[#f58220] text-lg z-10 pointer-events-auto"
+              @click="closeChat"
+              aria-label="Đóng chat"
+            >
+              <font-awesome-icon :icon="['fas', 'times']" />
+            </button>
           </div>
         </div>
       </div>
