@@ -269,7 +269,7 @@
                 <div v-if="document.wordFile" class="space-y-2">
                   <!-- Download Button -->
                   <button
-                    @click="downloadFile"
+                    @click="downloadFile(document)"
                     class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
                     <svg
@@ -403,7 +403,10 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <a :href="`/van-ban/${doc.id}-${slugify(doc.title)}`" class="text-sm hover:underline">
+              <a
+                :href="`/van-ban/${doc.id}-${slugify(doc.title)}`"
+                class="text-sm hover:underline"
+              >
                 {{ doc.title }}
               </a>
             </div>
@@ -433,7 +436,7 @@ const { getDocumentById, downloadWordFile, getPopularDocuments, getDocuments } =
 const route = useRoute();
 const idParam = route.params.id as string;
 // Extract ID from URL like "123-title-slug" -> "123"
-const id = idParam?.split('-')[0];
+const id = idParam?.split("-")[0];
 
 // Reactive data
 const document = ref<any>(null);
@@ -576,6 +579,7 @@ const downloadFileSearchResult = async (document: any) => {
 };
 
 const downloadFile = async (document: any) => {
+  console.log(document);
   if (!document?.wordFile) return;
 
   try {

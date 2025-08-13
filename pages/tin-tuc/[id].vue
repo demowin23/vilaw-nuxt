@@ -60,7 +60,9 @@
             v-for="related in newsStore.relatedNews"
             :key="related.id"
             class="related-item"
-            @click="navigateTo(`/tin-tuc/${related.id}-${slugify(related.title)}`)"
+            @click="
+              navigateTo(`/tin-tuc/${related.id}-${slugify(related.title)}`)
+            "
           >
             <img
               :src="newsStore.getImage(related.image)"
@@ -97,19 +99,180 @@
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, watch, nextTick } from "vue";
 import { useNewsStore } from "~/stores/news";
+import { useThemeStore } from "~/stores/theme";
 import { slugify } from "~/utils/slugify";
 
 // Get the ID from the route
 const route = useRoute();
 const idParam = route.params.id as string;
-const id = idParam?.split('-')[0];
+const id = idParam?.split("-")[0];
 
-// Use news store
+// Use stores
 const newsStore = useNewsStore();
+const themeStore = useThemeStore();
+
+// Function to apply dark mode styles
+const applyDarkModeStyles = () => {
+  const isDark = themeStore.isDark;
+
+  // Get all elements that need dark mode styling
+  const mainContainer = document.querySelector(".w-full") as HTMLElement;
+  const newsTitle = document.querySelector(".news-title") as HTMLElement;
+  const newsBody = document.querySelector(".news-body") as HTMLElement;
+  const newsExcerpt = document.querySelector(".news-excerpt") as HTMLElement;
+  const relatedTitle = document.querySelector(".related-title") as HTMLElement;
+  const relatedItems = document.querySelectorAll(
+    ".related-item"
+  ) as NodeListOf<HTMLElement>;
+  const relatedContentH4 = document.querySelectorAll(
+    ".related-content h4"
+  ) as NodeListOf<HTMLElement>;
+  const newsTextH2 = document.querySelectorAll(
+    ".news-text h2"
+  ) as NodeListOf<HTMLElement>;
+  const newsTextP = document.querySelectorAll(
+    ".news-text p"
+  ) as NodeListOf<HTMLElement>;
+  const relatedNews = document.querySelector(".related-news") as HTMLElement;
+
+  // Get all span elements
+  const spans = document.querySelectorAll("span");
+
+  if (isDark) {
+    // Dark mode styles
+    if (mainContainer) {
+      mainContainer.style.backgroundColor = "transparent";
+      mainContainer.style.color = "rgb(255, 255, 255)";
+    }
+
+    if (newsTitle) {
+      newsTitle.style.color = "rgb(255, 255, 255)";
+    }
+
+    if (newsBody) {
+      newsBody.style.color = "rgb(255, 255, 255)";
+    }
+
+    if (newsExcerpt) {
+      newsExcerpt.style.backgroundColor = "transparent";
+      newsExcerpt.style.color = "rgb(255, 255, 255)";
+    }
+
+    if (relatedTitle) {
+      relatedTitle.style.color = "rgb(255, 255, 255)";
+    }
+
+    if (relatedNews) {
+      relatedNews.style.borderTopColor = "rgb(255, 255, 255)";
+    }
+
+    relatedItems.forEach((item) => {
+      item.style.backgroundColor = "transparent";
+      item.style.color = "rgb(255, 255, 255)";
+    });
+
+    relatedContentH4.forEach((h4) => {
+      h4.style.color = "rgb(255, 255, 255)";
+    });
+
+    newsTextH2.forEach((h2) => {
+      h2.style.color = "rgb(255, 255, 255)";
+    });
+
+    newsTextP.forEach((p) => {
+      p.style.color = "rgb(255, 255, 255)";
+    });
+
+    // Handle span elements
+    spans.forEach((span) => {
+      if (span.classList.contains("breadcrumb-separator")) {
+        span.style.color = "rgb(255, 255, 255)";
+      } else if (span.classList.contains("breadcrumb-current")) {
+        span.style.color = "rgb(255, 255, 255)";
+      } else if (
+        span.classList.contains("news-date") ||
+        span.classList.contains("news-views") ||
+        span.classList.contains("news-author")
+      ) {
+        span.style.color = "rgb(255, 255, 255)";
+      } else if (span.classList.contains("related-date")) {
+        span.style.color = "rgb(255, 255, 255)";
+      }
+    });
+  } else {
+    // Light mode styles
+    if (mainContainer) {
+      mainContainer.style.backgroundColor = "#ffffff";
+      mainContainer.style.color = "#181818";
+    }
+
+    if (newsTitle) {
+      newsTitle.style.color = "#181818";
+    }
+
+    if (newsBody) {
+      newsBody.style.color = "#374151";
+    }
+
+    if (newsExcerpt) {
+      newsExcerpt.style.backgroundColor = "#f9fafb";
+      newsExcerpt.style.color = "#666";
+    }
+
+    if (relatedTitle) {
+      relatedTitle.style.color = "#181818";
+    }
+
+    if (relatedNews) {
+      relatedNews.style.borderTopColor = "#e5e7eb";
+    }
+
+    relatedItems.forEach((item) => {
+      item.style.backgroundColor = "#ffffff";
+      item.style.color = "#181818";
+    });
+
+    relatedContentH4.forEach((h4) => {
+      h4.style.color = "#181818";
+    });
+
+    newsTextH2.forEach((h2) => {
+      h2.style.color = "#181818";
+    });
+
+    newsTextP.forEach((p) => {
+      p.style.color = "#374151";
+    });
+
+    // Handle span elements
+    spans.forEach((span) => {
+      if (span.classList.contains("breadcrumb-separator")) {
+        span.style.color = "#ccc";
+      } else if (span.classList.contains("breadcrumb-current")) {
+        span.style.color = "#666";
+      } else if (
+        span.classList.contains("news-date") ||
+        span.classList.contains("news-views") ||
+        span.classList.contains("news-author")
+      ) {
+        span.style.color = "#666";
+      } else if (span.classList.contains("related-date")) {
+        span.style.color = "#666";
+      }
+    });
+  }
+};
+
+// Watch for theme changes
+watch(
+  () => themeStore.isDark,
+  () => {
+    applyDarkModeStyles();
+  }
+);
 
 // Fetch news detail from store
 const fetchNewsDetail = async () => {
@@ -143,6 +306,10 @@ function formatDate(dateString: string): string {
 // Load data on mount
 onMounted(() => {
   fetchNewsDetail();
+  // Apply initial theme styles
+  nextTick(() => {
+    applyDarkModeStyles();
+  });
 });
 </script>
 
