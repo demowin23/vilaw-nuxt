@@ -91,7 +91,9 @@
                     Giấy CNĐKHĐ
                   </p>
                   <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {{ Array.isArray(info.companyInfo) && info.companyInfo[0]?.value }}
+                    <a href="/pdf/DKKD_2025.pdf" target="_blank" rel="noopener" class="underline hover:text-[#f58220]">
+                      {{ Array.isArray(info.companyInfo) && info.companyInfo[0]?.value ? info.companyInfo[0].value : 'Thông tin pháp lý chính thức' }}
+                    </a>
                   </p>
                 </div>
               </div>
@@ -501,7 +503,7 @@
               width="100%"
               height="100%"
               style="border: 0; border-radius: 1rem"
-              allowfullscreen=""
+              allowfullscreen
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
             ></iframe>

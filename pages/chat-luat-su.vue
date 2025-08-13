@@ -3,6 +3,7 @@
     <div
       class="flex flex-col w-full bg-white dark:bg-gray-800 rounded-xl transition-colors duration-300"
       style="height: calc(100vh - 130px)"
+      v-if="user?.role === 'user'"
     >
       <div class="flex flex-1 min-h-0 h-0">
         <!-- Khu vực chat -->
@@ -215,6 +216,13 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div v-else class="flex-1 flex items-center justify-center">
+      <div class="text-center">
+        <p class="text-gray-600 dark:text-gray-400">
+          Vui lòng đăng nhập để sử dụng tính năng này
+        </p>
       </div>
     </div>
   </ClientOnly>

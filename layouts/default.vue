@@ -35,7 +35,7 @@
                 Video Pháp luật và Đời sống
               </NuxtLink>
             </li>
-            <li v-if="user?.role === 'user'">
+            <li v-if="isUser || !user">
               <NuxtLink to="/chat-luat-su" class="sidebar-link">
                 <font-awesome-icon
                   :icon="['fas', 'comments']"
@@ -173,7 +173,7 @@
           <NuxtLink to="/phap-luat-doi-song" class="sidebar-icon-only">
             <font-awesome-icon :icon="['fas', 'video']" class="sidebar-icon" />
           </NuxtLink>
-          <NuxtLink to="/chat-luat-su" class="sidebar-icon-only">
+          <NuxtLink to="/chat-luat-su" v-if="isUser || !user" class="sidebar-icon-only">
             <font-awesome-icon
               :icon="['fas', 'comments']"
               class="sidebar-icon"
@@ -271,7 +271,7 @@ const isChatPage = computed(() => route.path === "/chat-luat-su");
 const sidebarStore = useSidebarStore();
 const themeStore = useThemeStore();
 const { isOpenSidebar } = storeToRefs(sidebarStore);
-
+const isUser = computed(() => user.value?.role === "user");
 // Initialize theme on mount
 onMounted(() => {
   // Close sidebar on small screens
