@@ -21,9 +21,10 @@
         <SectionsVideo :topViews="videosKhac" title="Khác" />
       </div>
       <div
-        class="w-1/4 hidden lg:grid mt-[50px] min-w-[100px] max-w-xs h-fit bg-white dark:bg-gray-800 rounded-2xl p-4  grid-cols-2 gap-4 transition-colors duration-300"
+        class="w-1/4 hidden lg:grid mt-[50px] min-w-[100px] max-w-xs h-fit bg-white dark:bg-gray-800 rounded-2xl p-4 grid-cols-2 gap-4 transition-colors duration-300"
       >
         <div
+          @click="handleClick('mua-goi')"
           class="relative group rounded-2xl overflow-hidden h-48 cursor-pointer transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
         >
           <img
@@ -42,6 +43,7 @@
           </div>
         </div>
         <div
+          @click="handleClick('phap-luat-doi-song')"
           class="relative group rounded-2xl overflow-hidden h-48 cursor-pointer transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
         >
           <img
@@ -59,6 +61,7 @@
           </div>
         </div>
         <div
+          @click="handleClick('chat-luat-su')"
           class="relative group rounded-2xl overflow-hidden h-48 cursor-pointer transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
         >
           <img
@@ -76,6 +79,7 @@
           </div>
         </div>
         <div
+          @click="handleClick('kien-thuc')"
           class="relative group rounded-2xl overflow-hidden h-48 cursor-pointer transition-all duration-200 hover:shadow-xl hover:-translate-y-1"
         >
           <img
@@ -104,6 +108,9 @@ import SectionsVideo from "~/components/SectionsVideo.vue";
 import { ref } from "vue";
 import { onMounted } from "vue";
 import { useVideoStore } from "~/stores/video";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const videoStore = useVideoStore();
 const videosHinhSu = ref([]);
@@ -205,4 +212,8 @@ const topViews = [
     badgeBg: "bg-green-500",
   },
 ];
+
+const handleClick = (type: string) => {
+  router.push(`/${type}`);
+};
 </script>

@@ -235,6 +235,7 @@ export const useLegalKnowledge = () => {
   const getFeaturedLegalKnowledge = async (params: {
     limit?: number
     offset?: number
+    category?: string
   } = {}): Promise<LegalKnowledgeResponse> => {
     isLoading.value = true
     try {
@@ -242,7 +243,7 @@ export const useLegalKnowledge = () => {
       
       if (params.limit) queryParams.append('limit', params.limit.toString())
       if (params.offset) queryParams.append('offset', params.offset.toString())
-      
+      if (params.category) queryParams.append('category', params.category)
       const url = `/legal-knowledge/featured${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
       
       const response = await apiCall<LegalKnowledgeResponse>(url, {

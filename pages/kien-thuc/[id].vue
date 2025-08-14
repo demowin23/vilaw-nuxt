@@ -57,7 +57,9 @@
               </p>
 
               <a
-                :href="`/kien-thuc/chi-tiet/${featuredArticles[0].id}-${slugify(featuredArticles[0].title)}`"
+                :href="`/kien-thuc/chi-tiet/${featuredArticles[0].id}-${slugify(
+                  featuredArticles[0].title
+                )}`"
                 class="text-[#FF6600] font-semibold hover:underline flex items-center mt-auto"
               >
                 Xem chi tiết
@@ -75,18 +77,20 @@
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
             <NuxtLink
-              :to="`/kien-thuc/chi-tiet/${featuredArticles[1].id}-${slugify(featuredArticles[1].title)}`"
+              :to="`/kien-thuc/chi-tiet/${featuredArticles[1].id}-${slugify(
+                featuredArticles[1].title
+              )}`"
             >
-            <img
-              :src="getImageUrl(featuredArticles[1].image)"
+              <img
+                :src="getImageUrl(featuredArticles[1].image)"
                 :alt="featuredArticles[1].title"
                 class="w-full h-32 object-cover rounded-t-xl"
               />
-            <div class="p-4 flex-1 flex flex-col">
-              <h4 class="font-bold text-gray-800 text-sm">
-                {{ featuredArticles[1].title }}
-              </h4>
-            </div>
+              <div class="p-4 flex-1 flex flex-col">
+                <h4 class="font-bold text-gray-800 text-sm">
+                  {{ featuredArticles[1].title }}
+                </h4>
+              </div>
             </NuxtLink>
           </div>
 
@@ -96,18 +100,20 @@
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
             <NuxtLink
-              :to="`/kien-thuc/chi-tiet/${featuredArticles[2].id}-${slugify(featuredArticles[2].title)}`"
+              :to="`/kien-thuc/chi-tiet/${featuredArticles[2].id}-${slugify(
+                featuredArticles[2].title
+              )}`"
             >
-            <img
-              :src="getImageUrl(featuredArticles[2].image)"
-              :alt="featuredArticles[2].title"
-              class="w-full h-32 object-cover rounded-t-xl"
-            />
-            <div class="p-4 flex-1 flex flex-col">
-              <h4 class="font-bold text-gray-800 text-sm">
-                {{ featuredArticles[2].title }}
-              </h4>
-            </div>
+              <img
+                :src="getImageUrl(featuredArticles[2].image)"
+                :alt="featuredArticles[2].title"
+                class="w-full h-32 object-cover rounded-t-xl"
+              />
+              <div class="p-4 flex-1 flex flex-col">
+                <h4 class="font-bold text-gray-800 text-sm">
+                  {{ featuredArticles[2].title }}
+                </h4>
+              </div>
             </NuxtLink>
           </div>
 
@@ -117,18 +123,20 @@
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
             <NuxtLink
-              :to="`/kien-thuc/chi-tiet/${featuredArticles[3].id}-${slugify(featuredArticles[3].title)}`"
+              :to="`/kien-thuc/chi-tiet/${featuredArticles[3].id}-${slugify(
+                featuredArticles[3].title
+              )}`"
             >
-            <img
-              :src="getImageUrl(featuredArticles[3].image)"
-              :alt="featuredArticles[3].title"
-              class="w-full h-32 object-cover rounded-t-xl"
-            />
-            <div class="p-4 flex-1 flex flex-col">
-              <h4 class="font-bold text-gray-800 text-sm">
-                {{ featuredArticles[3].title }}
-              </h4>
-            </div>
+              <img
+                :src="getImageUrl(featuredArticles[3].image)"
+                :alt="featuredArticles[3].title"
+                class="w-full h-32 object-cover rounded-t-xl"
+              />
+              <div class="p-4 flex-1 flex flex-col">
+                <h4 class="font-bold text-gray-800 text-sm">
+                  {{ featuredArticles[3].title }}
+                </h4>
+              </div>
             </NuxtLink>
           </div>
 
@@ -138,18 +146,20 @@
             class="bg-white rounded-xl shadow-lg border border-gray-200 flex flex-col"
           >
             <NuxtLink
-              :to="`/kien-thuc/chi-tiet/${featuredArticles[4].id}-${slugify(featuredArticles[4].title)}`"
+              :to="`/kien-thuc/chi-tiet/${featuredArticles[4].id}-${slugify(
+                featuredArticles[4].title
+              )}`"
             >
-            <img
-              :src="getImageUrl(featuredArticles[4].image)"
-              :alt="featuredArticles[4].title"
-              class="w-full h-32 object-cover rounded-t-xl"
-            />
-            <div class="p-4 flex-1 flex flex-col">
-              <h4 class="font-bold text-gray-800 text-sm">
-                {{ featuredArticles[4].title }}
-              </h4>
-            </div>
+              <img
+                :src="getImageUrl(featuredArticles[4].image)"
+                :alt="featuredArticles[4].title"
+                class="w-full h-32 object-cover rounded-t-xl"
+              />
+              <div class="p-4 flex-1 flex flex-col">
+                <h4 class="font-bold text-gray-800 text-sm">
+                  {{ featuredArticles[4].title }}
+                </h4>
+              </div>
             </NuxtLink>
           </div>
         </div>
@@ -173,25 +183,25 @@
           <NuxtLink
             :to="`/kien-thuc/chi-tiet/${article.id}-${slugify(article.title)}`"
           >
-          <div class="flex p-2">
-            <!-- Image -->
-            <div class="w-28 h-24 flex-shrink-0">
-              <img
-                :src="getImageUrl(article.image)"
-                :alt="article.title"
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <!-- Text Content -->
-            <div class="px-4 flex-1">
-              <h3
-                class="font-bold text-gray-800 text-sm leading-tight line-clamp-2"
-              >
-                {{ article.title }}
-              </h3>
-              <p class="text-gray-600 text-sm leading-relaxed line-clamp-2">
-                {{ article.summary }}
-              </p>
+            <div class="flex p-2">
+              <!-- Image -->
+              <div class="w-28 h-24 flex-shrink-0">
+                <img
+                  :src="getImageUrl(article.image)"
+                  :alt="article.title"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <!-- Text Content -->
+              <div class="px-4 flex-1">
+                <h3
+                  class="font-bold text-gray-800 text-sm leading-tight line-clamp-2"
+                >
+                  {{ article.title }}
+                </h3>
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                  {{ article.summary }}
+                </p>
               </div>
             </div>
           </NuxtLink>
@@ -205,7 +215,7 @@
         <button
           class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
           :disabled="currentPage === 1"
-          @click="currentPage > 1 && currentPage--"
+          @click="handlePageChange(currentPage - 1)"
         >
           Trước
         </button>
@@ -221,17 +231,16 @@
                 ? 'bg-[#FF6600] text-white'
                 : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700'
             "
-            @click="currentPage = page"
+            @click="handlePageChange(page)"
           >
             {{ page }}
           </button>
         </div>
 
-        <!-- Next Button -->
         <button
           class="px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
           :disabled="currentPage === totalPages"
-          @click="currentPage < totalPages && currentPage++"
+          @click="handlePageChange(currentPage + 1)"
         >
           Sau
         </button>
@@ -247,7 +256,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useSidebarStore } from "~/stores/sidebar";
 import { useLegalKnowledge } from "~/composables/useLegalKnowledge";
@@ -261,14 +270,6 @@ const knowledgeList = ref<any[]>([]);
 import { getImageUrl } from "~/utils/config";
 
 const featuredArticles = ref<any[]>([]);
-const getStatusLabel = (status: string) => {
-  const labels: Record<string, string> = {
-    published: "Đã xuất bản",
-    draft: "Bản nháp",
-    archived: "Đã lưu trữ",
-  };
-  return labels[status] || status;
-};
 
 const routeTitles: Record<string, string> = {
   dan_su_thua_ke_hon_nhan_va_gia_dinh:
@@ -281,36 +282,13 @@ const routeTitles: Record<string, string> = {
   the_loai_khac: "Thể loại khác",
 };
 
-onMounted(async () => {
-  const routeId = route.params.id as string;
-  if (routeTitles[routeId]) {
-    sidebarStore.setTitle(routeTitles[routeId]);
-  }
-
-  // Fetch regular knowledge articles
-  const response = await getLegalKnowledge({
-    category: routeId,
-  });
-  knowledgeList.value = response.data;
-
-  // Fetch featured articles
-  try {
-    const featuredResponse = await getFeaturedLegalKnowledge({
-      limit: 5, // Get 5 featured articles
-    });
-    featuredArticles.value = featuredResponse.data;
-  } catch (error) {
-    console.error("Error fetching featured articles:", error);
-    // Fallback to empty array if API fails
-    featuredArticles.value = [];
-  }
-});
-
 // Pagination state
 const currentPage = ref(1);
 const itemsPerPage = 9;
+const totalArticles = ref(0);
+const totalPages = ref(0);
 
-// Mock data for articles
+// Mock data for articles (fallback)
 const articles = [
   {
     title: "Các lợi ích khi hộ kinh doanh chuyển lên doanh nghiệp là gì?",
@@ -418,17 +396,59 @@ const articles = [
   },
 ];
 
-// Computed properties for pagination
-const totalArticles = ref(articles.length);
-const totalPages = ref(Math.ceil(totalArticles.value / itemsPerPage));
+// Function to fetch knowledge articles with pagination
+const fetchKnowledgeArticles = async (page: number) => {
+  try {
+    const response = await getLegalKnowledge({
+      limit: itemsPerPage,
+      offset: (page - 1) * itemsPerPage,
+      category: route.params.id as string,
+    });
 
-const paginatedArticles = ref(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return articles.slice(start, end);
+    knowledgeList.value = response.data;
+    totalArticles.value = response.total;
+    totalPages.value = Math.ceil(totalArticles.value / itemsPerPage);
+  } catch (error) {
+    console.error("Error fetching knowledge articles:", error);
+    // Fallback to mock data if API fails
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    knowledgeList.value = articles.slice(startIndex, endIndex);
+    totalArticles.value = articles.length;
+    totalPages.value = Math.ceil(totalArticles.value / itemsPerPage);
+  }
+};
+
+// Function to handle page change
+const handlePageChange = async (page: number) => {
+  currentPage.value = page;
+  await fetchKnowledgeArticles(page);
+};
+
+onMounted(async () => {
+  const routeId = route.params.id as string;
+  if (routeTitles[routeId]) {
+    sidebarStore.setTitle(routeTitles[routeId]);
+  }
+
+  // Fetch regular knowledge articles
+  await fetchKnowledgeArticles(currentPage.value);
+
+  // Fetch featured articles
+  try {
+    const featuredResponse = await getFeaturedLegalKnowledge({
+      category: routeId,
+      limit: 5, // Get 5 featured articles
+    });
+    featuredArticles.value = featuredResponse.data;
+  } catch (error) {
+    console.error("Error fetching featured articles:", error);
+    // Fallback to empty array if API fails
+    featuredArticles.value = [];
+  }
 });
 
-const visiblePages = ref(() => {
+const visiblePages = computed(() => {
   const pages = [];
   const maxVisible = 5;
   let start = Math.max(1, currentPage.value - Math.floor(maxVisible / 2));

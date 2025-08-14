@@ -2,28 +2,16 @@
   <div class="news-list">
     <div class="header-row">
       <h2 class="section-title">{{ title }}</h2>
-      <div class="filters">
-        <select v-model="selectedCategory" class="filter-select">
-          <option value="">Tất cả danh mục</option>
-          <option value="dân sự">Dân sự</option>
-          <option value="hình sự">Hình sự</option>
-          <option value="kinh doanh">Kinh doanh</option>
-          <option value="lao động">Lao động</option>
-          <option value="đất đai">Đất đai</option>
-          <option value="thừa kế">Thừa kế</option>
-          <option value="hôn nhân">Hôn nhân</option>
-        </select>
-        <select v-model="sortBy" class="filter-select">
-          <option value="date">Mới nhất</option>
-          <option value="views">Xem nhiều nhất</option>
-          <option value="title">A-Z</option>
-        </select>
-      </div>
     </div>
 
     <div class="news-grid">
+      <div v-if="loading" class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Đang tải...</p>
+      </div>
       <NewsItem
-        v-for="(item, idx) in paginatedNews"
+        v-else
+        v-for="(item, idx) in news"
         :key="idx"
         :thumbnail="item.thumbnail"
         :title="item.title"
@@ -39,7 +27,7 @@
     <div class="pagination" v-if="totalPages > 1">
       <button
         class="pagination-btn"
-        :disabled="currentPage === 1"
+        :disabled="currentPage === 1 || loading"
         @click="currentPage = currentPage - 1"
       >
         <font-awesome-icon :icon="['fas', 'chevron-left']" />
@@ -52,6 +40,7 @@
           :key="page"
           class="page-number"
           :class="{ active: page === currentPage }"
+          :disabled="loading"
           @click="currentPage = page"
         >
           {{ page }}
@@ -60,7 +49,7 @@
 
       <button
         class="pagination-btn"
-        :disabled="currentPage === totalPages"
+        :disabled="currentPage === totalPages || loading"
         @click="currentPage = currentPage + 1"
       >
         Sau
@@ -88,46 +77,21 @@ interface NewsItemType {
 const props = defineProps<{
   news: NewsItemType[];
   title: string;
+  totalItems?: number;
+  loading?: boolean;
 }>();
 
-const selectedCategory = ref("");
-const sortBy = ref("date");
+const emit = defineEmits<{
+  "page-change": [page: number, itemsPerPage: number];
+}>();
+
 const currentPage = ref(1);
 const itemsPerPage = 12;
 
-const filteredNews = computed(() => {
-  let filtered = [...props.news];
-
-  if (selectedCategory.value) {
-    filtered = filtered.filter((item) =>
-      item.category.toLowerCase().includes(selectedCategory.value.toLowerCase())
-    );
-  }
-
-  filtered.sort((a, b) => {
-    switch (sortBy.value) {
-      case "date":
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      case "views":
-        return b.views - a.views;
-      case "title":
-        return a.title.localeCompare(b.title, "vi");
-      default:
-        return 0;
-    }
-  });
-
-  return filtered;
-});
-
-const totalPages = computed(() =>
-  Math.ceil(filteredNews.value.length / itemsPerPage)
-);
-
-const paginatedNews = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return filteredNews.value.slice(start, end);
+// Use totalItems from props if available, otherwise fallback to news array length
+const totalPages = computed(() => {
+  const total = props.totalItems || props.news.length;
+  return Math.ceil(total / itemsPerPage);
 });
 
 const visiblePages = computed(() => {
@@ -152,10 +116,18 @@ function handleNewsClick(news: NewsItemType) {
   navigateTo(`/tin-tuc/${news.id}-${slugify(news.title)}`);
 }
 
-// Reset to first page when filters change
-watch([selectedCategory, sortBy], () => {
-  currentPage.value = 1;
+// Watch for page changes and emit to parent
+watch(currentPage, (newPage) => {
+  console.log(
+    "Current page changed to:",
+    newPage,
+    "Emitting page-change event"
+  );
+  emit("page-change", newPage, itemsPerPage);
 });
+
+// Don't reset currentPage when news changes - this causes infinite loop
+// Instead, let the parent component handle the data updates
 </script>
 
 <style scoped>
@@ -221,6 +193,43 @@ watch([selectedCategory, sortBy], () => {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
   margin-bottom: 32px;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  color: #374151;
+}
+
+.dark .loading-state {
+  color: #f9fafb;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #f58220;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.dark .loading-spinner {
+  border-color: #4b5563;
+  border-top-color: #f58220;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 768px) {
@@ -317,5 +326,10 @@ watch([selectedCategory, sortBy], () => {
   background: #f58220;
   border-color: #f58220;
   color: white;
+}
+
+.page-number:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

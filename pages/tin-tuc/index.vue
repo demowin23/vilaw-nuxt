@@ -101,7 +101,13 @@
     </div>
 
     <!-- Main News List -->
-    <NewsList :news="newsStore.allNews" title="Tất cả tin tức" />
+    <NewsList
+      :news="newsStore.allNews"
+      :title="'Tất cả tin tức'"
+      :total-items="totalNewsCount"
+      :loading="newsStore.loading"
+      @page-change="handlePageChange"
+    />
   </div>
 </template>
 
@@ -114,30 +120,45 @@ import { slugify } from "~/utils/slugify";
 // Use news store
 const newsStore = useNewsStore();
 
-// Fetch news data from store
-const fetchNews = async () => {
+// Pagination state
+const currentPage = ref(1);
+const totalNewsCount = ref(0);
+const isPageChanging = ref(false); // Flag to prevent infinite loops
+
+const fetchNews = async (page = 1, isInitialLoad = false) => {
   try {
-    // Fetch all news and featured news in parallel
-    await Promise.all([
-      newsStore.fetchAllNews({ page: 1, limit: 20 }),
-      newsStore.fetchFeaturedNews(5),
-    ]);
+    if (isInitialLoad) {
+      // Fetch all news and featured news in parallel only on first load
+      const [newsResponse, featuredResponse] = await Promise.all([
+        newsStore.fetchAllNews({ page, limit: 12 }),
+        newsStore.fetchFeaturedNews(5),
+      ]);
+
+      // Update total count from API response
+      if (newsResponse && newsResponse.total) {
+        totalNewsCount.value = newsResponse.total;
+      }
+    } else {
+      // Only fetch news data for pagination
+      const newsResponse = await newsStore.fetchAllNews({ page, limit: 12 });
+
+      // Update total count from API response
+      if (newsResponse && newsResponse.total) {
+        totalNewsCount.value = newsResponse.total;
+      }
+    }
   } catch (error) {
     console.error("Error fetching news:", error);
-    // Fallback to static data if API fails
-    newsStore.allNews = [
-      {
-        id: 4,
-        thumbnail: "/images/bai-tap-luat.webp",
-        title: "Phân tích án lệ về tranh chấp hợp đồng mua bán nhà đất",
-        excerpt:
-          "Án lệ số 23/2018/AL của Tòa án nhân dân tối cao về hiệu lực của hợp đồng mua bán nhà đất khi chưa có sổ đỏ...",
-        category: "Dân sự",
-        date: "2024-01-12",
-        views: 8760,
-      },
-      // ... other fallback data
-    ];
+  }
+};
+
+// Handle page change from NewsList component
+const handlePageChange = async (page: number, itemsPerPage: number) => {
+  try {
+    currentPage.value = page;
+    await fetchNews(page, false);
+  } catch (error) {
+    console.error("Error fetching news:", error);
   }
 };
 
@@ -157,7 +178,7 @@ function handleNewsClick(news: any) {
 
 // Load data on mount
 onMounted(() => {
-  fetchNews();
+  fetchNews(1, true); // true = initial load
 });
 </script>
 

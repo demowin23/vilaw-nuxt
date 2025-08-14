@@ -2,6 +2,27 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getApiConfig, getImageUrl } from '~/utils/config'
 
+interface NewsItem {
+  id: number
+  title: string
+  description: string
+  image: string
+  category?: string
+  created_at: string
+  ts_update: string
+  view_count?: number
+}
+
+interface NewsItemFormatted {
+  id: number
+  thumbnail: string
+  title: string
+  excerpt: string
+  category: string
+  date: string
+  views: number
+}
+
 interface NewsParams {
   page?: number
   limit?: number
@@ -13,12 +34,12 @@ interface NewsParams {
 
 export const useNewsStore = defineStore('news', () => {
   // State
-  const allNews = ref([])
-  const featuredNews = ref([])
-  const currentNews = ref(null)
-  const relatedNews = ref([])
+  const allNews = ref<NewsItemFormatted[]>([])
+  const featuredNews = ref<NewsItem[]>([])
+  const currentNews = ref<NewsItem | null>(null)
+  const relatedNews = ref<NewsItem[]>([])
   const loading = ref(false)
-  const error = ref(null)
+  const error = ref<string | null>(null)
 
   // Getters
   const getImage = (image: string) => {
