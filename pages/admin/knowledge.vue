@@ -74,7 +74,13 @@
             </td>
             <td class="copy-cell">
               <button
-                @click="copyUrl(`https://vilaw.net.vn/kien-thuc/chi-tiet/${item.id}-${slugify(item.title)}`)"
+                @click="
+                  copyUrl(
+                    `https://vilaw.net.vn/kien-thuc/chi-tiet/${
+                      item.id
+                    }-${slugify(item.title)}`
+                  )
+                "
                 class="copy-btn"
                 title="Copy URL"
               >
@@ -138,6 +144,37 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button
+        class="pagination-btn"
+        :disabled="currentPage === 1"
+        @click="goToPage(currentPage - 1)"
+      >
+        ← Trước
+      </button>
+
+      <div class="page-numbers">
+        <button
+          v-for="page in visiblePages"
+          :key="page"
+          class="page-number"
+          :class="{ active: page === currentPage }"
+          @click="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button
+        class="pagination-btn"
+        :disabled="currentPage === totalPages"
+        @click="goToPage(currentPage + 1)"
+      >
+        Sau →
+      </button>
     </div>
 
     <div
@@ -312,7 +349,29 @@ const knowledgeList = ref<any[]>([]);
 const categories = ref<any[]>([]);
 const totalKnowledge = ref(0);
 const currentPage = ref(1);
-const itemsPerPage = ref(100);
+const itemsPerPage = ref(20);
+
+// Pagination computed
+const totalPages = computed(() =>
+  Math.ceil(totalKnowledge.value / itemsPerPage.value)
+);
+
+const visiblePages = computed(() => {
+  const pages = [];
+  const maxVisible = 5;
+  let start = Math.max(1, currentPage.value - Math.floor(maxVisible / 2));
+  let end = Math.min(totalPages.value, start + maxVisible - 1);
+
+  if (end - start + 1 < maxVisible) {
+    start = Math.max(1, end - maxVisible + 1);
+  }
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+});
 
 const searchQuery = ref("");
 const categoryFilter = ref("");
@@ -389,14 +448,22 @@ const loadCategories = async () => {
 
 // Watch for filter changes
 watch([searchQuery, categoryFilter, isPending], () => {
-  currentPage.value = 1;
+  currentPage.value = 1; // Reset to first page when filtering
   loadKnowledge();
 });
 
+// Pagination function
+const goToPage = async (page: number) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    await loadKnowledge();
+  }
+};
+
 // Computed
-const totalPages = computed(() =>
-  Math.ceil(totalKnowledge.value / itemsPerPage.value)
-);
+// const totalPages = computed(() =>
+//   Math.ceil(totalKnowledge.value / itemsPerPage.value)
+// );
 
 // Methods
 const getCategoryLabel = (category: string) => {
@@ -413,7 +480,7 @@ const getCategoryLabel = (category: string) => {
   return labels[category] || category;
 };
 
-const getStatusLabel = (status: boolean) => {
+const getStatusLabel = (status: any) => {
   if (status === true || status === "true") {
     return "Đã xuất bản";
   } else {
@@ -1027,6 +1094,67 @@ const closeModal = () => {
 
 .copy-btn:active {
   transform: scale(0.95);
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.pagination-btn {
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  font-weight: 500;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+  color: var(--text-secondary);
+  cursor: not-allowed;
+  background: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+.page-numbers {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.page-number {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  font-weight: 500;
+}
+
+.page-number:hover:not(.active) {
+  background: var(--bg-hover);
+  border-color: var(--primary-color);
+}
+
+.page-number.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
 }
 
 @media (max-width: 768px) {

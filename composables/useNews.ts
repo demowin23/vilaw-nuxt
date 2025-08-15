@@ -53,17 +53,29 @@ const apiCall = async <T>(url: string, options: RequestInit = {}, isFormData = f
 
 export const useNews = () => {
   // 1. Lấy danh sách tin tức
-  const getNews = async (params: { search?: string; isPending?: string; isAdmin?: boolean } = {}): Promise<NewsResponse> => {
+  const getNews = async (params: { 
+    search?: string; 
+    isPending?: string; 
+    isAdmin?: boolean;
+    page?: number;
+    limit?: number;
+  } = {}): Promise<NewsResponse> => {
     isLoading.value = true;
     error.value = null;
     try {
       const queryParams = new URLSearchParams();
       if (params.search) queryParams.append('search', params.search);
       if (params.isPending) queryParams.append('isPending', params.isPending);
+      if (params.page) queryParams.append('page', params.page.toString());
+      if (params.limit) queryParams.append('limit', params.limit.toString());
       
       // Nếu là admin thì dùng endpoint admin, ngược lại dùng endpoint thường
       const baseUrl = params.isAdmin ? '/legal-news/admin/all' : '/legal-news'
       const url = `${baseUrl}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+      
+      console.log('News API URL:', url);
+      console.log('News API Params:', params);
+      
       return await apiCall<NewsResponse>(url, { method: 'GET' }, false, params.isAdmin);
     } catch (e: any) {
       error.value = e.message;

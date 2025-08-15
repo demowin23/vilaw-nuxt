@@ -63,6 +63,7 @@
           <option value="true">Video nổi bật</option>
           <option value="false">Video thường</option>
         </select>
+
         <select
           v-model="isPending"
           @change="onFilterChange"
@@ -110,7 +111,13 @@
             </td>
             <td class="copy-cell">
               <button
-                @click="copyUrl(`https://vilaw.net.vn/video/${item.id}-${slugify(item.title)}`)"
+                @click="
+                  copyUrl(
+                    `https://vilaw.net.vn/video/${item.id}-${slugify(
+                      item.title
+                    )}`
+                  )
+                "
                 class="copy-btn"
                 title="Copy URL"
               >
@@ -126,8 +133,8 @@
               </span>
             </td>
             <td>{{ formatDuration(item.duration) }}</td>
-            <td>{{ item.view_count }}</td>
-            <td>{{ item.like_count }}</td>
+            <td>{{ item.view_count || 0 }}</td>
+            <td>{{ item.like_count || 0 }}</td>
             <td class="status">
               <input
                 type="checkbox"
@@ -143,7 +150,7 @@
                 {{ item.is_approved ? "Đã xuất bản" : "Chờ duyệt" }}
               </span>
             </td>
-            <td class="status">
+            <td class="actions">
               <button
                 @click="viewItem(item)"
                 class="action-btn view-btn"
@@ -171,7 +178,37 @@
       </table>
     </div>
 
-    <!-- Modal thêm/sửa video -->
+    <!-- Pagination -->
+    <div class="pagination">
+      <button
+        class="pagination-btn"
+        :disabled="currentPage === 1"
+        @click="goToPage(currentPage - 1)"
+      >
+        ← Trước
+      </button>
+
+      <div class="page-numbers">
+        <button
+          v-for="page in visiblePages"
+          :key="page"
+          class="page-number"
+          :class="{ active: page === currentPage }"
+          @click="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button
+        class="pagination-btn"
+        :disabled="currentPage === totalPages"
+        @click="goToPage(currentPage + 1)"
+      >
+        Sau →
+      </button>
+    </div>
+
     <div
       v-if="showAddModal || showEditModal"
       class="modal-overlay"
@@ -303,6 +340,7 @@
               placeholder="Ví dụ: luat, honnhan, dandien"
             />
           </div>
+
           <div class="modal-actions">
             <button type="button" @click="closeModal" class="cancel-btn">
               Hủy
@@ -334,9 +372,11 @@
               <span class="duration"
                 >Thời lượng: {{ formatDuration(selectedItem.duration) }}</span
               >
-              <span class="views">Lượt xem: {{ selectedItem.view_count }}</span>
+              <span class="views"
+                >Lượt xem: {{ selectedItem.view_count || 0 }}</span
+              >
               <span class="likes"
-                >Lượt like: {{ selectedItem.like_count }}</span
+                >Lượt like: {{ selectedItem.like_count || 0 }}</span
               >
             </div>
             <div class="tags">
@@ -373,7 +413,14 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
+import { ref, computed, onMounted, watch } from "vue";
+import { useVideoLifeLaw } from "~/composables/useVideoLifeLaw";
+import { useNotification } from "~/composables/useNotification";
+import { useAuth } from "~/composables/useAuth";
+import { getImageUrl, getVideoUrl } from "~/utils/config";
+import { slugify } from "~/utils/slugify";
+
 definePageMeta({
   layout: "admin",
   middleware: "auth",
@@ -392,8 +439,8 @@ const { handleApiError, handleApiSuccess } = useNotification();
 const { isAdmin } = useAuth();
 
 // State
-let isPending = ref(false);
-const videoList = ref<any[]>([]);
+const isPending = ref(false);
+const videoList = ref([]);
 const videoTypes = ref([
   {
     id: 1,
@@ -407,10 +454,33 @@ const videoTypes = ref([
   { id: 6, name: "Đất đai", slug: "dat_dai" },
   { id: 7, name: "Thể loại khác", slug: "the_loai_khac" },
 ]);
-const ageGroups = ref<any[]>([]);
+const ageGroups = ref([]);
 const totalVideos = ref(0);
 const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const itemsPerPage = ref(20);
+
+// Pagination computed
+const totalPages = computed(() => {
+  const pages = Math.ceil(totalVideos.value / itemsPerPage.value);
+  return Math.max(1, pages); // Đảm bảo ít nhất có 1 trang
+});
+
+const visiblePages = computed(() => {
+  const pages = [];
+  const maxVisible = 5;
+  let start = Math.max(1, currentPage.value - Math.floor(maxVisible / 2));
+  let end = Math.min(totalPages.value, start + maxVisible - 1);
+
+  if (end - start + 1 < maxVisible) {
+    start = Math.max(1, end - maxVisible + 1);
+  }
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+});
 
 const searchQuery = ref("");
 const typeFilter = ref("");
@@ -419,36 +489,71 @@ const featuredFilter = ref("");
 const showAddModal = ref(false);
 const showEditModal = ref(false);
 const showViewModal = ref(false);
-const selectedItem = ref<any>({});
+const selectedItem = ref({});
 const itemForm = ref({
   title: "",
   thumbnail: "",
   description: "",
   video: "",
-  duration: "",
-  age_group: "all" as "all" | "13+" | "16+" | "18+",
+  duration: 0,
+  age_group: "all",
   type: "",
   tags: "",
   is_featured: false,
 });
 
-import { getImageUrl, getVideoUrl } from "~/utils/config";
-import { slugify } from "~/utils/slugify";
+// File upload states
+const thumbnailFile = ref(null);
+const videoFile = ref(null);
+const thumbnailPreview = ref("");
+const videoPreview = ref("");
 
-const thumbnailFile = ref<File | null>(null);
-const videoFile = ref<File | null>(null);
-const thumbnailPreview = ref<string>("");
-const videoPreview = ref<string>("");
+// Debounce timer for search
+let searchTimer = null;
 
-const onThumbnailChange = (e: Event) => {
-  const files = (e.target as HTMLInputElement).files;
+// Methods
+const getAgeGroupLabel = (ageGroup) => {
+  const labels = {
+    all: "Tất cả",
+    "13+": "13+",
+    "16+": "16+",
+    "18+": "18+",
+  };
+  return labels[ageGroup] || ageGroup;
+};
+
+const formatDuration = (seconds) => {
+  if (!seconds) return "0:00";
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+};
+
+const copyUrl = async (url) => {
+  try {
+    await navigator.clipboard.writeText(url);
+    handleApiSuccess({ message: "Đã copy URL thành công!" });
+  } catch (error) {
+    // Fallback for older browsers
+    const textArea = document.createElement("textarea");
+    textArea.value = url;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    handleApiSuccess({ message: "Đã copy URL thành công!" });
+  }
+};
+
+const onThumbnailChange = (e) => {
+  const files = e.target.files;
   if (!files || !files[0]) return;
   thumbnailFile.value = files[0];
   thumbnailPreview.value = URL.createObjectURL(files[0]);
 };
 
-const onVideoChange = (e: Event) => {
-  const files = (e.target as HTMLInputElement).files;
+const onVideoChange = (e) => {
+  const files = e.target.files;
   if (!files || !files[0]) return;
   videoFile.value = files[0];
   videoPreview.value = URL.createObjectURL(files[0]);
@@ -465,19 +570,13 @@ const onVideoChange = (e: Event) => {
   };
 };
 
-// Load data on mount
-onMounted(() => {
-  loadVideos();
-  loadAgeGroups();
-});
-
-// Load videos with filters
+// Load videos with pagination
 const loadVideos = async () => {
   try {
-    const params: any = {
+    const params = {
       isAdmin: true,
-      limit: 100,
-      offset: 0,
+      page: currentPage.value,
+      limit: itemsPerPage.value,
     };
 
     if (searchQuery.value) {
@@ -501,9 +600,17 @@ const loadVideos = async () => {
     }
 
     const response = await getVideoLifeLaw(params);
-    videoList.value = response.data;
-    totalVideos.value = response.total;
+
+    if (response && response.success && response.data) {
+      videoList.value = response.data;
+      totalVideos.value =
+        response.pagination?.total || response.total || response.data.length;
+    } else {
+      videoList.value = response?.data || [];
+      totalVideos.value = response?.pagination?.total || response?.total || 0;
+    }
   } catch (error) {
+    console.error("Error loading videos:", error);
     handleApiError(error, "Không thể tải danh sách video");
   }
 };
@@ -512,18 +619,19 @@ const loadVideos = async () => {
 const loadAgeGroups = async () => {
   try {
     const response = await getAgeGroups();
-    ageGroups.value = response.data;
+    if (response && response.data) {
+      ageGroups.value = response.data;
+    }
   } catch (error) {
+    console.error("Error loading age groups:", error);
     handleApiError(error, "Không thể tải độ tuổi");
   }
 };
 
-// Debounce timer for search
-let searchTimer = null;
-
 // Filter change handler
 const onFilterChange = async () => {
   try {
+    currentPage.value = 1; // Reset to first page when filtering
     await loadVideos();
   } catch (error) {
     console.error("Error filtering videos:", error);
@@ -540,6 +648,7 @@ const onSearchInput = () => {
   // Set new timer
   searchTimer = setTimeout(async () => {
     try {
+      currentPage.value = 1; // Reset to first page when searching
       await loadVideos();
     } catch (error) {
       console.error("Error searching videos:", error);
@@ -547,52 +656,28 @@ const onSearchInput = () => {
   }, 500); // 500ms delay
 };
 
-// Methods
-const getAgeGroupLabel = (ageGroup: string) => {
-  const labels: Record<string, string> = {
-    all: "Tất cả",
-    "13+": "13+",
-    "16+": "16+",
-    "18+": "18+",
-  };
-  return labels[ageGroup] || ageGroup;
-};
-
-const formatDuration = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-};
-
-const copyUrl = async (url: string) => {
-  try {
-    await navigator.clipboard.writeText(url);
-    handleApiSuccess({ message: "Đã copy URL thành công!" });
-  } catch (error) {
-    // Fallback for older browsers
-    const textArea = document.createElement("textarea");
-    textArea.value = url;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand("copy");
-    document.body.removeChild(textArea);
-    handleApiSuccess({ message: "Đã copy URL thành công!" });
+// Pagination function
+const goToPage = async (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    await loadVideos();
   }
 };
 
-const viewItem = (item: any) => {
+// CRUD operations
+const viewItem = (item) => {
   selectedItem.value = item;
   showViewModal.value = true;
 };
 
-const editItem = (item: any) => {
+const editItem = (item) => {
   selectedItem.value = item;
   itemForm.value = {
     title: item.title,
     thumbnail: item.thumbnail || "",
     description: item.description || "",
     video: item.video || "",
-    duration: item.duration || "",
+    duration: item.duration || 0,
     age_group: item.age_group,
     type: item.type,
     tags: item.tags || "",
@@ -601,19 +686,20 @@ const editItem = (item: any) => {
   showEditModal.value = true;
 };
 
-const deleteItem = async (item: any) => {
+const deleteItem = async (item) => {
   if (confirm(`Bạn có chắc muốn xóa video "${item.title}"?`)) {
     try {
       await deleteVideoLifeLaw(item.id);
       handleApiSuccess({ message: "Xóa video thành công!" });
-      loadVideos();
+      // Reload videos with current pagination
+      await loadVideos();
     } catch (error) {
       handleApiError(error, "Không thể xóa video");
     }
   }
 };
 
-const approveItem = async (item: any) => {
+const approveItem = async (item) => {
   try {
     await approveVideo(item.id, item.is_approved);
     handleApiSuccess({
@@ -631,7 +717,7 @@ const approveItem = async (item: any) => {
 
 const saveItem = async () => {
   try {
-    let payload: any;
+    let payload;
     let isFormData = false;
 
     if (thumbnailFile.value || videoFile.value) {
@@ -656,6 +742,7 @@ const saveItem = async () => {
     } else {
       payload = { ...itemForm.value };
     }
+
     if (showAddModal.value) {
       const response = await createVideoLifeLaw(payload, isFormData);
       handleApiSuccess(response, "Tạo video thành công!");
@@ -667,8 +754,10 @@ const saveItem = async () => {
       );
       handleApiSuccess(response, "Cập nhật video thành công!");
     }
+
     closeModal();
-    loadVideos();
+    // Reload videos with current pagination
+    await loadVideos();
   } catch (error) {
     handleApiError(error, "Không thể lưu video");
   }
@@ -684,15 +773,31 @@ const closeModal = () => {
     thumbnail: "",
     description: "",
     video: "",
-    duration: "",
-    age_group: "all" as "all" | "13+" | "16+" | "18+",
+    duration: 0,
+    age_group: "all",
     type: "",
     tags: "",
     is_featured: false,
   };
   thumbnailPreview.value = "";
   videoPreview.value = "";
+  thumbnailFile.value = null;
+  videoFile.value = null;
 };
+
+// Lifecycle
+onMounted(() => {
+  loadVideos();
+  loadAgeGroups();
+});
+
+watch(
+  [searchQuery, typeFilter, ageGroupFilter, featuredFilter, isPending],
+  () => {
+    currentPage.value = 1; // Reset to first page when filtering
+    loadVideos();
+  }
+);
 </script>
 
 <style scoped>
@@ -1205,6 +1310,68 @@ const closeModal = () => {
   color: white;
 }
 
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 1rem 0;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.pagination-btn {
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--text-secondary);
+}
+
+.page-numbers {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.page-number {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.page-number:hover:not(.active) {
+  background: var(--bg-hover);
+  border-color: var(--primary-color);
+}
+
+.page-number.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
 @media (max-width: 768px) {
   .video-management {
     padding: 4px;
@@ -1248,6 +1415,16 @@ const closeModal = () => {
   .meta-info {
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .page-numbers {
+    flex-wrap: wrap;
+    gap: 0.25rem;
   }
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="page-header">
       <div class="header-left">
         <h2>Quản lý văn bản pháp luật</h2>
-        <p>Tổng cộng {{ documents.length }} văn bản</p>
+        <p>Tổng cộng {{ documents.total || documents.length }} văn bản</p>
       </div>
       <button @click="showAddModal = true" class="add-btn">
         <span>➕</span>
@@ -95,7 +95,13 @@
             </td>
             <td class="copy-cell">
               <button
-                @click="copyUrl(`https://vilaw.net.vn/van-ban/${doc.id}-${slugify(doc.title)}`)"
+                @click="
+                  copyUrl(
+                    `https://vilaw.net.vn/van-ban/${doc.id}-${slugify(
+                      doc.title
+                    )}`
+                  )
+                "
                 class="copy-btn"
                 title="Copy URL"
               >
@@ -151,6 +157,37 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button
+        class="pagination-btn"
+        :disabled="currentPage === 1"
+        @click="goToPage(currentPage - 1)"
+      >
+        ← Trước
+      </button>
+
+      <div class="page-numbers">
+        <button
+          v-for="page in visiblePages"
+          :key="page"
+          class="page-number"
+          :class="{ active: page === currentPage }"
+          @click="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button
+        class="pagination-btn"
+        :disabled="currentPage === totalPages"
+        @click="goToPage(currentPage + 1)"
+      >
+        Sau →
+      </button>
     </div>
 
     <!-- Modal thêm/sửa -->
@@ -448,6 +485,30 @@ const docForm = ref({
   tags: [],
 });
 
+// Pagination state
+const currentPage = ref(1);
+const itemsPerPage = ref(20);
+
+// Pagination computed
+const totalPages = ref(0);
+
+const visiblePages = computed(() => {
+  const pages = [];
+  const maxVisible = 5;
+  let start = Math.max(1, currentPage.value - Math.floor(maxVisible / 2));
+  let end = Math.min(totalPages.value, start + maxVisible - 1);
+
+  if (end - start + 1 < maxVisible) {
+    start = Math.max(1, end - maxVisible + 1);
+  }
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+});
+
 // File upload states
 const wordFile = ref(null);
 const wordFilePreview = ref("");
@@ -455,48 +516,48 @@ const wordFileName = ref("");
 const wordFileSize = ref("");
 const uploadProgress = ref(0);
 
-// Debounce timer for search
-let searchTimer = null;
+onMounted(async () => {
+  try {
+    const [
+      documentsResponse,
+      documentTypesResponse,
+      documentStatusesResponse,
+      legalFieldsResponse,
+    ] = await Promise.all([
+      getDocuments({
+        isAdmin: true,
+        limit: itemsPerPage.value,
+        offset: (currentPage.value - 1) * itemsPerPage.value,
+      }),
+      loadDocumentTypes(),
+      loadDocumentStatuses(),
+      loadLegalFields(),
+    ]);
+    documents.value = documentsResponse.data;
+    totalPages.value = Math.ceil(documentsResponse.total / itemsPerPage.value);
+  } catch (error) {
+    console.error("Error loading initial data:", error);
+  }
+});
 
 // Filter change handler
 const onFilterChange = async () => {
   try {
+    currentPage.value = 1; // Reset to first page when filtering
     await getDocuments({
       isAdmin: true,
       document_type: typeFilter.value,
       isPending: statusFilter.value,
       status: effectiveFilter.value,
       search: searchQuery.value,
+      limit: itemsPerPage.value,
+      offset: (currentPage.value - 1) * itemsPerPage.value,
     });
   } catch (error) {
     console.error("Error filtering documents:", error);
   }
 };
 
-// Search input handler with debounce
-const onSearchInput = () => {
-  // Clear previous timer
-  if (searchTimer) {
-    clearTimeout(searchTimer);
-  }
-
-  // Set new timer
-  searchTimer = setTimeout(async () => {
-    try {
-      await getDocuments({
-        isAdmin: true,
-        document_type: typeFilter.value,
-        isPending: statusFilter.value,
-        status: effectiveFilter.value,
-        search: searchQuery.value,
-      });
-    } catch (error) {
-      console.error("Error searching documents:", error);
-    }
-  }, 500); // 500ms delay
-};
-
-// Methods
 const getTypeLabel = (type) => {
   const typeObj = documentTypes.value.find((t) => t.value === type);
   return typeObj ? typeObj.label : type;
@@ -514,7 +575,7 @@ const getStatusLabel = (doc) => {
 };
 
 const formatDate = (date) => {
-  return new Date(date).toLocaleDateString("vi-VN");
+  return date ? new Date(date).toLocaleDateString("vi-VN") : "";
 };
 
 const copyUrl = async (url) => {
@@ -578,20 +639,6 @@ const downloadWordFile = async (doc) => {
     alert("Có lỗi xảy ra khi tải xuống file!");
   }
 };
-
-// Load documents on mount
-onMounted(async () => {
-  try {
-    await Promise.all([
-      getDocuments({ isAdmin: true }),
-      loadDocumentTypes(),
-      loadDocumentStatuses(),
-      loadLegalFields(),
-    ]);
-  } catch (error) {
-    console.error("Error loading initial data:", error);
-  }
-});
 
 const loadDocumentTypes = async () => {
   try {
@@ -673,7 +720,15 @@ const deleteDoc = async (doc) => {
   if (confirm(`Bạn có chắc muốn xóa văn bản "${doc.title}"?`)) {
     try {
       await deleteDocument(doc.id);
-      await getDocuments({ isAdmin: true });
+      await getDocuments({
+        isAdmin: true,
+        document_type: typeFilter.value,
+        isPending: statusFilter.value,
+        status: effectiveFilter.value,
+        search: searchQuery.value,
+        limit: itemsPerPage.value,
+        offset: (currentPage.value - 1) * itemsPerPage.value,
+      });
     } catch (error) {
       console.error("Lỗi khi xóa văn bản:", error);
       alert("Có lỗi xảy ra khi xóa văn bản!");
@@ -751,7 +806,15 @@ const saveDoc = async () => {
     }
 
     // Reload documents after save
-    await getDocuments({ isAdmin: true });
+    await getDocuments({
+      isAdmin: true,
+      document_type: typeFilter.value,
+      isPending: statusFilter.value,
+      status: effectiveFilter.value,
+      search: searchQuery.value,
+      limit: itemsPerPage.value,
+      offset: (currentPage.value - 1) * itemsPerPage.value,
+    });
     closeModal();
   } catch (error) {
     alert("Có lỗi xảy ra khi lưu văn bản!");
@@ -782,6 +845,26 @@ const closeModal = () => {
   wordFileName.value = "";
   wordFileSize.value = "";
   uploadProgress.value = 0;
+};
+
+// Pagination function
+const goToPage = async (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    try {
+      await getDocuments({
+        isAdmin: true,
+        document_type: typeFilter.value,
+        isPending: statusFilter.value,
+        status: effectiveFilter.value,
+        search: searchQuery.value,
+        limit: itemsPerPage.value,
+        offset: (currentPage.value - 1) * itemsPerPage.value,
+      });
+    } catch (error) {
+      console.error("Error loading documents for page:", page, error);
+    }
+  }
 };
 </script>
 
@@ -1411,6 +1494,67 @@ const closeModal = () => {
 
 .copy-btn:active {
   transform: scale(0.95);
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 1rem 0;
+}
+
+.pagination-btn {
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--text-secondary);
+}
+
+.page-numbers {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.page-number {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.page-number:hover:not(.active) {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+}
+
+.page-number.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
 }
 
 @media (max-width: 768px) {

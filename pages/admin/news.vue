@@ -25,17 +25,24 @@
           type="text"
           placeholder="Tìm kiếm theo tiêu đề..."
           class="search-input"
+          @input="onSearchInput"
         />
         <span class="search-icon">🔍</span>
       </div>
       <div class="filter-group">
-        <select v-model="statusFilter" class="filter-select">
+        <select
+          v-model="statusFilter"
+          class="filter-select"
+          @change="onFilterChange"
+        >
           <option value="">Tất cả trạng thái</option>
           <option value="true">Chờ duyệt</option>
           <option value="false">Đã duyệt</option>
         </select>
       </div>
     </div>
+
+    <!-- Bảng danh sách -->
     <div class="table-container">
       <table class="news-table">
         <thead>
@@ -56,7 +63,13 @@
             <td class="news-title">{{ item.title }}</td>
             <td class="copy-cell">
               <button
-                @click="copyUrl(`https://vilaw.net.vn/tin-tuc/${item.id}-${slugify(item.title)}`)"
+                @click="
+                  copyUrl(
+                    `https://vilaw.net.vn/tin-tuc/${item.id}-${slugify(
+                      item.title
+                    )}`
+                  )
+                "
                 class="copy-btn"
                 title="Copy URL"
               >
@@ -120,6 +133,37 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button
+        class="pagination-btn"
+        :disabled="currentPage === 1"
+        @click="goToPage(currentPage - 1)"
+      >
+        ← Trước
+      </button>
+
+      <div class="page-numbers">
+        <button
+          v-for="page in visiblePages"
+          :key="page"
+          class="page-number"
+          :class="{ active: page === currentPage }"
+          @click="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button
+        class="pagination-btn"
+        :disabled="currentPage === totalPages"
+        @click="goToPage(currentPage + 1)"
+      >
+        Sau →
+      </button>
     </div>
 
     <!-- Modal thêm/sửa -->
@@ -253,15 +297,20 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { useNotification } from "~/composables/useNotification";
 import { useNews } from "~/composables/useNews";
 import { useAuth } from "~/composables/useAuth";
+import { getImageUrl as getImageUrlUtil } from "~/utils/config";
+import { slugify } from "~/utils/slugify";
+
 definePageMeta({
   layout: "admin",
   middleware: "auth",
 });
+
 const { handleApiError, handleApiSuccess } = useNotification();
 const {
   isLoading,
@@ -274,6 +323,7 @@ const {
 } = useNews();
 const { user, isAdmin } = useAuth();
 
+// State
 const newsList = ref([]);
 const totalNews = ref(0);
 const searchQuery = ref("");
@@ -289,15 +339,52 @@ const itemForm = ref({
   image: "",
   tags: [],
 });
+
+// Pagination state
+const currentPage = ref(1);
+const itemsPerPage = ref(20);
+
+// Pagination computed
+const totalPages = computed(() =>
+  Math.ceil(totalNews.value / itemsPerPage.value)
+);
+
+const visiblePages = computed(() => {
+  const pages = [];
+  const maxVisible = 5;
+  let start = Math.max(1, currentPage.value - Math.floor(maxVisible / 2));
+  let end = Math.min(totalPages.value, start + maxVisible - 1);
+
+  if (end - start + 1 < maxVisible) {
+    start = Math.max(1, end - maxVisible + 1);
+  }
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+});
+
+// File upload states
 const imageFile = ref(null);
 const imagePreview = ref("");
 const tagsInput = ref("");
+
+// Debounce timer for search
+let searchTimer = null;
+
+// Methods
 const getStatusLabel = (item) => {
   if (item.is_approved) {
     return "Đã xuất bản";
   } else {
     return "Chờ duyệt";
   }
+};
+
+const getImageUrl = (image) => {
+  return getImageUrlUtil(image);
 };
 
 const copyUrl = async (url) => {
@@ -316,40 +403,90 @@ const copyUrl = async (url) => {
   }
 };
 
-import { getImageUrl as getImageUrlUtil } from "~/utils/config";
-import { slugify } from "~/utils/slugify";
-
-const getImageUrl = (image) => {
-  return getImageUrlUtil(image);
-};
 const onImageChange = (e) => {
   const files = e.target.files;
   if (!files || !files[0]) return;
   imageFile.value = files[0];
   imagePreview.value = URL.createObjectURL(files[0]);
 };
+
+// Load news with pagination
 const loadNews = async () => {
   try {
-    const res = await getNews({
+    const params = {
       search: searchQuery.value,
       isPending: statusFilter.value,
       isAdmin: true,
+      page: currentPage.value,
+      limit: itemsPerPage.value,
+    };
+
+    console.log("Loading news with params:", params);
+
+    const res = await getNews(params);
+
+    // Handle API response properly
+    if (res && res.data) {
+      newsList.value = res.data;
+      totalNews.value = res.total || res.data.length;
+    } else {
+      // Fallback if response structure is different
+      newsList.value = res || [];
+      totalNews.value = res?.total || res?.length || 0;
+    }
+
+    console.log("News loaded:", {
+      currentPage: currentPage.value,
+      totalNews: totalNews.value,
+      totalPages: totalPages.value,
+      newsCount: newsList.value.length,
     });
-    newsList.value = res.data || res;
-    totalNews.value = res.total || newsList.value.length;
   } catch (e) {
+    console.error("Error loading news:", e);
     handleApiError(e, "Không thể tải danh sách tin tức");
   }
 };
 
-onMounted(() => {
-  loadNews();
-});
+// Filter change handler
+const onFilterChange = async () => {
+  try {
+    currentPage.value = 1; // Reset to first page when filtering
+    console.log("Filter changed, resetting to page 1");
+    await loadNews();
+  } catch (error) {
+    console.error("Error filtering news:", error);
+  }
+};
 
-watch([searchQuery, statusFilter], () => {
-  loadNews();
-});
+// Search input handler with debounce
+const onSearchInput = () => {
+  // Clear previous timer
+  if (searchTimer) {
+    clearTimeout(searchTimer);
+  }
 
+  // Set new timer
+  searchTimer = setTimeout(async () => {
+    try {
+      currentPage.value = 1; // Reset to first page when searching
+      console.log("Search changed, resetting to page 1");
+      await loadNews();
+    } catch (error) {
+      console.error("Error searching news:", error);
+    }
+  }, 500); // 500ms delay
+};
+
+// Pagination function
+const goToPage = async (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+    console.log("Going to page:", page);
+    await loadNews();
+  }
+};
+
+// CRUD operations
 const viewItem = (item) => {
   selectedItem.value = item;
   showViewModal.value = true;
@@ -376,7 +513,8 @@ const deleteItemHandler = async (item) => {
     try {
       await deleteNews(item.id);
       handleApiSuccess({ message: "Xóa tin tức thành công!" });
-      loadNews();
+      // Reload news with current pagination
+      await loadNews();
     } catch (e) {
       handleApiError(e, "Không thể xóa tin tức");
     }
@@ -412,9 +550,11 @@ const saveItem = async () => {
       .map((t) => t.trim())
       .filter(Boolean);
     tagsArr.forEach((tag) => formData.append("tags[]", tag));
+
     if (imageFile.value) {
       formData.append("image", imageFile.value);
     }
+
     if (showEditModal.value && selectedItem.value.id) {
       await updateNews(selectedItem.value.id, formData);
       handleApiSuccess({ message: "Cập nhật tin tức thành công!" });
@@ -422,8 +562,10 @@ const saveItem = async () => {
       await createNews(formData);
       handleApiSuccess({ message: "Thêm tin tức thành công!" });
     }
+
     closeModal();
-    loadNews();
+    // Reload news with current pagination
+    await loadNews();
   } catch (e) {
     handleApiError(e, "Không thể lưu tin tức");
   }
@@ -445,6 +587,17 @@ const closeModal = () => {
   imagePreview.value = "";
   tagsInput.value = "";
 };
+
+// Lifecycle
+onMounted(() => {
+  loadNews();
+});
+
+// Watch for filter changes
+watch([searchQuery, statusFilter], () => {
+  currentPage.value = 1; // Reset to first page when filtering
+  loadNews();
+});
 </script>
 
 <style scoped>
@@ -890,6 +1043,66 @@ const closeModal = () => {
   white-space: pre-wrap;
   max-height: 400px;
   overflow-y: auto;
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.pagination-btn {
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  font-weight: 500;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--text-secondary);
+}
+
+.page-numbers {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.page-number {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  font-weight: 500;
+}
+
+.page-number:hover:not(.active) {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+}
+
+.page-number.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
 }
 
 @media (max-width: 768px) {
