@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 rounded-2xl p-4 mb-6" @click="handleClick">
+  <div class="bg-gray-100 rounded-2xl p-4 mb-6">
     <div class="flex items-center mb-2">
       <span class="text-orange-500 font-bold text-lg flex items-center">
         {{ title }}
@@ -10,7 +10,12 @@
       <div
         v-for="(item, idx) in topViews"
         :key="idx"
-        class="flex items-center gap-3 bg-white rounded-xl p-3 shadow hover:shadow-lg transition group"
+        class="flex items-center gap-3 bg-white rounded-xl p-3 shadow hover:shadow-lg transition group cursor-pointer"
+        @click="goToVideoDetail(item.id, item.title)"
+        role="button"
+        tabindex="0"
+        @keydown.enter="goToVideoDetail(item.id, item.title)"
+        @keydown.space="goToVideoDetail(item.id, item.title)"
       >
         <div
           :class="[
@@ -47,14 +52,27 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { slugify } from "~/utils/slugify";
 
+const router = useRouter();
+
+interface VideoItem {
+  id: string | number;
+  thumbnail: string;
+  title: string;
+  views: string | number;
+  bg: string;
+  badgeBg: string;
+}
+
 const props = defineProps<{
-  topViews: any[];
+  topViews: VideoItem[];
   title: string;
 }>();
-const handleClick = () => {
-  router.push(`/video/${item.id}-${slugify(item.title)}`);
+
+const goToVideoDetail = (videoId: string | number, title: string) => {
+  router.push(`/video/${videoId}-${slugify(title)}`);
 };
 </script>

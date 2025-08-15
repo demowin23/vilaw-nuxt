@@ -176,7 +176,6 @@ import { useNotification } from "~/composables/useNotification";
 const { handleApiSuccess, handleApiError } = useNotification();
 
 const handlePackageClick = (packageId: string) => {
-  console.log("Package clicked:", packageId);
   handleApiSuccess({
     message: `Đã chọn gói ${packageId}. Vui lòng liên hệ để hoàn tất đăng ký!`,
   });

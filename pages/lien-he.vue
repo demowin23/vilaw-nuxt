@@ -9,12 +9,12 @@
       <div class="absolute inset-0 bg-black opacity-20"></div>
       <div class="relative container mx-auto px-4 py-20">
         <div class="text-center text-white">
-              <h1 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
-                {{ info.heroTitle || 'Liên Hệ' }}
-              </h1>
-            <p class="text-xl md:text-2xl opacity-95 font-light">
-              {{ info.heroSubtitle }}
-            </p>
+          <h1 class="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+            {{ info.heroTitle || "Liên Hệ" }}
+          </h1>
+          <p class="text-xl md:text-2xl opacity-95 font-light">
+            {{ info.heroSubtitle }}
+          </p>
           <div class="mt-8 flex justify-center">
             <div class="bg-white/20 backdrop-blur-sm rounded-full px-8 py-3">
               <span class="text-white font-medium"
@@ -60,7 +60,12 @@
                   Thông Tin Công Ty
                 </h2>
                 <p class="text-gray-600 dark:text-gray-300 mt-1">
-                  {{ Array.isArray(info.companyInfo) && info.companyInfo[0]?.value ? info.companyInfo[0].value : 'Thông tin pháp lý chính thức' }}
+                  {{
+                    Array.isArray(info.companyInfo) &&
+                    info.companyInfo[0]?.value
+                      ? info.companyInfo[0].value
+                      : "Thông tin pháp lý chính thức"
+                  }}
                 </p>
               </div>
             </div>
@@ -91,8 +96,18 @@
                     Giấy CNĐKHĐ
                   </p>
                   <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    <a href="/pdf/DKKD_2025.pdf" target="_blank" rel="noopener" class="underline hover:text-[#f58220]">
-                      {{ Array.isArray(info.companyInfo) && info.companyInfo[0]?.value ? info.companyInfo[0].value : 'Thông tin pháp lý chính thức' }}
+                    <a
+                      href="/pdf/DKKD_2025.pdf"
+                      target="_blank"
+                      rel="noopener"
+                      class="underline hover:text-[#f58220]"
+                    >
+                      {{
+                        Array.isArray(info.companyInfo) &&
+                        info.companyInfo[0]?.value
+                          ? info.companyInfo[0].value
+                          : "Thông tin pháp lý chính thức"
+                      }}
                     </a>
                   </p>
                 </div>
@@ -123,7 +138,10 @@
                     Mã số thuế
                   </p>
                   <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {{ Array.isArray(info.companyInfo) && info.companyInfo[1]?.value }}
+                    {{
+                      Array.isArray(info.companyInfo) &&
+                      info.companyInfo[1]?.value
+                    }}
                   </p>
                 </div>
               </div>
@@ -310,11 +328,17 @@
             </div>
 
             <div class="space-y-4">
-              <div v-for="(bh, idx) in info.businessHours" :key="idx"
+              <div
+                v-for="(bh, idx) in info.businessHours"
+                :key="idx"
                 class="flex justify-between items-center p-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-100 dark:border-amber-800/30"
               >
-                <span class="text-gray-700 dark:text-gray-200 font-medium">{{ bh.label }}</span>
-                <span class="font-bold text-amber-600 dark:text-amber-400">{{ bh.value }}</span>
+                <span class="text-gray-700 dark:text-gray-200 font-medium">{{
+                  bh.label
+                }}</span>
+                <span class="font-bold text-amber-600 dark:text-amber-400">{{
+                  bh.value
+                }}</span>
               </div>
             </div>
           </div>
@@ -529,7 +553,7 @@ const info = ref({
   hotline: "",
   email: "",
   businessHours: [],
-  mapEmbedSrc: ""
+  mapEmbedSrc: "",
 } as any);
 
 onMounted(async () => {
@@ -549,11 +573,7 @@ const form = ref({
 });
 
 const submitForm = () => {
-  // Xử lý gửi form ở đây
-  console.log("Form submitted:", form.value);
   alert("Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.");
-
-  // Reset form
   form.value = {
     name: "",
     phone: "",

@@ -118,11 +118,6 @@ function handleNewsClick(news: NewsItemType) {
 
 // Watch for page changes and emit to parent
 watch(currentPage, (newPage) => {
-  console.log(
-    "Current page changed to:",
-    newPage,
-    "Emitting page-change event"
-  );
   emit("page-change", newPage, itemsPerPage);
 });
 

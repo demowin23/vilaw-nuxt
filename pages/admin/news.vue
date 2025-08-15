@@ -421,8 +421,6 @@ const loadNews = async () => {
       limit: itemsPerPage.value,
     };
 
-    console.log("Loading news with params:", params);
-
     const res = await getNews(params);
 
     // Handle API response properly
@@ -434,13 +432,6 @@ const loadNews = async () => {
       newsList.value = res || [];
       totalNews.value = res?.total || res?.length || 0;
     }
-
-    console.log("News loaded:", {
-      currentPage: currentPage.value,
-      totalNews: totalNews.value,
-      totalPages: totalPages.value,
-      newsCount: newsList.value.length,
-    });
   } catch (e) {
     console.error("Error loading news:", e);
     handleApiError(e, "Không thể tải danh sách tin tức");
@@ -451,7 +442,6 @@ const loadNews = async () => {
 const onFilterChange = async () => {
   try {
     currentPage.value = 1; // Reset to first page when filtering
-    console.log("Filter changed, resetting to page 1");
     await loadNews();
   } catch (error) {
     console.error("Error filtering news:", error);
@@ -469,7 +459,6 @@ const onSearchInput = () => {
   searchTimer = setTimeout(async () => {
     try {
       currentPage.value = 1; // Reset to first page when searching
-      console.log("Search changed, resetting to page 1");
       await loadNews();
     } catch (error) {
       console.error("Error searching news:", error);
@@ -481,7 +470,6 @@ const onSearchInput = () => {
 const goToPage = async (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page;
-    console.log("Going to page:", page);
     await loadNews();
   }
 };

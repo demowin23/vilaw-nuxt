@@ -13,9 +13,6 @@ async function addApprovalFields() {
   const client = await pool.connect();
 
   try {
-    console.log("Bắt đầu thêm trường is_approved...");
-
-    // Danh sách các bảng cần thêm trường is_approved
     const tables = [
       "legal_documents",
       "legal_news",
@@ -44,7 +41,6 @@ async function addApprovalFields() {
           `;
 
           await client.query(addQuery);
-          console.log(`✅ Đã thêm trường is_approved vào bảng ${table}`);
 
           // Cập nhật tất cả record hiện tại thành approved (để tương thích với dữ liệu cũ)
           const updateQuery = `
@@ -54,16 +50,13 @@ async function addApprovalFields() {
           `;
 
           await client.query(updateQuery);
-          console.log(`✅ Đã cập nhật dữ liệu cũ trong bảng ${table}`);
         } else {
-          console.log(`⚠️ Trường is_approved đã tồn tại trong bảng ${table}`);
         }
       } catch (error) {
         console.error(`❌ Lỗi khi xử lý bảng ${table}:`, error.message);
       }
     }
 
-    console.log("✅ Hoàn thành thêm trường is_approved cho tất cả bảng!");
   } catch (error) {
     console.error("❌ Lỗi:", error);
   } finally {

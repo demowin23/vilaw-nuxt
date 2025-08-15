@@ -13,9 +13,9 @@ const checkSSLFiles = () => {
   const keyExists = fs.existsSync(sslConfig.key);
   const certExists = fs.existsSync(sslConfig.cert);
 
-  console.log("SSL Configuration:");
-  console.log(`Private Key: ${sslConfig.key} - ${keyExists ? "✓" : "✗"}`);
-  console.log(`Certificate: ${sslConfig.cert} - ${certExists ? "✓" : "✗"}`);
+    console.log("SSL Configuration:");
+    console.log(`Private Key: ${sslConfig.key} - ${keyExists ? "✓" : "✗"}`);
+    console.log(`Certificate: ${sslConfig.cert} - ${certExists ? "✓" : "✗"}`);
 
   return keyExists && certExists;
 };

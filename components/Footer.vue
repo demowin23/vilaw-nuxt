@@ -1,7 +1,7 @@
 <template>
   <footer class="bg-transparent mt-8">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- THÔNG TIN -->
         <div
           class="rounded-xl border border-dashed border-orange-400 bg-gradient-to-br from-green-50 to-white dark:from-gray-800 dark:to-gray-700 p-6 relative overflow-hidden transition-colors duration-300"

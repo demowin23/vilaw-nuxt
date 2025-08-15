@@ -25,7 +25,7 @@
                 Trang chủ
               </NuxtLink>
             </li>
-            
+
             <li>
               <NuxtLink to="/phap-luat-doi-song" class="sidebar-link">
                 <font-awesome-icon
@@ -35,15 +35,7 @@
                 Video Pháp luật và Đời sống
               </NuxtLink>
             </li>
-            <li v-if="isUser || !user">
-              <NuxtLink to="/chat-luat-su" class="sidebar-link">
-                <font-awesome-icon
-                  :icon="['fas', 'comments']"
-                  class="sidebar-icon"
-                />
-                Chat với Luật sư
-              </NuxtLink>
-            </li>
+
             <li
               @mouseover="kienThucHover = true"
               @mouseleave="kienThucHover = false"
@@ -135,6 +127,15 @@
                 Tin tức pháp luật
               </NuxtLink>
             </li>
+            <li v-if="isUser || !user">
+              <NuxtLink to="/chat-luat-su" class="sidebar-link">
+                <font-awesome-icon
+                  :icon="['fas', 'comments']"
+                  class="sidebar-icon"
+                />
+                Chat với Luật sư
+              </NuxtLink>
+            </li>
             <li>
               <NuxtLink to="/lien-he" class="sidebar-link">
                 <font-awesome-icon
@@ -164,21 +165,11 @@
           <NuxtLink to="/" class="sidebar-icon-only">
             <font-awesome-icon :icon="['fas', 'house']" class="sidebar-icon" />
           </NuxtLink>
-          <NuxtLink to="/gioi-thieu" class="sidebar-icon-only">
-            <font-awesome-icon
-              :icon="['fas', 'circle-info']"
-              class="sidebar-icon"
-            />
-          </NuxtLink>
+
           <NuxtLink to="/phap-luat-doi-song" class="sidebar-icon-only">
             <font-awesome-icon :icon="['fas', 'video']" class="sidebar-icon" />
           </NuxtLink>
-          <NuxtLink to="/chat-luat-su" v-if="isUser || !user" class="sidebar-icon-only">
-            <font-awesome-icon
-              :icon="['fas', 'comments']"
-              class="sidebar-icon"
-            />
-          </NuxtLink>
+
           <NuxtLink
             to="/kien-thuc/dan-su"
             class="sidebar-icon-only"
@@ -201,8 +192,24 @@
               class="sidebar-icon"
             />
           </NuxtLink>
+          <NuxtLink
+            to="/chat-luat-su"
+            v-if="isUser || !user"
+            class="sidebar-icon-only"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'comments']"
+              class="sidebar-icon"
+            />
+          </NuxtLink>
           <NuxtLink to="/lien-he" class="sidebar-icon-only">
             <font-awesome-icon :icon="['fas', 'phone']" class="sidebar-icon" />
+          </NuxtLink>
+          <NuxtLink to="/gioi-thieu" class="sidebar-icon-only">
+            <font-awesome-icon
+              :icon="['fas', 'circle-info']"
+              class="sidebar-icon"
+            />
           </NuxtLink>
           <div class="mt-6 flex justify-center">
             <ThemeToggle />
@@ -215,7 +222,13 @@
           class="flex-1 container mx-auto px-2 md:px-4 py-4 overflow-y-auto no-scrollbar min-h-0 max-w-screen-2xl flex flex-col bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
         >
           <slot />
-          <Footer v-if="!isChatPage && !route.path.startsWith('/dang-ky') && !route.path.startsWith('/dang-nhap')" />
+          <Footer
+            v-if="
+              !isChatPage &&
+              !route.path.startsWith('/dang-ky') &&
+              !route.path.startsWith('/dang-nhap')
+            "
+          />
         </main>
       </div>
     </div>
@@ -261,7 +274,7 @@ import { storeToRefs } from "pinia";
 import ChatPopup from "~/components/ChatPopup.vue";
 import ServiceModal from "~/components/ServiceModal.vue";
 import { useRoute } from "vue-router";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch, nextTick, onUnmounted } from "vue";
 import { useAuth } from "~/composables/useAuth";
 const { user } = useAuth();
 const route = useRoute();
@@ -279,7 +292,81 @@ onMounted(() => {
     sidebarStore.closeSidebar();
   }
   themeStore.initTheme();
+
+  // Add mousedown outside listener for mobile sidebar
+  document.addEventListener("mousedown", handleClickOutside);
 });
+
+// Cleanup event listener
+onUnmounted(() => {
+  document.removeEventListener("mousedown", handleClickOutside);
+});
+
+// Handle click outside sidebar on mobile
+const handleClickOutside = (event: Event) => {
+  if (window.innerWidth <= 1024 && isOpenSidebar.value) {
+    const sidebar = document.querySelector(".sidebar-absolute");
+    const target = event.target as Element;
+
+    // Check if click is outside sidebar and sidebar is open
+    if (sidebar && !sidebar.contains(target)) {
+      // Add small delay to avoid conflict with sidebar open button
+      setTimeout(() => {
+        sidebarStore.closeSidebar();
+      }, 100);
+    }
+  }
+};
+
+// Auto scroll to top when route changes
+watch(
+  () => route.path,
+  async () => {
+    // Wait for DOM to update
+    await nextTick();
+
+    // Try multiple scroll methods to ensure it works
+    try {
+      // Method 1: Scroll main content element
+      const mainContent = document.querySelector(".main-content");
+      if (mainContent) {
+        mainContent.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
+      }
+
+      // Method 2: Scroll main element
+      const mainElement = document.querySelector("main");
+      if (mainElement) {
+        mainElement.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
+      }
+
+      // Method 3: Scroll window as fallback
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+
+      // Method 4: Use scrollIntoView for better compatibility
+      const firstElement = document.querySelector("main > *:first-child");
+      if (firstElement) {
+        firstElement.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    } catch (error) {
+      window.scrollTo(0, 0);
+    }
+  }
+);
 </script>
 
 <style scoped>

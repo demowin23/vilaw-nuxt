@@ -35,17 +35,11 @@ async function startServer() {
       // Tạo HTTPS server
       const httpsServer = https.createServer(sslOptions, nuxt.handler);
       httpsServer.listen(port, host, () => {
-        console.log(`🚀 HTTPS Server running on https://${host}:${port}`);
-        console.log("🔒 SSL Certificate loaded successfully");
-        console.log(`📁 Key: ${process.env.SSL_KEY_PATH}`);
-        console.log(`📁 Cert: ${process.env.SSL_CERT_PATH}`);
       });
     } else {
       // Tạo HTTP server (fallback)
       const httpServer = http.createServer(nuxt.handler);
       httpServer.listen(port, host, () => {
-        console.log(`🚀 HTTP Server running on http://${host}:${port}`);
-        console.log("⚠️  SSL Certificate not found, running in HTTP mode");
         console.log(
           "💡 Set SSL_KEY_PATH and SSL_CERT_PATH environment variables"
         );

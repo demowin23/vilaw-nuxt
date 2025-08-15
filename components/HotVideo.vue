@@ -10,6 +10,11 @@
         <div
           class="hot-video-item"
           :style="{ backgroundImage: `url('${item.thumbnail}')` }"
+          @click="goToVideoDetail(item.id)"
+          role="button"
+          tabindex="0"
+          @keydown.enter="goToVideoDetail(item.id)"
+          @keydown.space="goToVideoDetail(item.id)"
         ></div>
       </SwiperSlide>
     </Swiper>
@@ -30,10 +35,13 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
 
+const router = useRouter();
+
 const sidebarStore = useSidebarStore();
 const { isOpenSidebar } = storeToRefs(sidebarStore);
 
 interface HotVideoItem {
+  id: string | number;
   thumbnail: string;
   title: string;
 }
@@ -53,7 +61,7 @@ const getSlidesPerView = computed(() => {
   if (process.client) {
     // Mobile Small (375px - 480px): 3 items
     if (windowWidth.value <= 480) return 3;
-    // Mobile Medium (481px - 600px): 3 items  
+    // Mobile Medium (481px - 600px): 3 items
     if (windowWidth.value <= 600) return 3;
     // Mobile Large (601px - 768px): 4 items
     if (windowWidth.value <= 768) return 4;
@@ -64,9 +72,9 @@ const getSlidesPerView = computed(() => {
     // Tablet Large (1025px - 1250px): 5-6 items
     if (windowWidth.value <= 1250) return isOpenSidebar.value ? 5 : 6;
     // Desktop Small (1251px - 1500px): 6-7 items
-    if (windowWidth.value <= 1500) return isOpenSidebar.value ? 6 : 7;
+    if (windowWidth.value <= 1500) return isOpenSidebar.value ? 5 : 6;
     // Desktop Medium (1501px - 1800px): 7-8 items
-    if (windowWidth.value <= 1800) return isOpenSidebar.value ? 6 : 7;
+    if (windowWidth.value <= 1800) return 6;
     // Desktop Large (1801px+): 8-9 items
     return isOpenSidebar.value ? 6 : 7;
   }
@@ -107,6 +115,10 @@ const progressWidth = computed(() => {
   if (total <= visible) return 100;
   return (activeIndex.value / (total - visible)) * 100;
 });
+
+const goToVideoDetail = (videoId: string | number) => {
+  router.push(`/video/${videoId}`);
+};
 </script>
 
 <style scoped>
@@ -152,6 +164,24 @@ const progressWidth = computed(() => {
   min-width: 90px;
   min-height: 135px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.hot-video-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hot-video-item:focus {
+  outline: 2px solid #f58220;
+  outline-offset: 2px;
+}
+
+.hot-video-item:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
 }
 .hot-video-title {
   position: absolute;

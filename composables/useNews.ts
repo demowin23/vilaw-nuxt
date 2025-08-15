@@ -72,10 +72,6 @@ export const useNews = () => {
       // Nếu là admin thì dùng endpoint admin, ngược lại dùng endpoint thường
       const baseUrl = params.isAdmin ? '/legal-news/admin/all' : '/legal-news'
       const url = `${baseUrl}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-      
-      console.log('News API URL:', url);
-      console.log('News API Params:', params);
-      
       return await apiCall<NewsResponse>(url, { method: 'GET' }, false, params.isAdmin);
     } catch (e: any) {
       error.value = e.message;

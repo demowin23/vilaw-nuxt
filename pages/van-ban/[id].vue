@@ -579,7 +579,6 @@ const downloadFileSearchResult = async (document: any) => {
 };
 
 const downloadFile = async (document: any) => {
-  console.log(document);
   if (!document?.wordFile) return;
 
   try {

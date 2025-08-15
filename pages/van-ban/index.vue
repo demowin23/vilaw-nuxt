@@ -1,6 +1,8 @@
 <template>
   <div class="container mx-auto px-4 py-4 sm:py-6 lg:py-8">
-    <h1 class="text-xl sm:text-2xl font-bold text-[#f58220] mb-4">Văn bản pháp luật</h1>
+    <h1 class="text-xl sm:text-2xl font-bold text-[#f58220] mb-4">
+      Văn bản pháp luật
+    </h1>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
       <!-- Cột trái - chiếm 2/3 -->
       <div class="lg:col-span-2">
@@ -55,12 +57,16 @@
                   v-else
                   class="w-4 h-4 animate-spin rounded-full border-2 border-white border-t-transparent"
                 ></div>
-                <span class="hidden sm:inline">{{ isSearching ? "Đang tìm..." : "Tìm kiếm" }}</span>
+                <span class="hidden sm:inline">{{
+                  isSearching ? "Đang tìm..." : "Tìm kiếm"
+                }}</span>
                 <span class="sm:hidden">{{ isSearching ? "..." : "Tìm" }}</span>
               </button>
             </div>
 
-            <div class="flex flex-col sm:flex-row sm:justify-between sm:w-[60%] gap-2">
+            <div
+              class="flex flex-col sm:flex-row sm:justify-between sm:w-[60%] gap-2"
+            >
               <p
                 class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 transition-colors duration-300"
               >
@@ -99,8 +105,12 @@
                 :key="document.id || index"
                 class="border-b border-gray-200 dark:border-gray-600 pb-3 sm:pb-4 last:border-b-0 transition-colors duration-300"
               >
-                <div class="flex flex-col lg:flex-row lg:justify-between gap-3 sm:gap-4">
-                  <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div
+                  class="flex flex-col lg:flex-row lg:justify-between gap-3 sm:gap-4"
+                >
+                  <div
+                    class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
+                  >
                     <div>
                       <h3
                         class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300 text-sm sm:text-base"
@@ -210,7 +220,9 @@
               <div
                 class="inline-block animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-[#f58220]"
               ></div>
-              <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm sm:text-base">
+              <p
+                class="mt-2 text-gray-600 dark:text-gray-400 text-sm sm:text-base"
+              >
                 Đang tải văn bản...
               </p>
             </div>
@@ -238,9 +250,13 @@
                 :key="document.id || index"
                 class="border-b border-gray-200 dark:border-gray-600 pb-3 sm:pb-4 last:border-b-0 transition-colors duration-300"
               >
-                <div class="flex flex-col lg:flex-row lg:justify-between gap-3 sm:gap-4">
+                <div
+                  class="flex flex-col lg:flex-row lg:justify-between gap-3 sm:gap-4"
+                >
                   <!-- Thông tin văn bản -->
-                  <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div
+                    class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
+                  >
                     <!-- Cột 1: Title và Description -->
                     <div>
                       <h3
@@ -604,7 +620,10 @@
                   clip-rule="evenodd"
                 ></path>
               </svg>
-              <a :href="`/van-ban/${doc.id}-${slugify(doc.title)}`" class="text-sm hover:underline">
+              <a
+                :href="`/van-ban/${doc.id}-${slugify(doc.title)}`"
+                class="text-sm hover:underline"
+              >
                 {{ doc.title }}
               </a>
             </div>
@@ -749,12 +768,10 @@ const getDocumentsByField = async (fieldSlug?: string) => {
 
   fieldLoading.value = true;
   try {
-    console.log("Calling API with tags:", fieldSlug);
     const results = await getDocuments({
       tags: fieldSlug,
       limit: 50,
     });
-    console.log("API response:", results);
     fieldDocuments.value = results.data || [];
   } catch (error) {
     console.error("Error loading documents by field:", error);
