@@ -21,6 +21,12 @@
 <script setup lang="ts">
 // Google Analytics setup
 useHead({
+  meta: [
+    {
+      name: "google-site-verification",
+      content: "vAUdCGVdIKwyUAUz2tVOuWRDzkvKhgiZqxK1s1r1434",
+    },
+  ],
   script: [
     {
       src: "https://www.googletagmanager.com/gtag/js?id=G-E67PMGVVTG",

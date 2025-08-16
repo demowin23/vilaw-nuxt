@@ -13,10 +13,9 @@
           <div
             class="text-lg text-gray-700 dark:text-gray-300 space-y-1 transition-colors duration-300"
           >
-            <div>ĐC</div>
-            <div>Hà Nội</div>
-            <div>0912345678</div>
-            <div>vilaw@gmail.com</div>
+            <div>ĐC: {{ info.address }}</div>
+            <div>Hotline: {{ info.hotline }}</div>
+            <div>Email: {{ info.email }}</div>
           </div>
         </div>
         <!-- KHO TÀI LIỆU -->
