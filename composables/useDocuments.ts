@@ -208,6 +208,7 @@ export const useDocuments = () => {
       throw err
     } finally {
       loading.value = false
+      console.log(error.value);
     }
   }
 
