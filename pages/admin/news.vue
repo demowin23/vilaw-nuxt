@@ -167,11 +167,7 @@
     </div>
 
     <!-- Modal thêm/sửa -->
-    <div
-      v-if="showAddModal || showEditModal"
-      class="modal-overlay"
-      @click="closeModal"
-    >
+    <div v-if="showAddModal || showEditModal" class="modal-overlay">
       <div class="modal modal-wide" @click.stop>
         <div class="modal-header">
           <h3>{{ showAddModal ? "Thêm tin tức mới" : "Sửa tin tức" }}</h3>
@@ -253,7 +249,7 @@
     </div>
 
     <!-- Modal xem chi tiết -->
-    <div v-if="showViewModal" class="modal-overlay" @click="closeModal">
+    <div v-if="showViewModal" class="modal-overlay">
       <div class="modal modal-large" @click.stop>
         <div class="modal-header">
           <h3>Chi tiết tin tức</h3>

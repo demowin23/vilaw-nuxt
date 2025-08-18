@@ -177,17 +177,12 @@
       </button>
     </div>
 
-    <div
-      v-if="showAddModal || showEditModal"
-      class="modal-overlay"
-      @click="closeModal"
-    >
+    <div v-if="showAddModal || showEditModal" class="modal-overlay">
       <div class="modal modal-wide" @click.stop>
         <div class="modal-header">
           <h3>{{ showAddModal ? "Thêm bài viết mới" : "Sửa bài viết" }}</h3>
           <button @click="closeModal" class="close-btn">✕</button>
         </div>
-
         <form @submit.prevent="saveItem" class="modal-form">
           <div class="form-group">
             <label>Tiêu đề *</label>
@@ -280,7 +275,7 @@
     </div>
 
     <!-- Modal xem chi tiết -->
-    <div v-if="showViewModal" class="modal-overlay" @click="closeModal">
+    <div v-if="showViewModal" class="modal-overlay">
       <div class="modal modal-large" @click.stop>
         <div class="modal-header">
           <h3>Chi tiết bài viết</h3>

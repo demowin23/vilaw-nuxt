@@ -209,11 +209,7 @@
       </button>
     </div>
 
-    <div
-      v-if="showAddModal || showEditModal"
-      class="modal-overlay"
-      @click="closeModal"
-    >
+    <div v-if="showAddModal || showEditModal" class="modal-overlay">
       <div class="modal modal-wide" @click.stop>
         <div class="modal-header">
           <h3>{{ showAddModal ? "Thêm video mới" : "Sửa video" }}</h3>
@@ -353,14 +349,12 @@
       </div>
     </div>
 
-    <!-- Modal xem chi tiết -->
-    <div v-if="showViewModal" class="modal-overlay" @click="closeModal">
+    <div v-if="showViewModal" class="modal-overlay">
       <div class="modal modal-large" @click.stop>
         <div class="modal-header">
           <h3>Chi tiết video</h3>
           <button @click="closeModal" class="close-btn">✕</button>
         </div>
-
         <div class="item-detail">
           <div class="detail-header">
             <h2>{{ selectedItem.title }}</h2>
