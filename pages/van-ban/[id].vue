@@ -112,15 +112,15 @@
                     >
                       <div>
                         <span class="font-medium">Ban hành:</span>
-                        {{ formatDate(document.issueDate) }}
+                        {{ formatDate(document.issued_date) }}
                       </div>
                       <div>
                         <span class="font-medium">Hiệu lực:</span>
-                        {{ formatDate(document.effectiveDate) }}
+                        {{ formatDate(document.effective_date) }}
                       </div>
-                      <div v-if="document.expiryDate">
+                      <div v-if="document.expiry_date">
                         <span class="font-medium">Hết hiệu lực:</span>
-                        {{ formatDate(document.expiryDate) }}
+                        {{ formatDate(document.expiry_date) }}
                       </div>
                       <div>
                         <span class="font-medium">Tình trạng:</span>
@@ -247,10 +247,10 @@
               <!-- Metadata -->
               <div class="space-y-2 text-sm">
                 <div class="text-gray-700 dark:text-gray-300">
-                  Ban hành: {{ formatDate(document.issueDate) }}
+                  Ban hành: {{ formatDate(document.issued_date) }}
                 </div>
                 <div class="text-gray-700 dark:text-gray-300">
-                  Hiệu lực: {{ formatDate(document.effectiveDate) }}
+                  Hiệu lực: {{ formatDate(document.effective_date) }}
                 </div>
                 <div class="text-gray-700 dark:text-gray-300">
                   Tình trạng:
@@ -266,7 +266,7 @@
 
               <!-- Download Section -->
               <div class="mt-4">
-                <div v-if="document.wordFile" class="space-y-2">
+                <div v-if="document.file_url" class="space-y-2">
                   <!-- Download Button -->
                   <button
                     @click="downloadFile(document)"
@@ -579,10 +579,10 @@ const downloadFileSearchResult = async (document: any) => {
 };
 
 const downloadFile = async (document: any) => {
-  if (!document?.wordFile) return;
+  if (!document?.file_url) return;
 
   try {
-    const filename = getFileName(document.wordFile);
+    const filename = getFileName(document.file_url);
     await downloadWordFile(document.id, filename);
   } catch (err: any) {
     console.error("Error downloading file:", err);

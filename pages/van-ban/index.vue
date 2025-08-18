@@ -102,7 +102,7 @@
             <div class="space-y-3 sm:space-y-4">
               <div
                 v-for="(document, index) in searchResults"
-                :key="document.id || index"
+                :key="(document as any).id || index"
                 class="border-b border-gray-200 dark:border-gray-600 pb-3 sm:pb-4 last:border-b-0 transition-colors duration-300"
               >
                 <div
@@ -115,7 +115,7 @@
                       <h3
                         class="font-medium text-gray-900 dark:text-gray-100 mb-2 transition-colors duration-300 text-sm sm:text-base"
                       >
-                        {{ document.title }}
+                        {{ (document as any).title }}
                       </h3>
                     </div>
                     <div
@@ -123,18 +123,18 @@
                     >
                       <div class="dark:text-gray-100">
                         <span class="font-medium">Ban hành:</span>
-                        {{ formatDate(document.issueDate) }}
+                        {{ formatDate((document as any).issued_date) }}
                       </div>
                       <div class="dark:text-gray-100">
                         <span class="font-medium">Hiệu lực:</span>
-                        {{ formatDate(document.effectiveDate) }}
+                        {{ formatDate((document as any).effective_date) }}
                       </div>
                       <div
                         class="dark:text-gray-100"
-                        v-if="document.expiryDate"
+                        v-if="(document as any).expiry_date"
                       >
                         <span class="font-medium">Hết hiệu lực:</span>
-                        {{ formatDate(document.expiryDate) }}
+                        {{ formatDate((document as any).expiry_date) }}
                       </div>
                       <div class="dark:text-gray-100">
                         <span class="font-medium">Tình trạng:</span>
@@ -180,7 +180,7 @@
                       <span class="sm:hidden">Xem</span>
                     </button>
                     <button
-                      v-if="document.file_url"
+                      v-if="(document as any).file_url"
                       @click="handleDownload(document)"
                       class="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-1 sm:gap-2 hover:bg-red-700 transition-colors duration-300"
                     >
@@ -271,18 +271,18 @@
                     >
                       <div class="dark:text-gray-100">
                         <span class="font-medium">Ban hành:</span>
-                        {{ formatDate(document.issueDate) }}
+                        {{ formatDate(document.issued_date) }}
                       </div>
                       <div class="dark:text-gray-100">
                         <span class="font-medium">Hiệu lực:</span>
-                        {{ formatDate(document.effectiveDate) }}
+                        {{ formatDate(document.effective_date) }}
                       </div>
                       <div
                         class="dark:text-gray-100"
-                        v-if="document.expiryDate"
+                        v-if="document.expiry_date"
                       >
                         <span class="font-medium">Hết hiệu lực:</span>
-                        {{ formatDate(document.expiryDate) }}
+                        {{ formatDate(document.expiry_date) }}
                       </div>
                       <div class="dark:text-gray-100">
                         <span class="font-medium">Tình trạng:</span>
@@ -330,7 +330,7 @@
                       <span class="sm:hidden">Xem</span>
                     </button>
                     <button
-                      v-if="document.wordFile"
+                      v-if="document.file_url"
                       @click="handleDownload(document)"
                       class="bg-red-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-1 sm:gap-2 hover:bg-red-700 transition-colors duration-300"
                     >
@@ -435,24 +435,24 @@
                       >
                         <div class="dark:text-gray-100">
                           <span class="font-medium">Ban hành:</span>
-                          {{ formatDate(document.issueDate) }}
+                          {{ formatDate(document.issued_date) }}
                         </div>
                         <div class="dark:text-gray-100">
                           <span class="font-medium">Hiệu lực:</span>
-                          {{ formatDate(document.effectiveDate) }}
+                          {{ formatDate(document.effective_date) }}
                         </div>
                         <div
                           class="dark:text-gray-100"
-                          v-if="document.expiryDate"
+                          v-if="document.expiry_date"
                         >
                           <span class="font-medium">Hết hiệu lực:</span>
-                          {{ formatDate(document.expiryDate) }}
+                          {{ formatDate(document.expiry_date) }}
                         </div>
                         <div class="dark:text-gray-100">
                           <span class="font-medium">Tình trạng:</span>
                           <span
                             :class="
-                              document.status === 'co_hieu_luc'
+                              (document as any).status === 'co_hieu_luc'
                                 ? 'text-green-600 dark:text-green-400'
                                 : 'text-red-600 dark:text-red-400'
                             "
@@ -493,7 +493,7 @@
                         Xem
                       </button>
                       <button
-                        v-if="document.wordFile"
+                        v-if="document.file_url"
                         @click="handleDownload(document)"
                         class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2 hover:bg-red-700 transition-colors duration-300"
                       >
@@ -551,7 +551,10 @@
                     <button
                       v-for="page in getVisiblePages()"
                       :key="page"
-                      @click="currentPage = page"
+                      @click="
+                        currentPage =
+                          typeof page === 'number' ? page : currentPage
+                      "
                       :class="[
                         'px-3 py-2 rounded-lg text-sm transition-colors duration-300',
                         currentPage === page
@@ -653,8 +656,6 @@ const {
   loading,
   error,
   getDocuments,
-  getDocumentTypes,
-  getDocumentStatuses,
   downloadWordFile,
   getPopularDocuments,
 } = useDocuments();
@@ -664,11 +665,11 @@ const { legalFields: apiLegalFields, getLegalFields } = useLegalFields();
 
 // Search functionality
 const searchQuery = ref("");
-const searchResults = ref([]);
+const searchResults = ref<any[]>([]);
 const isSearching = ref(false);
 
 // Add ref for popular documents
-const popularDocuments = ref([]);
+const popularDocuments = ref<any[]>([]);
 
 // Load documents and legal fields on mount
 onMounted(async () => {
@@ -757,7 +758,7 @@ const currentPage = ref(1);
 const itemsPerPage = 5; // Số văn bản hiển thị trên mỗi trang
 
 // Documents for current field
-const fieldDocuments = ref([]);
+const fieldDocuments = ref<any[]>([]);
 const fieldLoading = ref(false);
 
 const getDocumentsByField = async (fieldSlug?: string) => {
@@ -796,7 +797,7 @@ const getTotalPages = () => {
 };
 
 // Lấy các số trang hiển thị
-const getVisiblePages = () => {
+const getVisiblePages = (): (number | string)[] => {
   const totalPages = getTotalPages();
   const current = currentPage.value;
 
@@ -848,9 +849,9 @@ const performSearch = async () => {
 // Download function
 const handleDownload = async (document: any) => {
   try {
-    const filename = document.wordFile
-      ? document.wordFile.split("/").pop()
-      : document.file_url.split("/").pop();
+    const filename = document.file_url
+      ? document.file_url.split("/").pop()
+      : `${document.title}.doc`;
     await downloadWordFile(document.id, filename);
   } catch (error) {
     console.error("Error downloading document:", error);
@@ -1057,7 +1058,7 @@ const getFormsByType = () => {
   if (selectedFormType.value === "all") {
     return Object.values(formDocuments).flat();
   }
-  return formDocuments[selectedFormType.value] || [];
+  return (formDocuments as any)[selectedFormType.value] || [];
 };
 
 const getPaginatedForms = () => {

@@ -54,7 +54,6 @@
         </select>
       </div>
     </div>
-
     <div class="table-container">
       <table class="documents-table">
         <thead>
@@ -75,8 +74,10 @@
             <td>{{ doc.id }}</td>
             <td class="doc-info">
               <div class="doc-title">{{ doc.title }}</div>
-              <div class="doc-number">Số hiệu: {{ doc.number }}</div>
-              <div class="doc-issuer">Cơ quan ban hành: {{ doc.issuer }}</div>
+              <div class="doc-number">Số hiệu: {{ doc.document_number }}</div>
+              <div class="doc-issuer">
+                Cơ quan ban hành: {{ doc.issuing_authority }}
+              </div>
               <div v-if="doc.tags" class="doc-tags">
                 <span
                   v-for="tag in getTagsArray(doc.tags).slice(0, 3)"
@@ -109,23 +110,23 @@
               </button>
             </td>
             <td>
-              <span :class="`type-badge type-${doc.type}`">
-                {{ getTypeLabel(doc.type) }}
+              <span :class="`type-badge type-${doc.document_type}`">
+                {{ getTypeLabel(doc.document_type) }}
               </span>
             </td>
-            <td>{{ formatDate(doc.issueDate) }}</td>
-            <td>{{ formatDate(doc.effectiveDate) }}</td>
+            <td>{{ formatDate(doc.issued_date) }}</td>
+            <td>{{ formatDate(doc.effective_date) }}</td>
             <td>{{ getEffectiveLabel(doc.status) }}</td>
             <td>
               <input
                 type="checkbox"
                 v-if="isAdmin"
-                v-model="doc.isApproved"
+                v-model="doc.is_approved"
                 @change="approveDoc(doc)"
               />
               <span
                 :class="`status-badge ${
-                  doc.isApproved ? 'status-published' : 'status-pending'
+                  doc.is_approved ? 'status-published' : 'status-pending'
                 }`"
               >
                 {{ getStatusLabel(doc) }}
@@ -292,18 +293,18 @@
                 class="file-input"
               />
               <label for="word-file-upload" class="file-upload-label">
-                <span v-if="!wordFilePreview && !docForm.wordFile"
+                <span v-if="!wordFilePreview && !docForm.file_url"
                   >Chọn file Word (.doc, .docx)...</span
                 >
                 <div
-                  v-if="wordFilePreview || docForm.wordFile"
+                  v-if="wordFilePreview || docForm.file_url"
                   class="file-info"
                 >
                   <span class="file-name">{{ wordFileName }}</span>
                   <span class="file-size">{{ wordFileSize }}</span>
                 </div>
                 <span
-                  v-if="wordFilePreview || docForm.wordFile"
+                  v-if="wordFilePreview || docForm.file_url"
                   class="change-file-btn"
                   >Đổi file</span
                 >
@@ -349,42 +350,42 @@
             <div class="meta-info">
               <div class="meta-row">
                 <span class="label">Số hiệu:</span>
-                <span class="value">{{ selectedDoc.number }}</span>
+                <span class="value">{{ selectedDoc.document_number }}</span>
               </div>
               <div class="meta-row">
                 <span class="label">Loại văn bản:</span>
-                <span :class="`type-badge type-${selectedDoc.type}`">
-                  {{ getTypeLabel(selectedDoc.type) }}
+                <span :class="`type-badge type-${selectedDoc.document_type}`">
+                  {{ getTypeLabel(selectedDoc.document_type) }}
                 </span>
               </div>
               <div class="meta-row">
                 <span class="label">Cơ quan ban hành:</span>
-                <span class="value">{{ selectedDoc.issuer }}</span>
+                <span class="value">{{ selectedDoc.issuing_authority }}</span>
               </div>
               <div class="meta-row">
                 <span class="label">Ngày ban hành:</span>
                 <span class="value">{{
-                  formatDate(selectedDoc.issueDate)
+                  formatDate(selectedDoc.issued_date)
                 }}</span>
               </div>
               <div class="meta-row">
                 <span class="label">Ngày có hiệu lực:</span>
                 <span class="value">{{
-                  formatDate(selectedDoc.effectiveDate)
+                  formatDate(selectedDoc.effective_date)
                 }}</span>
               </div>
               <div class="meta-row">
                 <span class="label">Ngày hết hiệu lực:</span>
                 <span class="value">{{
-                  selectedDoc.expiryDate
-                    ? formatDate(selectedDoc.expiryDate)
+                  selectedDoc.expiry_date
+                    ? formatDate(selectedDoc.expiry_date)
                     : "Không có"
                 }}</span>
               </div>
               <div class="meta-row">
                 <span class="label">Trạng thái:</span>
-                <span :class="`status-badge status-${selectedDoc.status}`">
-                  {{ getStatusLabel(selectedDoc.status) }}
+                <span :class="`status-badge status-${selectedDoc.is_approved}`">
+                  {{ getStatusLabel(selectedDoc) }}
                 </span>
               </div>
               <div v-if="selectedDoc.tags" class="meta-row">
@@ -403,12 +404,12 @@
           </div>
 
           <div class="content-preview">
-            <div v-if="selectedDoc.wordFile" class="word-file-section">
+            <div v-if="selectedDoc.file_url" class="word-file-section">
               <h4>File văn bản:</h4>
               <div class="file-download">
                 <span class="file-icon">📄</span>
                 <span class="file-name">{{
-                  selectedDoc.wordFile.split("/").pop()
+                  selectedDoc.file_url.split("/").pop()
                 }}</span>
                 <button
                   class="download-btn"
@@ -445,15 +446,12 @@ definePageMeta({
 
 const {
   documents,
-  loading,
-  error,
   getDocuments,
   createDocument,
   updateDocument,
   deleteDocument,
   approveDocument,
   downloadWordFile: downloadWordFileApi,
-  getDocumentTypes,
   getDocumentStatuses,
 } = useDocuments();
 
@@ -485,7 +483,7 @@ const docForm = ref({
   effective_date: "",
   expiry_date: "",
   html_content: "",
-  wordFile: "",
+  file_url: "",
   tags: [],
 });
 
@@ -571,7 +569,7 @@ const getEffectiveLabel = (status) => {
   return statusObj.name;
 };
 const getStatusLabel = (doc) => {
-  if (doc.isApproved) {
+  if (doc.is_approved) {
     return "Đã xuất bản";
   } else {
     return "Chờ duyệt";
@@ -634,8 +632,8 @@ const formatFileSize = (bytes) => {
 const downloadWordFile = async (doc) => {
   try {
     // Extract filename from file_url or use title
-    const filename = doc.wordFile
-      ? doc.wordFile.split("/").pop()
+    const filename = doc.file_url
+      ? doc.file_url.split("/").pop()
       : `${doc.title}.doc`;
     await downloadWordFileApi(doc.id, filename);
   } catch (error) {
@@ -659,7 +657,6 @@ const loadDocumentTypes = async () => {
     console.error("Error loading document types:", error);
   }
 };
-
 const loadDocumentStatuses = async () => {
   try {
     const statuses = await getDocumentStatuses();
@@ -704,19 +701,19 @@ const editDoc = (doc) => {
   }
   docForm.value = {
     ...doc,
-    document_number: doc.number,
-    document_type: doc.type,
-    issuing_authority: doc.issuer,
-    issued_date: formatDateForInput(doc.issueDate),
-    effective_date: formatDateForInput(doc.effectiveDate),
-    expiry_date: formatDateForInput(doc.expiryDate),
+    document_number: doc.document_number,
+    document_type: doc.document_type,
+    issuing_authority: doc.issuing_authority,
+    issued_date: formatDateForInput(doc.issued_date),
+    effective_date: formatDateForInput(doc.effective_date),
+    expiry_date: formatDateForInput(doc.expiry_date),
     tags: processedTags,
     html_content: doc.html_content || "",
   };
 
   // Set file info if exists
-  if (doc.wordFile) {
-    wordFileName.value = doc.wordFile;
+  if (doc.file_url) {
+    wordFileName.value = doc.file_url;
     wordFileSize.value = "Đã tải lên";
     wordFilePreview.value = "existing";
   }
@@ -746,21 +743,22 @@ const deleteDoc = async (doc) => {
 
 const approveDoc = async (doc) => {
   try {
-    await approveDocument(doc.id, doc.isApproved);
+    await approveDocument(doc.id, doc.is_approved);
     handleApiSuccess({
-      message: doc.isApproved
+      message: doc.is_approved
         ? "Đã duyệt văn bản thành công!"
         : "Đã từ chối văn bản thành công!",
     });
     // Không cần reload vì checkbox đã update trực tiếp
   } catch (error) {
     // Revert checkbox nếu có lỗi
-    doc.isApproved = !doc.isApproved;
+    doc.is_approved = !doc.is_approved;
     handleApiError(error, "Không thể thay đổi trạng thái duyệt");
   }
 };
 
 const saveDoc = async () => {
+  console.log(docForm.value);
   try {
     let payload = null;
     let isFormData = false;
@@ -775,11 +773,7 @@ const saveDoc = async () => {
       payload.append("issued_date", docForm.value.issued_date);
       payload.append("effective_date", docForm.value.effective_date);
       payload.append("expiry_date", docForm.value.expiry_date);
-
-      // Append html_content
-      if (docForm.value.html_content) {
-        payload.append("html_content", docForm.value.html_content);
-      }
+      payload.append("html_content", docForm.value.html_content);
 
       // Append legal field IDs
       if (docForm.value.tags && docForm.value.tags.length > 0) {
@@ -801,7 +795,7 @@ const saveDoc = async () => {
         effective_date: docForm.value.effective_date,
         expiry_date: docForm.value.expiry_date,
         html_content: docForm.value.html_content,
-        wordFile: docForm.value.wordFile,
+        file_url: docForm.value.file_url,
         tags: docForm.value.tags,
       };
 
@@ -844,7 +838,7 @@ const closeModal = () => {
     effective_date: "",
     expiry_date: "",
     html_content: "",
-    wordFile: "",
+    file_url: "",
     tags: [],
   };
 

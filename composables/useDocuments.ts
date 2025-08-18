@@ -4,25 +4,17 @@ import { getApiConfig } from '~/utils/config'
 interface Document {
   id: number
   title: string
-  number: string
-  type: string
-  issuer: string
-  issueDate: string
-  effectiveDate: string
-  expiryDate?: string
-  status: string
-  content: string
+  document_number: string
+  document_type: string
+  issuing_authority: string
+  issued_date: string
+  effective_date: string
+  expiry_date?: string
+  is_approved: boolean
   html_content?: string
-  html_toc?: Array<{
-    id: string
-    level: number
-    text: string
-  }>
-  wordFile: string
+  file_url: string
   tags?: string
   legalFieldIds?: number[]
-  notes: string
-  downloadCount?: number
 }
 
 interface DocumentType {
@@ -98,18 +90,17 @@ export const useDocuments = () => {
       documents.value = response.data.map((doc: any) => ({
         id: doc.id,
         title: doc.title,
-        number: doc.document_number,
-        type: doc.document_type,
-        issuer: doc.issuing_authority,
-        issueDate: doc.issued_date,
-        effectiveDate: doc.effective_date,
-        expiryDate: doc.expiry_date,
-        status: doc.status,
+        document_number: doc.document_number,
+        document_type: doc.document_type,
+        issuing_authority: doc.issuing_authority,
+        issued_date: doc.issued_date,
+        effective_date: doc.effective_date,
+        expiry_date: doc.expiry_date,
+        is_approved: doc.is_approved,
         isApproved: doc.is_approved,
-        content: doc.content || '',
-        wordFile: doc.file_url || '',
+        file_url: doc.file_url || '',
+        status: doc.status,
         tags: Array.isArray(doc.tags) ? doc.tags.join(', ') : doc.tags || '',
-        notes: doc.notes || ''
       }))
       
       return response
@@ -137,19 +128,19 @@ export const useDocuments = () => {
         const docData = data as Partial<Document>
         const payload: any = {
           title: docData.title,
-          document_number: docData.number,
-          document_type: docData.type,
-          issuing_authority: docData.issuer,
-          issued_date: docData.issueDate,
+          document_number: docData.document_number,
+          document_type: docData.document_type,
+          issuing_authority: docData.issuing_authority,
+          issued_date: docData.issued_date,
           is_important: false
         }
         
-        if (docData.effectiveDate) {
-          payload.effective_date = docData.effectiveDate
+        if (docData.effective_date) {
+          payload.effective_date = docData.effective_date
         }
         
-        if (docData.expiryDate) {
-          payload.expiry_date = docData.expiryDate
+        if (docData.expiry_date) {
+          payload.expiry_date = docData.expiry_date
         }
         
         if (docData.legalFieldIds && docData.legalFieldIds.length > 0) {
@@ -186,19 +177,20 @@ export const useDocuments = () => {
         const docData = data as Partial<Document>
         const payload: any = {
           title: docData.title,
-          document_number: docData.number,
-          document_type: docData.type,
-          issuing_authority: docData.issuer,
-          issued_date: docData.issueDate,
+          document_number: docData.document_number,
+          document_type: docData.document_type,
+          issuing_authority: docData.issuing_authority,
+          issued_date: docData.issued_date,
+          html_content: docData.html_content,
           is_important: false
         }
         
-        if (docData.effectiveDate) {
-          payload.effective_date = docData.effectiveDate
+        if (docData.effective_date) {
+            payload.effective_date = docData.effective_date
         }
         
-        if (docData.expiryDate) {
-          payload.expiry_date = docData.expiryDate
+        if (docData.expiry_date) {
+          payload.expiry_date = docData.expiry_date
         }
         
         if (docData.legalFieldIds && docData.legalFieldIds.length > 0) {
@@ -333,7 +325,7 @@ export const useDocuments = () => {
         expiryDate: doc.expiry_date,
         status: doc.status,
         content: doc.content || '',
-        wordFile: doc.file_url || '',
+        file_url: doc.file_url || '',
         tags: Array.isArray(doc.tags) ? doc.tags.join(', ') : doc.tags || '',
         notes: doc.notes || '',
         downloadCount: doc.download_count || 0,
@@ -433,7 +425,7 @@ export const useDocuments = () => {
         content: response.data.content || '',
         html_content: response.data.html_content || '',
         html_toc: response.data.html_toc || [],
-        wordFile: response.data.file_url || '',
+        file_url: response.data.file_url || '',
         tags: Array.isArray(response.data.tags) ? response.data.tags.join(', ') : response.data.tags || '',
         notes: response.data.notes || '',
         downloadCount: response.data.download_count || 0
