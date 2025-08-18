@@ -207,12 +207,12 @@
           <div class="form-row">
             <div class="form-group">
               <label>Số hiệu *</label>
-              <input v-model="docForm.number" type="text" required />
+              <input v-model="docForm.document_number" type="text" required />
             </div>
 
             <div class="form-group">
               <label>Loại văn bản *</label>
-              <select v-model="docForm.type" required>
+              <select v-model="docForm.document_type" required>
                 <option value="">Chọn loại văn bản</option>
                 <option
                   v-for="type in documentTypes"
@@ -227,25 +227,25 @@
 
           <div class="form-group">
             <label>Cơ quan ban hành *</label>
-            <input v-model="docForm.issuer" type="text" required />
+            <input v-model="docForm.issuing_authority" type="text" required />
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label>Ngày ban hành *</label>
-              <input v-model="docForm.issueDate" type="date" required />
+              <input v-model="docForm.issued_date" type="date" required />
             </div>
 
             <div class="form-group">
               <label>Ngày có hiệu lực</label>
-              <input v-model="docForm.effectiveDate" type="date" />
+              <input v-model="docForm.effective_date" type="date" />
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label>Ngày hết hiệu lực</label>
-              <input v-model="docForm.expiryDate" type="date" />
+              <input v-model="docForm.expiry_date" type="date" />
             </div>
           </div>
 
@@ -478,12 +478,12 @@ const showViewModal = ref(false);
 const selectedDoc = ref({});
 const docForm = ref({
   title: "",
-  number: "",
-  type: "",
-  issuer: "",
-  issueDate: "",
-  effectiveDate: "",
-  expiryDate: "",
+  document_number: "",
+  document_type: "",
+  issuing_authority: "",
+  issued_date: "",
+  effective_date: "",
+  expiry_date: "",
   html_content: "",
   wordFile: "",
   tags: [],
@@ -704,9 +704,12 @@ const editDoc = (doc) => {
   }
   docForm.value = {
     ...doc,
-    issueDate: formatDateForInput(doc.issueDate),
-    effectiveDate: formatDateForInput(doc.effectiveDate),
-    expiryDate: formatDateForInput(doc.expiryDate),
+    document_number: doc.number,
+    document_type: doc.type,
+    issuing_authority: doc.issuer,
+    issued_date: formatDateForInput(doc.issueDate),
+    effective_date: formatDateForInput(doc.effectiveDate),
+    expiry_date: formatDateForInput(doc.expiryDate),
     tags: processedTags,
     html_content: doc.html_content || "",
   };
@@ -766,14 +769,12 @@ const saveDoc = async () => {
       // Upload file Word
       payload = new FormData();
       payload.append("title", docForm.value.title);
-      payload.append("document_number", docForm.value.number);
-      payload.append("document_type", docForm.value.type);
-      payload.append("issuing_authority", docForm.value.issuer);
-      payload.append("issued_date", docForm.value.issueDate);
-
-      payload.append("effective_date", docForm.value.effectiveDate);
-
-      payload.append("expiry_date", docForm.value.expiryDate);
+      payload.append("document_number", docForm.value.document_number);
+      payload.append("document_type", docForm.value.document_type);
+      payload.append("issuing_authority", docForm.value.issuing_authority);
+      payload.append("issued_date", docForm.value.issued_date);
+      payload.append("effective_date", docForm.value.effective_date);
+      payload.append("expiry_date", docForm.value.expiry_date);
 
       // Append html_content
       if (docForm.value.html_content) {
@@ -793,18 +794,16 @@ const saveDoc = async () => {
       // Không có file mới, gửi dữ liệu JSON
       const jsonPayload = {
         title: docForm.value.title,
-        number: docForm.value.number,
-        type: docForm.value.type,
-        issuer: docForm.value.issuer,
-        issueDate: docForm.value.issueDate,
+        document_number: docForm.value.document_number,
+        document_type: docForm.value.document_type,
+        issuing_authority: docForm.value.issuing_authority,
+        issued_date: docForm.value.issued_date,
+        effective_date: docForm.value.effective_date,
+        expiry_date: docForm.value.expiry_date,
         html_content: docForm.value.html_content,
         wordFile: docForm.value.wordFile,
         tags: docForm.value.tags,
       };
-
-      jsonPayload.effectiveDate = docForm.value.effectiveDate;
-
-      jsonPayload.expiryDate = docForm.value.expiryDate;
 
       payload = jsonPayload;
     }
@@ -838,12 +837,12 @@ const closeModal = () => {
   selectedDoc.value = {};
   docForm.value = {
     title: "",
-    number: "",
-    type: "",
-    issuer: "",
-    issueDate: "",
-    effectiveDate: "",
-    expiryDate: "",
+    document_number: "",
+    document_type: "",
+    issuing_authority: "",
+    issued_date: "",
+    effective_date: "",
+    expiry_date: "",
     html_content: "",
     wordFile: "",
     tags: [],
