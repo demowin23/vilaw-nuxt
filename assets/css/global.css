@@ -180,70 +180,40 @@ select {
   background: #9ca3af;
 }
 
-/* QuillEditor styles */
-.ql-editor {
-  min-height: 200px;
-  font-family: inherit;
-  color: var(--text-primary);
-  background: var(--bg-card);
-}
-
-.ql-toolbar {
-  background: var(--bg-hover);
+/* TinyMCE styles */
+.tox-tinymce {
+  border-radius: 8px;
   border-color: var(--border-color) !important;
-  border-radius: 8px 8px 0 0;
 }
 
-.ql-container {
-  border-color: var(--border-color) !important;
-  border-radius: 0 0 8px 8px;
-}
-
-.dark .ql-editor {
-  color: var(--text-primary);
-  background: var(--bg-card);
-}
-
-.dark .ql-toolbar {
+.tox .tox-toolbar {
   background: var(--bg-hover);
   border-color: var(--border-color) !important;
 }
 
-.dark .ql-container {
+.tox .tox-edit-area {
+  background: var(--bg-card);
+}
+
+.tox .tox-edit-area__iframe {
+  background: var(--bg-card);
+}
+
+.dark .tox-tinymce {
   border-color: var(--border-color) !important;
 }
 
-.dark .ql-stroke {
-  stroke: var(--text-primary);
-}
-
-.dark .ql-fill {
-  fill: var(--text-primary);
-}
-
-.dark .ql-picker {
-  color: var(--text-primary);
-}
-
-.dark .ql-picker-options {
-  background: var(--bg-card);
-  border-color: var(--border-color);
-}
-
-.dark .ql-picker-item {
-  color: var(--text-primary);
-}
-
-.dark .ql-picker-item:hover {
+.dark .tox .tox-toolbar {
   background: var(--bg-hover);
+  border-color: var(--border-color) !important;
 }
 
-.dark .ql-picker-label {
-  color: var(--text-primary);
+.dark .tox .tox-edit-area {
+  background: var(--bg-card);
 }
 
-.dark .ql-picker-label:hover {
-  color: var(--primary-color);
+.dark .tox .tox-edit-area__iframe {
+  background: var(--bg-card);
 }
 
 /* Disable outer (window) scroll */

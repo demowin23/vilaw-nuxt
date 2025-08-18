@@ -69,19 +69,12 @@
             </ul>
           </nav>
         </div>
-        <div class="custom-quill-editor ql-container ql-snow">
-          <div
-            class="ql-editor html-output"
-            data-gramm="false"
-            contenteditable="true"
-          >
-            <div
-              class="knowledge-content"
-              v-html="knowledge?.content"
-              ref="contentRef"
-            ></div>
-          </div>
-        </div>
+
+        <div
+          class="knowledge-content"
+          v-html="knowledge?.content"
+          ref="contentRef"
+        ></div>
       </div>
       <aside class="sidebar">
         <div class="related-knowledge">
@@ -131,7 +124,6 @@ library.add(faCalendar, faUser, faEye, faList);
 
 const route = useRoute();
 const idParam = route.params.id as string;
-// Extract ID from URL like "123-title-slug" -> "123"
 const id = idParam?.split("-")[0];
 const { getLegalKnowledgeById, getLegalKnowledge } = useLegalKnowledge();
 

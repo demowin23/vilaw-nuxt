@@ -226,7 +226,7 @@
           <div class="form-group">
             <label>Nội dung *</label>
             <client-only>
-              <QuillEditor v-model="itemForm.content" theme="snow" />
+              <TinyMCE v-model="itemForm.content" />
             </client-only>
           </div>
 

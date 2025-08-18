@@ -39,7 +39,7 @@ export default defineNuxtConfig({
       }
     },
     ssr: {
-      noExternal: ['@vueup/vue-quill']
+      noExternal: ['@tinymce/tinymce-vue']
     }
   },
   // Removed incorrect isCustomElement config that treated RouterLink as a custom element
