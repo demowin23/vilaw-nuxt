@@ -273,6 +273,14 @@
               Chọn một hoặc nhiều lĩnh vực pháp luật
             </small>
           </div>
+
+          <div class="form-group">
+            <label>Nội dung văn bản</label>
+            <TinyMCE v-model="docForm.html_content" />
+            <small class="form-help">
+              Sử dụng trình soạn thảo để tạo nội dung văn bản
+            </small>
+          </div>
           <div class="form-group">
             <label>File văn bản Word *</label>
             <div class="file-upload-wrapper">
@@ -411,9 +419,9 @@
               </div>
             </div>
 
-            <div v-if="selectedDoc.content" class="content-section">
+            <div v-if="selectedDoc.html_content" class="content-section">
               <h4>Nội dung văn bản:</h4>
-              <div class="content-text" v-html="selectedDoc.content"></div>
+              <div class="content-text" v-html="selectedDoc.html_content"></div>
             </div>
           </div>
         </div>
@@ -421,7 +429,6 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, computed, onMounted, watch } from "vue";
 import { useDocuments } from "~/composables/useDocuments";
@@ -429,6 +436,7 @@ import { useLegalFields } from "~/composables/useLegalFields";
 import { useNotification } from "~/composables/useNotification";
 import { useAuth } from "~/composables/useAuth";
 import { slugify } from "~/utils/slugify";
+import TinyMCE from "~/components/TinyMCE.vue";
 
 definePageMeta({
   layout: "admin",
@@ -476,7 +484,7 @@ const docForm = ref({
   issueDate: "",
   effectiveDate: "",
   expiryDate: "",
-  content: "",
+  html_content: "",
   wordFile: "",
   tags: [],
 });
@@ -700,6 +708,7 @@ const editDoc = (doc) => {
     effectiveDate: formatDateForInput(doc.effectiveDate),
     expiryDate: formatDateForInput(doc.expiryDate),
     tags: processedTags,
+    html_content: doc.html_content || "",
   };
 
   // Set file info if exists
@@ -766,6 +775,11 @@ const saveDoc = async () => {
 
       payload.append("expiry_date", docForm.value.expiryDate);
 
+      // Append html_content
+      if (docForm.value.html_content) {
+        payload.append("html_content", docForm.value.html_content);
+      }
+
       // Append legal field IDs
       if (docForm.value.tags && docForm.value.tags.length > 0) {
         docForm.value.tags.forEach((fieldId) => {
@@ -783,7 +797,7 @@ const saveDoc = async () => {
         type: docForm.value.type,
         issuer: docForm.value.issuer,
         issueDate: docForm.value.issueDate,
-        content: docForm.value.content,
+        html_content: docForm.value.html_content,
         wordFile: docForm.value.wordFile,
         tags: docForm.value.tags,
       };
@@ -830,7 +844,7 @@ const closeModal = () => {
     issueDate: "",
     effectiveDate: "",
     expiryDate: "",
-    content: "",
+    html_content: "",
     wordFile: "",
     tags: [],
   };

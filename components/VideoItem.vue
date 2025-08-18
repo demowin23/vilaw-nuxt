@@ -11,7 +11,7 @@
       <div class="info">
         <div class="title" v-html="item.title"></div>
         <div class="meta">
-          <span class="duration-meta">Thời lượng: {{ item.duration }}</span>
+          <span class="duration-meta">{{ formatDuration(item.duration) }}</span>
           <span class="views">{{ item.view_count }} lượt xem</span>
         </div>
       </div>
@@ -26,6 +26,12 @@ import { slugify } from "~/utils/slugify";
 defineProps<{
   item: Object;
 }>();
+const formatDuration = (seconds: number) => {
+  if (!seconds) return "";
+  const min = Math.floor(seconds / 60);
+  const sec = seconds % 60;
+  return `${min}:${sec.toString().padStart(2, "0")}` + " phút";
+};
 </script>
 
 <style scoped>

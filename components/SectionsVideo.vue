@@ -45,7 +45,7 @@
           <div
             class="mt-1 text-xs text-gray-500 bg-gray-100 rounded px-2 py-0.5 inline-block"
           >
-            {{ item.views }} lượt xem
+            {{ item.view_count }} lượt xem
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@ interface VideoItem {
   id: string | number;
   thumbnail: string;
   title: string;
-  views: string | number;
+  view_count: string | number;
   bg: string;
   badgeBg: string;
 }
