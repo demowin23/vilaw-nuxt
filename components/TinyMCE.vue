@@ -1,5 +1,10 @@
 <template>
-  <editor ref="editor" v-model="content" :init="editorConfig" />
+  <editor
+    api-key="rpo2vefirnutsvv5aflw6uskeic8l1jy2qr04a04ckw0ka0g"
+    ref="editor"
+    v-model="content"
+    :init="editorConfig"
+  />
 </template>
 
 <script>
@@ -25,6 +30,8 @@ export default {
     editorConfig() {
       return {
         height: 500,
+        // Hide onboarding popup
+        onboarding: false,
         plugins:
           "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table paste code help wordcount",
         menubar: "file edit view insert format tools table help",
