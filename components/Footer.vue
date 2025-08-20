@@ -1,6 +1,6 @@
 <template>
   <footer class="bg-transparent mt-8">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- THÔNG TIN -->
         <div

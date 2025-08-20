@@ -219,7 +219,7 @@
       <!-- Main content -->
       <div class="main-content flex-1 flex flex-col w-full h-full min-h-0">
         <main
-          class="flex-1 container mx-auto px-2 md:px-4 py-4 overflow-y-auto no-scrollbar min-h-0 max-w-screen-2xl flex flex-col bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
+          class="flex-1 container mx-auto px-2 md:px-4 py-4 min-h-0 max-w-screen-2xl flex flex-col bg-gray-100 dark:bg-gray-900 transition-colors duration-300"
         >
           <slot />
           <Footer
@@ -370,6 +370,59 @@ watch(
 </script>
 
 <style scoped>
+/* Hide scrollbar on body/html */
+:global(html) {
+  overflow: hidden;
+}
+
+:global(body) {
+  overflow: hidden;
+}
+
+/* Show scrollbar only on main content */
+.main-content {
+  flex: 1 1 0%;
+  min-width: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+  height: calc(100vh - var(--header-height));
+  max-height: calc(100vh - var(--header-height));
+  position: relative;
+}
+
+/* Custom scrollbar styling for webkit browsers */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af;
+}
+
+/* Dark mode scrollbar */
+.dark .main-content {
+  scrollbar-color: #4b5563 transparent;
+}
+
+.dark .main-content::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+}
+
+.dark .main-content::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
 .sidebar-link {
   @apply flex items-center gap-2 px-1 py-2 rounded font-semibold hover:bg-[#f58220]/10 transition-colors duration-200;
   @apply text-gray-800 dark:text-gray-200;
@@ -563,13 +616,6 @@ watch(
   flex-shrink: 0;
   min-width: 4rem;
   max-width: 16rem;
-}
-.main-content {
-  flex: 1 1 0%;
-  min-width: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 .sidebar-text--active {
   color: #f58220 !important;
