@@ -12,12 +12,14 @@
         <div
           class="text-blue-800 dark:text-blue-300 font-bold uppercase tracking-wide text-lg mb-2 transition-colors duration-300"
         >
-          {{ about.headerTitle || 'Về chúng tôi' }}
+          {{ about.headerTitle || "Về chúng tôi" }}
         </div>
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6">
-          {{ about.companyName || 'Công ty Luật TNHH ViLaw' }}
+          {{ about.companyName || "Công ty Luật TNHH ViLaw" }}
         </h1>
-        <div v-for="(p, idx) in about.introParagraphs" :key="idx"
+        <div
+          v-for="(p, idx) in about.introParagraphs"
+          :key="idx"
           class="text-justify text-gray-600 dark:text-gray-300 text-base sm:text-lg md:text-xl leading-7 sm:leading-8 md:leading-9 mb-6 transition-colors duration-300"
         >
           {{ p }}
@@ -34,8 +36,14 @@
         >
           Lịch sử thành lập
         </h2>
-        <div class="relative border-l-2 border-blue-800/30 dark:border-blue-300/30 pl-0 md:pl-0 space-y-10 transition-colors duration-300">
-          <div v-for="(t, i) in about.timeline" :key="i" class="relative flex flex-col gap-2 pl-12">
+        <div
+          class="relative border-l-2 border-blue-800/30 dark:border-blue-300/30 pl-0 md:pl-0 space-y-10 transition-colors duration-300"
+        >
+          <div
+            v-for="(t, i) in about.timeline"
+            :key="i"
+            class="relative flex flex-col gap-2 pl-12"
+          >
             <span
               class="absolute left-0 top-0 flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-800 dark:border-blue-300 bg-white dark:bg-gray-900 text-blue-800 dark:text-blue-300 z-10 -translate-x-1/2 shadow-md transition-colors duration-300"
             >
@@ -56,10 +64,26 @@
               </svg>
             </span>
             <div class="ml-2">
-              <div class="font-bold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300">{{ t.title }}</div>
-              <div class="font-semibold text-base text-[#222] dark:text-gray-300 transition-colors duration-300">{{ t.subtitle }}</div>
-              <div class="text-xs text-gray-500 dark:text-gray-400 mb-2 transition-colors duration-300">{{ t.period }}</div>
-              <div class="text-gray-700 dark:text-gray-300 text-base leading-relaxed transition-colors duration-300">{{ t.description }}</div>
+              <div
+                class="font-bold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
+              >
+                {{ t.title }}
+              </div>
+              <div
+                class="font-semibold text-base text-[#222] dark:text-gray-300 transition-colors duration-300"
+              >
+                {{ t.subtitle }}
+              </div>
+              <div
+                class="text-xs text-gray-500 dark:text-gray-400 mb-2 transition-colors duration-300"
+              >
+                {{ t.period }}
+              </div>
+              <div
+                class="text-gray-700 dark:text-gray-300 text-base leading-relaxed transition-colors duration-300"
+              >
+                {{ t.description }}
+              </div>
             </div>
           </div>
         </div>
@@ -76,7 +100,11 @@
       >
         <!-- Left: Awards List -->
         <div class="flex-1 flex flex-col gap-8">
-          <div v-for="(a, idx) in about.awards" :key="idx" class="flex items-start gap-5">
+          <div
+            v-for="(a, idx) in about.awards"
+            :key="idx"
+            class="flex items-start gap-5"
+          >
             <span
               class="flex items-center justify-center w-14 h-14 aspect-square rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 text-2xl shrink-0 transition-colors duration-300"
             >
@@ -137,8 +165,8 @@
         Cảm nhận của khách hàng
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div
-            v-for="(item, idx) in about.testimonials"
+        <div
+          v-for="(item, idx) in about.testimonials"
           :key="idx"
           class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 flex flex-col gap-4 border-l-4 border-blue-800 dark:border-blue-300 hover:shadow-2xl transition-all duration-300"
         >
@@ -367,7 +395,7 @@
           <div
             class="text-4xl font-extrabold text-blue-800 dark:text-blue-300 transition-colors duration-300"
           >
-            {{ about.stats.offices || '5' }}
+            {{ about.stats.offices || "5" }}
           </div>
           <div
             class="text-gray-700 dark:text-gray-300 text-lg transition-colors duration-300"
@@ -379,7 +407,7 @@
           <div
             class="text-4xl font-extrabold text-blue-800 dark:text-blue-300 transition-colors duration-300"
           >
-            {{ about.stats.lawyers || '30+' }}
+            {{ about.stats.lawyers || "30+" }}
           </div>
           <div
             class="text-gray-700 dark:text-gray-300 text-lg transition-colors duration-300"
@@ -391,7 +419,7 @@
           <div
             class="text-4xl font-extrabold text-blue-800 dark:text-blue-300 transition-colors duration-300"
           >
-            {{ about.stats.enterpriseClients || '1176' }}
+            {{ about.stats.enterpriseClients || "1176" }}
           </div>
           <div
             class="text-gray-700 dark:text-gray-300 text-lg transition-colors duration-300"
@@ -403,7 +431,7 @@
           <div
             class="text-4xl font-extrabold text-blue-800 dark:text-blue-300 transition-colors duration-300"
           >
-            {{ about.stats.individualClients || '723' }}
+            {{ about.stats.individualClients || "723" }}
           </div>
           <div
             class="text-gray-700 dark:text-gray-300 text-lg transition-colors duration-300"
@@ -422,16 +450,25 @@
         Dịch vụ của Chúng tôi
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div v-for="(s, idx) in about.services" :key="idx"
+        <div
+          v-for="(s, idx) in about.services"
+          :key="idx"
           class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 flex flex-col gap-4 border-l-4 border-blue-800 dark:border-blue-300 hover:shadow-2xl transition-all duration-300"
         >
           <div class="flex items-center gap-3 mb-2">
-            <span class="text-blue-800 dark:text-blue-300 text-2xl transition-colors duration-300">
+            <span
+              class="text-blue-800 dark:text-blue-300 text-2xl transition-colors duration-300"
+            >
               <font-awesome-icon :icon="['fas', 'gavel']" />
             </span>
-            <span class="font-semibold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300">{{ s.title }}</span>
+            <span
+              class="font-semibold text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
+              >{{ s.title }}</span
+            >
           </div>
-          <div class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300">
+          <div
+            class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+          >
             {{ s.description }}
           </div>
         </div>
@@ -453,11 +490,21 @@
         Địa chỉ văn phòng
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div v-for="(o, idx) in about.offices" :key="idx"
+        <div
+          v-for="(o, idx) in about.offices"
+          :key="idx"
           class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 border-l-4 border-blue-800 dark:border-blue-300 flex flex-col items-center transition-colors duration-300"
         >
-          <div class="font-semibold text-blue-800 dark:text-blue-300 mb-2 text-lg transition-colors duration-300">{{ o.city }}</div>
-          <div class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300">{{ o.address }}</div>
+          <div
+            class="font-semibold text-blue-800 dark:text-blue-300 mb-2 text-lg transition-colors duration-300"
+          >
+            {{ o.city }}
+          </div>
+          <div
+            class="text-gray-700 dark:text-gray-300 text-base transition-colors duration-300"
+          >
+            {{ o.address }}
+          </div>
         </div>
       </div>
     </section>
@@ -473,18 +520,24 @@
           >
             Liên hệ để được tư vấn ngay
           </h3>
-          <ul class="flex flex-wrap gap-6 text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300">
+          <ul
+            class="flex flex-wrap gap-6 text-blue-800 dark:text-blue-300 text-lg transition-colors duration-300"
+          >
             <li v-if="about.contactCTA.phone">
-              <font-awesome-icon :icon="['fas', 'phone']" class="mr-2" /> {{ about.contactCTA.phone }}
+              <font-awesome-icon :icon="['fas', 'phone']" class="mr-2" />
+              {{ about.contactCTA.phone }}
             </li>
             <li v-if="about.contactCTA.email">
-              <font-awesome-icon :icon="['fas', 'envelope']" class="mr-2" /> {{ about.contactCTA.email }}
+              <font-awesome-icon :icon="['fas', 'envelope']" class="mr-2" />
+              {{ about.contactCTA.email }}
             </li>
             <li v-if="about.contactCTA.facebook">
-              <font-awesome-icon :icon="['fab', 'facebook']" class="mr-2" /> {{ about.contactCTA.facebook }}
+              <font-awesome-icon :icon="['fab', 'facebook']" class="mr-2" />
+              {{ about.contactCTA.facebook }}
             </li>
             <li v-if="about.contactCTA.website">
-              <font-awesome-icon :icon="['fas', 'globe']" class="mr-2" /> {{ about.contactCTA.website }}
+              <font-awesome-icon :icon="['fas', 'globe']" class="mr-2" />
+              {{ about.contactCTA.website }}
             </li>
           </ul>
         </div>
@@ -548,11 +601,16 @@ const about = ref({
   principles: [],
   mission: "",
   coreValues: [],
-  stats: { offices: "", lawyers: "", enterpriseClients: "", individualClients: "" },
+  stats: {
+    offices: "",
+    lawyers: "",
+    enterpriseClients: "",
+    individualClients: "",
+  },
   services: [],
   servicesImage: "",
   offices: [],
-  contactCTA: { phone: "", email: "", facebook: "", website: "" }
+  contactCTA: { phone: "", email: "", facebook: "", website: "" },
 } as any);
 
 const testimonials = [
@@ -646,6 +704,23 @@ onMounted(async () => {
 });
 onUnmounted(() => {
   window.removeEventListener("scroll", onScroll);
+});
+
+// Set page SEO
+useHead({
+  title: "Giới thiệu - Công ty Luật TNHH ViLaw",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Tìm hiểu về Công ty Luật TNHH ViLaw - Đơn vị tư vấn pháp luật hàng đầu với đội ngũ luật sư giàu kinh nghiệm, dịch vụ pháp lý toàn diện và cam kết chất lượng.",
+    },
+    {
+      name: "keywords",
+      content:
+        "giới thiệu, công ty luật, ViLaw, tư vấn pháp luật, luật sư, dịch vụ pháp lý, công ty luật TNHH",
+    },
+  ],
 });
 </script>
 

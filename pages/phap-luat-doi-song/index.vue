@@ -51,4 +51,21 @@ onMounted(async () => {
   videosDatDai.value = resDatDai.data;
   videosKhac.value = resKhac.data;
 });
+
+// Set page SEO
+useHead({
+  title: "Video pháp luật đời sống",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Xem các video pháp luật đời sống với nội dung hướng dẫn chi tiết về các vấn đề pháp lý thường gặp. Từ dân sự, hình sự đến thương mại và đất đai.",
+    },
+    {
+      name: "keywords",
+      content:
+        "video pháp luật, pháp luật đời sống, hướng dẫn pháp luật, luật dân sự, luật hình sự, luật thương mại, luật đất đai",
+    },
+  ],
+});
 </script>

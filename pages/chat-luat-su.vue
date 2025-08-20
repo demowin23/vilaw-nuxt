@@ -119,7 +119,9 @@
                   </template>
                   <template v-else-if="msg.messageType === 'image'">
                     <img
-                      :src="msg.fileUrl ? getImageUrl(msg.fileUrl) : msg.content"
+                      :src="
+                        msg.fileUrl ? getImageUrl(msg.fileUrl) : msg.content
+                      "
                       class="max-w-xs max-h-48 rounded-lg"
                     />
                   </template>
@@ -136,7 +138,13 @@
                         @click.prevent="downloadFile(msg)"
                         class="underline text-blue-600 dark:text-blue-400"
                       >
-                        📎 {{ msg.fileName || (msg.fileUrl ? msg.fileUrl.split('/').pop() : 'Tải file') }}
+                        📎
+                        {{
+                          msg.fileName ||
+                          (msg.fileUrl
+                            ? msg.fileUrl.split("/").pop()
+                            : "Tải file")
+                        }}
                       </a>
                     </template>
                   </template>
@@ -338,7 +346,8 @@ async function handleSendMessage() {
 
   const messageContent = input.value;
   const messageFile = selectedFile.value;
-  const isImage = messageFile && messageFile.type && messageFile.type.startsWith("image/");
+  const isImage =
+    messageFile && messageFile.type && messageFile.type.startsWith("image/");
 
   // Clear input immediately for better UX
   input.value = "";
@@ -347,12 +356,17 @@ async function handleSendMessage() {
   // Add message to UI immediately (optimistic update)
   const newMessage: Message = {
     id: Date.now(), // Temporary ID
-    content: messageFile ? (isImage ? URL.createObjectURL(messageFile) : messageContent) : messageContent,
+    content: messageFile
+      ? isImage
+        ? URL.createObjectURL(messageFile)
+        : messageContent
+      : messageContent,
     messageType: messageFile ? (isImage ? "image" : "file") : "text",
     senderId: user.value?.id || 0,
     senderName: user.value?.fullName || "Người dùng",
     senderRole: "user",
-    fileUrl: messageFile && !isImage ? URL.createObjectURL(messageFile) : undefined,
+    fileUrl:
+      messageFile && !isImage ? URL.createObjectURL(messageFile) : undefined,
     fileName: messageFile?.name,
     createdAt: new Date().toISOString(),
     isRead: false,
@@ -410,14 +424,14 @@ function isImageFile(pathOrName?: string) {
   if (!pathOrName) return false;
   const lower = pathOrName.toLowerCase();
   return (
-    lower.endsWith('.png') ||
-    lower.endsWith('.jpg') ||
-    lower.endsWith('.jpeg') ||
-    lower.endsWith('.gif') ||
-    lower.endsWith('.webp') ||
-    lower.endsWith('.bmp') ||
-    lower.endsWith('.jfif') ||
-    lower.endsWith('.svg')
+    lower.endsWith(".png") ||
+    lower.endsWith(".jpg") ||
+    lower.endsWith(".jpeg") ||
+    lower.endsWith(".gif") ||
+    lower.endsWith(".webp") ||
+    lower.endsWith(".bmp") ||
+    lower.endsWith(".jfif") ||
+    lower.endsWith(".svg")
   );
 }
 
@@ -471,7 +485,8 @@ function scrollToBottom() {
 // Download file via authorized API call
 async function downloadFile(msg: Message) {
   try {
-    const fileName = msg.fileName || (msg.fileUrl ? msg.fileUrl.split('/').pop() || '' : '');
+    const fileName =
+      msg.fileName || (msg.fileUrl ? msg.fileUrl.split("/").pop() || "" : "");
     if (!fileName) return;
 
     if (!token.value) {
@@ -480,8 +495,10 @@ async function downloadFile(msg: Message) {
     }
 
     const { BASE_URL } = getApiConfig();
-    const response = await fetch(`${BASE_URL}/chat/download/${encodeURIComponent(fileName)}`,
-      { method: "GET", headers: { Authorization: `Bearer ${token.value}` } });
+    const response = await fetch(
+      `${BASE_URL}/chat/download/${encodeURIComponent(fileName)}`,
+      { method: "GET", headers: { Authorization: `Bearer ${token.value}` } }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to download file");
@@ -561,6 +578,23 @@ onUnmounted(() => {
   if (refreshInterval) {
     clearInterval(refreshInterval);
   }
+});
+
+// Set page SEO
+useHead({
+  title: "Chat với luật sư - Tư vấn pháp luật trực tuyến",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Chat trực tiếp với luật sư chuyên nghiệp để được tư vấn pháp luật miễn phí. Hỗ trợ giải đáp các vấn đề pháp lý 24/7 với đội ngũ luật sư giàu kinh nghiệm.",
+    },
+    {
+      name: "keywords",
+      content:
+        "chat luật sư, tư vấn pháp luật trực tuyến, hỏi đáp pháp luật, luật sư online, tư vấn pháp lý miễn phí",
+    },
+  ],
 });
 </script>
 

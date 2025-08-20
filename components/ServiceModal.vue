@@ -41,17 +41,7 @@
             <!-- Logo -->
             <div class="flex justify-center mb-6">
               <div class="relative">
-                <div
-                  class="bg-orange-500 text-white px-4 py-2 rounded-full font-bold text-xl"
-                >
-                  <span class="text-sm">vilaw.net.vn</span>
-                </div>
-                <div
-                  class="absolute -top-1 -right-1 w-3 h-3 bg-orange-400 rounded-full"
-                ></div>
-                <div
-                  class="absolute -bottom-1 -left-1 w-2 h-2 bg-orange-300 rounded-full"
-                ></div>
+                <img src="/images/logo.png" alt="Logo" class="h-12" />
               </div>
             </div>
 

@@ -99,11 +99,13 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { onMounted, watch, nextTick } from "vue";
 import { useNewsStore } from "~/stores/news";
 import { useThemeStore } from "~/stores/theme";
 import { slugify } from "~/utils/slugify";
+import { useSeo } from "~/composables/useSeo";
 
 // Get the ID from the route
 const route = useRoute();
@@ -113,6 +115,7 @@ const id = idParam?.split("-")[0];
 // Use stores
 const newsStore = useNewsStore();
 const themeStore = useThemeStore();
+const { setArticleSeo } = useSeo();
 
 // Function to apply dark mode styles
 const applyDarkModeStyles = () => {
@@ -266,12 +269,39 @@ const applyDarkModeStyles = () => {
   }
 };
 
+// Set SEO when news is loaded
+const setSeo = () => {
+  if (newsStore.currentNews) {
+    setArticleSeo({
+      title: newsStore.currentNews.title,
+      description: newsStore.currentNews.description,
+      content: newsStore.currentNews.content,
+      image: newsStore.currentNews.image,
+      publishedTime: newsStore.currentNews.ts_update,
+      author: newsStore.currentNews.author,
+      category: newsStore.currentNews.category,
+      tags: newsStore.currentNews.tags,
+    });
+  }
+};
+
 // Watch for theme changes
 watch(
   () => themeStore.isDark,
   () => {
     applyDarkModeStyles();
   }
+);
+
+// Watch for news changes to update SEO
+watch(
+  () => newsStore.currentNews,
+  () => {
+    if (newsStore.currentNews) {
+      setSeo();
+    }
+  },
+  { immediate: true }
 );
 
 // Fetch news detail from store

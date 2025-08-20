@@ -216,4 +216,19 @@ const topViews = [
 const handleClick = (type: string) => {
   router.push(`/${type}`);
 };
+
+// Set page SEO
+useHead({
+  title: 'Trang chủ',
+  meta: [
+    {
+      name: 'description',
+      content: 'VILAW - Nền tảng pháp luật trực tuyến hàng đầu Việt Nam. Cung cấp kiến thức pháp luật, video hướng dẫn, văn bản pháp luật và dịch vụ tư vấn pháp lý chuyên nghiệp.'
+    },
+    {
+      name: 'keywords',
+      content: 'pháp luật, kiến thức pháp luật, video pháp luật, văn bản pháp luật, tư vấn pháp lý, luật sư, dịch vụ pháp lý, VILAW'
+    }
+  ]
+});
 </script>

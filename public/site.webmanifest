@@ -1,0 +1,29 @@
+{
+  "name": "VILAW - Nền tảng pháp luật trực tuyến",
+  "short_name": "VILAW",
+  "description": "Nền tảng pháp luật trực tuyến cung cấp kiến thức pháp luật, video hướng dẫn, văn bản pháp luật và dịch vụ tư vấn pháp lý chuyên nghiệp",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f58220",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/logo-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/logo-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/logo-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "business", "productivity"],
+  "lang": "vi-VN"
+}

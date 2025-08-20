@@ -14,17 +14,7 @@
       <!-- Logo Section -->
       <div class="flex justify-center mb-8">
         <div class="relative">
-          <div
-            class="bg-orange-500 text-white px-6 py-3 rounded-full font-bold text-2xl"
-          >
-            <span class="text-lg">vilaw.net.vn</span>
-          </div>
-          <div
-            class="absolute -top-1 -right-1 w-4 h-4 bg-orange-400 rounded-full"
-          ></div>
-          <div
-            class="absolute -bottom-1 -left-1 w-3 h-3 bg-orange-300 rounded-full"
-          ></div>
+          <img src="/images/logo.png" alt="Logo" class="h-12" />
         </div>
       </div>
 
@@ -50,12 +40,8 @@
 </template>
 
 <script setup lang="ts">
-import { useNotification } from "~/composables/useNotification";
 import ServiceModal from "~/components/ServiceModal.vue";
 import { useModalStore } from "~/stores/modal";
-// Nuxt auto-imports components from `components/`, nên không cần import PackagePlans thủ công
-
-const { handleApiSuccess } = useNotification();
 const modalStore = useModalStore();
 
 function handleSelect(packageId: string) {
@@ -67,4 +53,21 @@ function handleSelect(packageId: string) {
     packages: [],
   });
 }
+
+// Set page SEO
+useHead({
+  title: "Mua gói - Dịch vụ pháp lý VILAW",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Đăng ký gói dịch vụ pháp lý VILAW để được truy cập kho video pháp luật chất lượng cao, tư vấn pháp lý chuyên nghiệp và hỗ trợ toàn diện.",
+    },
+    {
+      name: "keywords",
+      content:
+        "mua gói, đăng ký gói, dịch vụ pháp lý, gói cước VILAW, video pháp luật, tư vấn pháp lý",
+    },
+  ],
+});
 </script>

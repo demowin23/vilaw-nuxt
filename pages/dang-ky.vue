@@ -16,17 +16,7 @@
       <!-- Logo Section -->
       <div class="flex justify-center mb-8">
         <div class="relative">
-          <div
-            class="bg-orange-500 text-white px-6 py-3 rounded-full font-bold text-2xl"
-          >
-            <span class="text-lg">vilaw.net.vn</span>
-          </div>
-          <div
-            class="absolute -top-1 -right-1 w-4 h-4 bg-orange-400 rounded-full"
-          ></div>
-          <div
-            class="absolute -bottom-1 -left-1 w-3 h-3 bg-orange-300 rounded-full"
-          ></div>
+          <img src="/images/logo.png" alt="Logo" class="h-12" />
         </div>
       </div>
 
@@ -167,17 +157,23 @@
         </NuxtLink>
       </div>
     </div>
+    <!-- Modal -->
+    <ServiceModal />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useNotification } from "~/composables/useNotification";
+import ServiceModal from "~/components/ServiceModal.vue";
+import { useModalStore } from "~/stores/modal";
+const modalStore = useModalStore();
 
-const { handleApiSuccess, handleApiError } = useNotification();
-
-const handlePackageClick = (packageId: string) => {
-  handleApiSuccess({
-    message: `Đã chọn gói ${packageId}. Vui lòng liên hệ để hoàn tất đăng ký!`,
+function handlePackageClick(packageId: string) {
+  // Hiển thị popup hướng dẫn đăng ký theo yêu cầu
+  modalStore.openCustomModal({
+    title: "",
+    message:
+      'Thuê bao Vinaphone vui lòng soạn "DK PL" gửi 9488 (3.000 đồng/ngày) để được miễn hoàn toàn cước 3G/4G khi trải nghiệm kho video chất lượng nhất tại Vilaw.',
+    packages: [],
   });
-};
+}
 </script>

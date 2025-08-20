@@ -40,10 +40,7 @@
               />
             </svg>
           </button>
-          <img src="/favicon.ico" alt="Logo" class="h-10 w-10 ml-4" />
-          <span class="font-bold text-xl text-[#f58220] tracking-wide"
-            >VILAW</span
-          >
+          <img src="/images/logo.png" alt="Logo" class="h-10 ml-4" />
         </div>
         <!-- Search -->
         <div class="flex-1 flex justify-center max-w-lg">

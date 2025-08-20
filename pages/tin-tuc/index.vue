@@ -125,6 +125,23 @@ const currentPage = ref(1);
 const totalNewsCount = ref(0);
 const isPageChanging = ref(false); // Flag to prevent infinite loops
 
+// Set page SEO
+useHead({
+  title: "Tin tức pháp luật",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Cập nhật những tin tức, bài viết pháp luật mới nhất, đáng tin cậy và hữu ích. Thông tin pháp luật Việt Nam cập nhật hàng ngày.",
+    },
+    {
+      name: "keywords",
+      content:
+        "tin tức pháp luật, pháp luật Việt Nam, tin tức mới nhất, bài viết pháp luật, thông tin pháp lý, cập nhật pháp luật",
+    },
+  ],
+});
+
 const fetchNews = async (page = 1, isInitialLoad = false) => {
   try {
     if (isInitialLoad) {

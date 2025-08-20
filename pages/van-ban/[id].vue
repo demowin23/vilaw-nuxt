@@ -426,6 +426,7 @@
 import { ref, onMounted, nextTick } from "vue";
 import { useThemeStore } from "~/stores/theme";
 import { useDocuments } from "~/composables/useDocuments";
+import { useSeo } from "~/composables/useSeo";
 import { slugify } from "~/utils/slugify";
 
 const themeStore = useThemeStore();
@@ -497,6 +498,9 @@ const scrollToHeading = (id: string) => {
     }
   });
 };
+
+// Initialize SEO composable
+const { setDocumentSeo } = useSeo();
 
 // Set page title
 useHead({
@@ -628,6 +632,15 @@ const fetchDocument = async () => {
     useHead({
       title: `${document.value.title} - Văn bản pháp luật`,
       meta: [{ name: "description", content: document.value.title }],
+    });
+
+    // Set comprehensive SEO for document
+    setDocumentSeo({
+      title: document.value.title,
+      description: document.value.title,
+      documentNumber: document.value.document_number,
+      publishedTime: document.value.issued_date,
+      tags: getTagsArray(document.value.tags),
     });
 
     // Fetch related documents after document is loaded

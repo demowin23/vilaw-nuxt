@@ -108,7 +108,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch } from "vue";
+import { ref, onMounted, nextTick, watch, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { useLegalKnowledge } from "~/composables/useLegalKnowledge";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -120,14 +120,17 @@ import {
   faList,
 } from "@fortawesome/free-solid-svg-icons";
 import { slugify } from "~/utils/slugify";
+import { getImageUrl } from "~/utils/config";
+import { useSeo } from "~/composables/useSeo";
+
 library.add(faCalendar, faUser, faEye, faList);
 
 const route = useRoute();
-const idParam = route.params.id as string;
-const id = idParam?.split("-")[0];
+const { setArticleSeo } = useSeo();
 const { getLegalKnowledgeById, getLegalKnowledge } = useLegalKnowledge();
 
-import { getImageUrl } from "~/utils/config";
+const idParam = route.params.id as string;
+const id = idParam?.split("-")[0];
 
 let knowledge = ref<any>(null);
 const isLoading = ref(false);
@@ -216,6 +219,22 @@ const loadRelated = async (category: string) => {
   }
 };
 
+// Set SEO when knowledge is loaded
+const setSeo = () => {
+  if (knowledge.value) {
+    setArticleSeo({
+      title: knowledge.value.title,
+      description: knowledge.value.summary || knowledge.value.description,
+      content: knowledge.value.content,
+      image: knowledge.value.image,
+      publishedTime: knowledge.value.ts_update,
+      author: knowledge.value.author,
+      category: knowledge.value.category,
+      tags: knowledge.value.tags,
+    });
+  }
+};
+
 onMounted(async () => {
   if (!id) return;
   isLoading.value = true;
@@ -224,6 +243,9 @@ onMounted(async () => {
     knowledge.value = res.data;
     await nextTick();
     extractHeadings();
+
+    // Set SEO
+    setSeo();
 
     // Add scroll listener for active heading
     window.addEventListener("scroll", updateActiveHeading);
@@ -248,6 +270,11 @@ watch(
     });
   }
 );
+
+// Cleanup
+onUnmounted(() => {
+  window.removeEventListener("scroll", updateActiveHeading);
+});
 </script>
 <style scoped>
 :deep(.ql-container.ql-snow) {

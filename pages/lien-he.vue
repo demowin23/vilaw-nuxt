@@ -582,6 +582,23 @@ const submitForm = () => {
     message: "",
   };
 };
+
+// Set page SEO
+useHead({
+  title: "Liên hệ - Tư vấn pháp luật",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Liên hệ với VILAW để được tư vấn pháp luật chuyên nghiệp. Hỗ trợ giải đáp các vấn đề pháp lý, tư vấn doanh nghiệp và dịch vụ pháp lý toàn diện.",
+    },
+    {
+      name: "keywords",
+      content:
+        "liên hệ, tư vấn pháp luật, dịch vụ pháp lý, luật sư tư vấn, hỗ trợ pháp lý, VILAW",
+    },
+  ],
+});
 </script>
 
 <style scoped>

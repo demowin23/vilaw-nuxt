@@ -1,16 +1,12 @@
 <template>
   <div class="accounting-knowledge-page">
-    <div 
-      v-for="category in categories" 
-      :key="category.value" 
-    >
+    <div v-for="category in categories" :key="category.value">
       <div class="header-section">
         <div class="title-container">
           <div class="title-accent"></div>
           <h1 class="main-title">{{ category.label }}</h1>
         </div>
         <p class="description">
- 
           {{ category.description }}
         </p>
       </div>
@@ -27,31 +23,51 @@ const { getLegalKnowledge, getCategories } = useLegalKnowledge();
 const categories = ref<any[]>([]);
 const categoryKnowledge = ref<Record<string, any[]>>({});
 
-
 onMounted(async () => {
   try {
     const categoriesResponse = await getCategories();
     categories.value = categoriesResponse.data.slice().sort((a, b) => {
-      if (a.value === 'the_loai_khac') return 1;
-      if (b.value === 'the_loai_khac') return -1;
+      if (a.value === "the_loai_khac") return 1;
+      if (b.value === "the_loai_khac") return -1;
       return a.id - b.id;
     });
 
     // Fetch knowledge for each category
     const knowledgePromises = categories.value.map(async (category) => {
-      const response = await getLegalKnowledge({ category: category.value,limit: 8,offset: 0 });
+      const response = await getLegalKnowledge({
+        category: category.value,
+        limit: 8,
+        offset: 0,
+      });
       return { value: category.value, data: response.data };
     });
 
     const knowledgeResults = await Promise.all(knowledgePromises);
-    
+
     // Organize knowledge by category value
     knowledgeResults.forEach(({ value, data }) => {
       categoryKnowledge.value[value] = data;
     });
   } catch (error) {
-    console.error('Error loading categories and knowledge:', error);
+    console.error("Error loading categories and knowledge:", error);
   }
+});
+
+// Set page SEO
+useHead({
+  title: "Kiến thức pháp luật",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Khám phá kiến thức pháp luật Việt Nam với các bài viết chuyên sâu về các lĩnh vực pháp luật khác nhau. Từ dân sự, hình sự đến thương mại và đất đai.",
+    },
+    {
+      name: "keywords",
+      content:
+        "kiến thức pháp luật, pháp luật Việt Nam, luật dân sự, luật hình sự, luật thương mại, luật đất đai, pháp luật đời sống",
+    },
+  ],
 });
 </script>
 
@@ -210,4 +226,3 @@ onMounted(async () => {
   }
 }
 </style>
-

@@ -330,6 +330,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useVideoLifeLaw } from "~/composables/useVideoLifeLaw";
 import { useAuth } from "~/composables/useAuth";
 import { useNotification } from "~/composables/useNotification";
+import { useSeo } from "~/composables/useSeo";
 import VideoList from "~/components/VideoList.vue";
 import { slugify } from "~/utils/slugify";
 
@@ -417,6 +418,19 @@ const fetchVideo = async (id: number) => {
     video.value = res.data;
     await nextTick();
     setupPlyr();
+
+    // Set SEO for video
+    if (video.value) {
+      const { setVideoSeo } = useSeo();
+      setVideoSeo({
+        title: video.value.title,
+        description: video.value.description,
+        thumbnail: video.value.thumbnail,
+        duration: video.value.duration,
+        publishedTime: video.value.ts_update,
+        tags: video.value.hashtags,
+      });
+    }
   } catch (error) {
     handleApiError(error, "Không thể tải video");
   }
@@ -640,7 +654,7 @@ onMounted(() => {
   if (typeof window === "undefined") return;
   const idParam = route.params.id as string;
   // Extract ID from URL like "123-title-slug" -> "123"
-  const id = Number(idParam?.split('-')[0]);
+  const id = Number(idParam?.split("-")[0]);
   fetchVideo(id);
   fetchRelatedVideos(id);
   fetchComments(id);
@@ -652,7 +666,7 @@ watch(
     if (typeof window === "undefined") return;
     const idParam = newId as string;
     // Extract ID from URL like "123-title-slug" -> "123"
-    const id = Number(idParam?.split('-')[0]);
+    const id = Number(idParam?.split("-")[0]);
     fetchVideo(id);
     fetchRelatedVideos(id);
     fetchComments(id);
