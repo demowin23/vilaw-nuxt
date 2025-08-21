@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   // Runtime config for API
   runtimeConfig: {
     public: {
-      apiBase: process.env.BASE_URL || 'http://localhost:5000/api/v1'
+      apiBase: process.env.BASE_URL || 'https://vilaw.net.vn/api/v1'
     },
     // SSL configuration
     ssl: {
@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       '/api/v1': {
-        target: process.env.BASE_URL || 'http://localhost:5000/api/v1',
+        target: process.env.BASE_URL || 'https://vilaw.net.vn/api/v1',
         changeOrigin: true,
         prependPath: false,
       }
