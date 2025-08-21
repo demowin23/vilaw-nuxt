@@ -37,8 +37,8 @@
           @click="navigateToVideo(video.id, video.title)"
         >
           <img
-            :src="getImageUrl(video.thumbnail)"
-            class="w-full h-52 object-cover object-bottom"
+            :src="getImageUrl(video.img)"
+            class="w-full h-52 object-cover"
             :alt="video.title"
           />
           <div class="p-4 flex-1 flex flex-col">
@@ -83,8 +83,8 @@
           @click="navigateToVideo(video.id, video.title)"
         >
           <img
-            :src="getImageUrl(video.thumbnail)"
-            class="w-full h-48 object-cover object-bottom"
+            :src="getImageUrl(video.img)"
+            class="w-full h-48 object-cover"
             :alt="video.title"
           />
           <div class="p-4 flex-1 flex flex-col">

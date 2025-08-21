@@ -80,14 +80,26 @@
               >
             </NuxtLink>
 
-            <NuxtLink to="/admin/gioi-thieu" class="nav-item" active-class="active">
+            <NuxtLink
+              to="/admin/gioi-thieu"
+              class="nav-item"
+              active-class="active"
+            >
               <span class="nav-icon">ℹ️</span>
-              <span v-if="!sidebarCollapsed" class="nav-text">Trang Giới thiệu</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Trang Giới thiệu</span
+              >
             </NuxtLink>
 
-            <NuxtLink to="/admin/lien-he" class="nav-item" active-class="active">
+            <NuxtLink
+              to="/admin/lien-he"
+              class="nav-item"
+              active-class="active"
+            >
               <span class="nav-icon">☎️</span>
-              <span v-if="!sidebarCollapsed" class="nav-text">Trang Liên hệ</span>
+              <span v-if="!sidebarCollapsed" class="nav-text"
+                >Trang Liên hệ</span
+              >
             </NuxtLink>
 
             <NuxtLink
@@ -261,8 +273,8 @@ watch(
       "/admin/documents": "Quản lý văn bản pháp luật",
       "/admin/news": "Quản lý tin tức pháp luật",
       "/admin/videos": "Quản lý video pháp luật",
-          "/admin/gioi-thieu": "Quản trị trang Giới thiệu",
-          "/admin/lien-he": "Quản trị trang Liên hệ",
+      "/admin/gioi-thieu": "Quản trị trang Giới thiệu",
+      "/admin/lien-he": "Quản trị trang Liên hệ",
       "/admin/chat": "Chat hỗ trợ",
       "/admin/service-usage": "Tra cứu sử dụng dịch vụ",
       "/admin/service-history": "Lịch sử sử dụng",
@@ -290,6 +302,8 @@ watch(
 .admin-layout {
   display: flex;
   min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .admin-sidebar {
@@ -299,6 +313,7 @@ watch(
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
+  flex-shrink: 0;
 }
 
 .sidebar-collapsed {
@@ -311,6 +326,7 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .sidebar-header h2 {
@@ -338,7 +354,7 @@ watch(
   flex: 1;
   padding: 1rem 0;
   overflow-y: auto;
-  min-height: 0; /* Allow flex item to shrink */
+  min-height: 0;
 }
 
 .menu-section {
@@ -352,6 +368,8 @@ watch(
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
 }
 
 .section-title {
@@ -377,17 +395,6 @@ watch(
 .section-content.collapsed {
   max-height: 0;
   opacity: 0;
-}
-
-.section-header {
-  padding: 0.5rem 1.5rem;
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.2s;
 }
 
 .section-header:hover {
@@ -429,7 +436,7 @@ watch(
 .sidebar-footer {
   padding: 1rem 1.5rem;
   border-top: 1px solid var(--border-color);
-  flex-shrink: 0; /* Prevent footer from shrinking */
+  flex-shrink: 0;
 }
 
 .admin-main {
@@ -437,6 +444,8 @@ watch(
   display: flex;
   flex-direction: column;
   background: var(--bg-page);
+  min-height: 0;
+  overflow: hidden;
 }
 
 .admin-header {
@@ -446,6 +455,7 @@ watch(
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .header-left h1 {
@@ -482,6 +492,8 @@ watch(
 .admin-content {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
+  padding: 2rem;
 }
 
 @media (max-width: 768px) {

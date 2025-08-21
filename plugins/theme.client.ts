@@ -14,10 +14,7 @@ export default defineNuxtPlugin(() => {
         themeStore.setTheme(e.matches ? 'dark' : 'light')
       }
     }
-    
     mediaQuery.addEventListener('change', handleChange)
-    
-    // Cleanup on app unmount
     onUnmounted(() => {
       mediaQuery.removeEventListener('change', handleChange)
     })

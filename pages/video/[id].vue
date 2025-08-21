@@ -6,7 +6,7 @@
         <video
           ref="plyrVideo"
           v-if="video.video"
-          :poster="getImageUrl(video.thumbnail)"
+          :poster="getImageUrl(video.img)"
           controls
           crossorigin
           playsinline
@@ -295,7 +295,7 @@
         >
           <div class="relative w-40 h-24 flex-shrink-0">
             <img
-              :src="getImageUrl(video.thumbnail)"
+              :src="getImageUrl(video.img)"
               :alt="video.title"
               class="w-full h-full object-cover rounded-lg"
             />
@@ -425,7 +425,7 @@ const fetchVideo = async (id: number) => {
       setVideoSeo({
         title: video.value.title,
         description: video.value.description,
-        thumbnail: video.value.thumbnail,
+        thumbnail: video.value.img,
         duration: video.value.duration,
         publishedTime: video.value.ts_update,
         tags: video.value.hashtags,

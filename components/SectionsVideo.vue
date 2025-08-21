@@ -25,8 +25,8 @@
           ]"
         >
           <img
-            :src="item.thumbnail"
-            class="w-16 h-16 mx-auto object-cover object-bottom"
+            :src="getImageUrl(item.img)"
+            class="w-16 h-16 mx-auto object-cover"
             alt="icon"
           />
           <span
@@ -60,7 +60,7 @@ const router = useRouter();
 
 interface VideoItem {
   id: string | number;
-  thumbnail: string;
+  img: string;
   title: string;
   view_count: string | number;
   bg: string;

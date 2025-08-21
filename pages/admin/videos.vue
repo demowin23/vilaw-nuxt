@@ -268,6 +268,41 @@
             </div>
 
             <div class="form-group">
+              <label>Ảnh (img)</label>
+              <div class="file-upload-wrapper">
+                <input
+                  id="img-upload"
+                  type="file"
+                  accept="image/*"
+                  @change="onImgChange"
+                  class="file-input"
+                />
+                <label for="img-upload" class="file-upload-label">
+                  <span v-if="!imgPreview && !itemForm.img">Chọn ảnh...</span>
+                  <img
+                    v-if="imgPreview"
+                    :src="imgPreview"
+                    alt="Preview"
+                    class="file-preview"
+                  />
+                  <img
+                    v-else-if="itemForm.img"
+                    :src="getImageUrl(itemForm.img)"
+                    alt="Preview"
+                    class="file-preview"
+                  />
+                  <span
+                    v-if="imgPreview || itemForm.img"
+                    class="change-file-btn"
+                    >Đổi ảnh</span
+                  >
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
               <label>File video</label>
               <div class="file-upload-wrapper">
                 <input
@@ -487,6 +522,7 @@ const selectedItem = ref({});
 const itemForm = ref({
   title: "",
   thumbnail: "",
+  img: "",
   description: "",
   video: "",
   duration: 0,
@@ -498,8 +534,10 @@ const itemForm = ref({
 
 // File upload states
 const thumbnailFile = ref(null);
+const imgFile = ref(null);
 const videoFile = ref(null);
 const thumbnailPreview = ref("");
+const imgPreview = ref("");
 const videoPreview = ref("");
 
 // Debounce timer for search
@@ -544,6 +582,13 @@ const onThumbnailChange = (e) => {
   if (!files || !files[0]) return;
   thumbnailFile.value = files[0];
   thumbnailPreview.value = URL.createObjectURL(files[0]);
+};
+
+const onImgChange = (e) => {
+  const files = e.target.files;
+  if (!files || !files[0]) return;
+  imgFile.value = files[0];
+  imgPreview.value = URL.createObjectURL(files[0]);
 };
 
 const onVideoChange = (e) => {
@@ -669,6 +714,7 @@ const editItem = (item) => {
   itemForm.value = {
     title: item.title,
     thumbnail: item.thumbnail || "",
+    img: item.img || "",
     description: item.description || "",
     video: item.video || "",
     duration: item.duration || 0,
@@ -714,7 +760,7 @@ const saveItem = async () => {
     let payload;
     let isFormData = false;
 
-    if (thumbnailFile.value || videoFile.value) {
+    if (thumbnailFile.value || imgFile.value || videoFile.value) {
       payload = new FormData();
       payload.append("title", itemForm.value.title);
       payload.append("description", itemForm.value.description || "");
@@ -728,6 +774,9 @@ const saveItem = async () => {
       );
       if (thumbnailFile.value) {
         payload.append("thumbnail", thumbnailFile.value);
+      }
+      if (imgFile.value) {
+        payload.append("img", imgFile.value);
       }
       if (videoFile.value) {
         payload.append("video", videoFile.value);
@@ -765,6 +814,7 @@ const closeModal = () => {
   itemForm.value = {
     title: "",
     thumbnail: "",
+    img: "",
     description: "",
     video: "",
     duration: 0,
@@ -774,8 +824,10 @@ const closeModal = () => {
     is_featured: false,
   };
   thumbnailPreview.value = "";
+  imgPreview.value = "";
   videoPreview.value = "";
   thumbnailFile.value = null;
+  imgFile.value = null;
   videoFile.value = null;
 };
 

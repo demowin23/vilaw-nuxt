@@ -71,19 +71,11 @@
     <priority>0.6</priority>
   </url>
   
-  
   <url>
     <loc>https://vilaw.net.vn/gioi-thieu</loc>
     <lastmod>2025-01-07T00:00:00.000Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://vilaw.net.vn/sitemap</loc>
-    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
   </url>
   
   <!-- Knowledge Categories -->
@@ -141,5 +133,50 @@
     <lastmod>2025-01-07T00:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  
+  <!-- Additional Important Pages -->
+  <url>
+    <loc>https://vilaw.net.vn/lawyer/chat</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Sitemap Index -->
+  <url>
+    <loc>https://vilaw.net.vn/sitemap</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <!-- Dynamic Sitemap Endpoints -->
+  <url>
+    <loc>https://vilaw.net.vn/api/phap-luat-doi-song.xml</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/api/kien-thuc.xml</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/api/van-ban.xml</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://vilaw.net.vn/api/tin-tuc.xml</loc>
+    <lastmod>2025-01-07T00:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>

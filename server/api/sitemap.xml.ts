@@ -14,25 +14,25 @@ export default defineEventHandler(async (event) => {
       documentsResponse,
       newsResponse
     ] = await Promise.all([
-      fetch(`${config.BASE_URL}/legal-knowledge?is_featured=true&limit=50`, {
+      fetch(`${config.BASE_URL}/legal-knowledge?limit=10000`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       }).then(res => res.json()),
-      fetch(`${config.BASE_URL}/video-life-law?is_featured=true&limit=50`, {
+      fetch(`${config.BASE_URL}/video-life-law?limit=10000`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       }).then(res => res.json()),
-      fetch(`${config.BASE_URL}/legal-documents?is_important=true&limit=50`, {
+      fetch(`${config.BASE_URL}/legal-documents?limit=10000`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       }).then(res => res.json()),
-      fetch(`${config.BASE_URL}/legal-news?limit=50`, {
+      fetch(`${config.BASE_URL}/legal-news?limit=10000`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -117,19 +117,11 @@ export default defineEventHandler(async (event) => {
     <priority>0.6</priority>
   </url>
   
-  
   <url>
     <loc>${baseUrl}/gioi-thieu</loc>
     <lastmod>${currentDate}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>${baseUrl}/sitemap</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
   </url>
 
   <!-- Knowledge Articles -->
@@ -210,6 +202,30 @@ export default defineEventHandler(async (event) => {
     <lastmod>${currentDate}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/chat-luat-su</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/mua-goi</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/lien-he</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>${baseUrl}/gioi-thieu</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>`
   }
