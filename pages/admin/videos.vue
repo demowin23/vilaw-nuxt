@@ -443,7 +443,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useVideoLifeLaw } from "~/composables/useVideoLifeLaw";
 import { useNotification } from "~/composables/useNotification";
 import { useAuth } from "~/composables/useAuth";
@@ -468,7 +468,7 @@ const { handleApiError, handleApiSuccess } = useNotification();
 const { isAdmin } = useAuth();
 
 // State
-const isPending = ref(false);
+const isPending = ref("");
 const videoList = ref([]);
 const videoTypes = ref([
   {
@@ -487,6 +487,7 @@ const ageGroups = ref([]);
 const totalVideos = ref(0);
 const currentPage = ref(1);
 const itemsPerPage = ref(20);
+const isLoadingVideos = ref(false);
 
 // Pagination computed
 const totalPages = computed(() => {
@@ -611,7 +612,13 @@ const onVideoChange = (e) => {
 
 // Load videos with pagination
 const loadVideos = async () => {
+  // Tránh gọi API nhiều lần đồng thời
+  if (isLoadingVideos.value) {
+    return;
+  }
+
   try {
+    isLoadingVideos.value = true;
     const params = {
       isAdmin: true,
       page: currentPage.value,
@@ -635,7 +642,7 @@ const loadVideos = async () => {
     }
 
     if (isPending.value) {
-      params.isPending = isPending.value;
+      params.isPending = isPending.value === "true";
     }
 
     const response = await getVideoLifeLaw(params);
@@ -651,6 +658,8 @@ const loadVideos = async () => {
   } catch (error) {
     console.error("Error loading videos:", error);
     handleApiError(error, "Không thể tải danh sách video");
+  } finally {
+    isLoadingVideos.value = false;
   }
 };
 
@@ -695,9 +704,9 @@ const onSearchInput = () => {
   }, 500); // 500ms delay
 };
 
-// Pagination function
+// Pagination function - chỉ gọi API một lần khi chọn trang
 const goToPage = async (page) => {
-  if (page >= 1 && page <= totalPages.value) {
+  if (page >= 1 && page <= totalPages.value && page !== currentPage.value) {
     currentPage.value = page;
     await loadVideos();
   }
@@ -836,14 +845,6 @@ onMounted(() => {
   loadVideos();
   loadAgeGroups();
 });
-
-watch(
-  [searchQuery, typeFilter, ageGroupFilter, featuredFilter, isPending],
-  () => {
-    currentPage.value = 1; // Reset to first page when filtering
-    loadVideos();
-  }
-);
 </script>
 
 <style scoped>

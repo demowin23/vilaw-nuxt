@@ -164,6 +164,7 @@ export const useVideoLifeLaw = () => {
     sort_order?: 'asc' | 'desc'
     limit?: number
     offset?: number
+    page?: number
     search?: string
     is_featured?: boolean
     isAdmin?: boolean
@@ -179,7 +180,14 @@ export const useVideoLifeLaw = () => {
       if (params.sort_by) queryParams.append('sort_by', params.sort_by)
       if (params.sort_order) queryParams.append('sort_order', params.sort_order)
       if (params.limit) queryParams.append('limit', params.limit.toString())
-      if (params.offset) queryParams.append('offset', params.offset.toString())
+      
+      // Hỗ trợ cả page và offset, ưu tiên page nếu có
+      if (params.page !== undefined) {
+        queryParams.append('page', params.page.toString())
+      } else if (params.offset !== undefined) {
+        queryParams.append('offset', params.offset.toString())
+      }
+      
       if (params.search) queryParams.append('search', params.search)
       if (params.is_featured !== undefined) queryParams.append('is_featured', params.is_featured.toString())
       if (params.isPending !== undefined) queryParams.append('isPending', params.isPending.toString())
